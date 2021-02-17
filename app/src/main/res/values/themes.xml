@@ -12,5 +12,21 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
     </style>
+
+    <style name="login_button">
+        <item name="cornerSize">50sp</item>
+        <item name="color">@color/light_purple</item>
+    </style>
+
+    <style name="Theme.ShowcaseApp.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.ShowcaseApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.ShowcaseApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
