@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/profileFragment"
+        android:title="Profile"
+        android:icon="@drawable/ic_profile" />
+    <item
+        android:id="@+id/searchFragment"
+        android:title="Search"
+        android:icon="@drawable/ic_search"/>
+    <item
+        android:id="@+id/uploadFragment"
+        android:title="Upload"
+        android:icon="@drawable/ic_upload"/>
+    <item
+        android:id="@+id/feedFragment"
+        android:title="Feed"
+        android:icon="@drawable/ic_feed"/>
+    <item
+        android:id="@+id/analyticsFragment"
+        android:title="Analytics"
+        android:icon="@drawable/ic_analytics"/>
+</menu>

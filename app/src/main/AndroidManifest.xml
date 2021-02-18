@@ -11,9 +11,12 @@
         android:theme="@style/Theme.ShowcaseApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"/>
+        <activity
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register"
-            android:theme="@style/Theme.ShowcaseApp.NoActionBar"></activity>
+            android:theme="@style/Theme.ShowcaseApp.NoActionBar" />
         <activity android:name=".SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
