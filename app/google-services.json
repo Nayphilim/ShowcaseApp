@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "923239775273",
+    "firebase_url": "https://showcaseapp-a59c0-default-rtdb.firebaseio.com",
+    "project_id": "showcaseapp-a59c0",
+    "storage_bucket": "showcaseapp-a59c0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:923239775273:android:1cadd82fddbc3a4e18b038",
+        "android_client_info": {
+          "package_name": "com.nayphilim.showcaseapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "923239775273-j86sd2v19vshbs8ah4o58qnt9lk97inq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nayphilim.showcaseapp",
+            "certificate_hash": "9cc4e45d83f04b276ec9074df823ba507252bec9"
+          }
+        },
+        {
+          "client_id": "923239775273-c3o3pgh1n8slmrr8s7gd0c2ruqsfvecs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBItK2FmlcOBXFl2I8iTowSRUcMB7BTlcI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "923239775273-c3o3pgh1n8slmrr8s7gd0c2ruqsfvecs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
