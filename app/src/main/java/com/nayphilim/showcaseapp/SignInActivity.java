@@ -16,10 +16,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView registerLink;
+    private TextView registerLink, errorText;
     private EditText emailText, passwordText;
     private Button loginButton;
     private ProgressBar progressBar;
@@ -29,6 +30,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        errorText = findViewById(R.id.errorText);
         registerLink = findViewById(R.id.register);
         registerLink.setOnClickListener(this);
 
@@ -83,11 +85,20 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    startProfileActivity();
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if(user.isEmailVerified()) {
+                        startProfileActivity();
+                    }else{
+                        user.sendEmailVerification();
+                        errorText.setText("Please verify your account via email before logging in.");
+                        errorText.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
+                        return;
+                    }
                 }
                 else{
-                    emailText.setError("Email or password is incorrect, please try again");
-                    emailText.requestFocus();
+                    errorText.setText("Email or password incorrect. Please try again.");
+                    errorText.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
                     return;
                 }
