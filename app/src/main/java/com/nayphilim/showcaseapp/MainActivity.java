@@ -3,6 +3,7 @@ package com.nayphilim.showcaseapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavHostController;
 import androidx.navigation.Navigation;
@@ -10,7 +11,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,15 +28,19 @@ public class MainActivity extends AppCompatActivity {
      BottomNavigationView bottomNavigationView;
      NavController navController;
 
-     private FirebaseUser user;
-     private DatabaseReference reference;
+    private FirebaseUser user;
+    private DatabaseReference reference;
 
-     private String userID;
+    private String userID;
+
+    User userProfile = new User();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
@@ -49,23 +56,27 @@ public class MainActivity extends AppCompatActivity {
         reference = FirebaseDatabase.getInstance().getReference("Users");
         userID = user.getUid();
 
-//        reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                User userProfile = snapshot.getValue(User.class);
-//
-//                if (userProfile != null) {
-//                    String firstName = userProfile.firstName;
-//                    String lastName = userProfile.lastName;
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
+
+
+
+        reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userProfile.setFirstName(snapshot.child("firstName").getValue().toString().trim());
+                userProfile.setLastName(snapshot.child("lastName").getValue().toString().trim());
+                userProfile.setEmail(snapshot.child("email").getValue().toString().trim());
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        
+
+
+
 
 
     }
@@ -90,6 +101,10 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.uploadFragment:
                     selectedFragment = new uploadFragment();
                     break;
+            }
+
+            if(selectedFragment != null){
+                profileFragment.updateValues(userProfile.getFirstName(), userProfile.getLastName());
             }
             getSupportFragmentManager()
                     .beginTransaction()
