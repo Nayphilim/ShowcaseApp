@@ -39,7 +39,13 @@ public class profileFragment extends Fragment {
     
 
     private TextView profileName;
-    private static String profileNameText;
+
+    private FirebaseUser user;
+    private DatabaseReference reference;
+
+    private String userID;
+
+    User userProfile = new User();
 
     public profileFragment() {
         // Required empty public constructor
@@ -80,18 +86,50 @@ public class profileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
+
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+
         profileName = getView().findViewById(R.id.profileName);
-        profileName.setText(this.profileNameText);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("Users");
+        userID = user.getUid();
+
+
+
+
+        reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userProfile.setFirstName(snapshot.child("firstName").getValue().toString().trim());
+                userProfile.setLastName(snapshot.child("lastName").getValue().toString().trim());
+                userProfile.setEmail(snapshot.child("email").getValue().toString().trim());
+                profileName.setText(userProfile.getFirstName() + " " + userProfile.getLastName());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
     }
 
-    public static void updateValues(String firstName, String lastName){
-        profileNameText = firstName + " " + lastName;
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
     }
 }

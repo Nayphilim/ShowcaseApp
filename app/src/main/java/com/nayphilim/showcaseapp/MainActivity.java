@@ -28,12 +28,7 @@ public class MainActivity extends AppCompatActivity {
      BottomNavigationView bottomNavigationView;
      NavController navController;
 
-    private FirebaseUser user;
-    private DatabaseReference reference;
 
-    private String userID;
-
-    User userProfile = new User();
 
 
     @Override
@@ -52,28 +47,8 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.fragment, new NavHostFragment())
                 .commit();
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference("Users");
-        userID = user.getUid();
 
 
-
-
-        reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                userProfile.setFirstName(snapshot.child("firstName").getValue().toString().trim());
-                userProfile.setLastName(snapshot.child("lastName").getValue().toString().trim());
-                userProfile.setEmail(snapshot.child("email").getValue().toString().trim());
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        
 
 
 
@@ -103,9 +78,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
 
-            if(selectedFragment != null){
-                profileFragment.updateValues(userProfile.getFirstName(), userProfile.getLastName());
-            }
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment, selectedFragment)
