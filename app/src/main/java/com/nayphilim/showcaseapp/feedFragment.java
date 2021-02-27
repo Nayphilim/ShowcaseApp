@@ -16,6 +16,7 @@ import android.view.ViewGroup;
  */
 public class feedFragment extends Fragment {
 
+    private static feedFragment instance;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -62,5 +63,12 @@ public class feedFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_feed, container, false);
+    }
+
+    public static feedFragment getInstance(){
+        if(instance==null){
+            instance = new feedFragment();
+        }
+        return instance;
     }
 }

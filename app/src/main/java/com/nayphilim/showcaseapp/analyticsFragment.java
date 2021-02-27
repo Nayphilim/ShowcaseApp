@@ -16,6 +16,7 @@ import android.view.ViewGroup;
  */
 public class analyticsFragment extends Fragment {
 
+    private static analyticsFragment instance;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -62,5 +63,12 @@ public class analyticsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_analytics, container, false);
+    }
+
+    public static analyticsFragment getInstance(){
+        if(instance==null){
+            instance = new analyticsFragment();
+        }
+        return instance;
     }
 }

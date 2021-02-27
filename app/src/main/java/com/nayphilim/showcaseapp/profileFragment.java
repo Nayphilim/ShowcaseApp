@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
  */
 public class profileFragment extends Fragment {
 
+    private static profileFragment instance;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -81,12 +82,13 @@ public class profileFragment extends Fragment {
         }
 
 
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        updateProfile();
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
@@ -98,15 +100,24 @@ public class profileFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
         profileName = getView().findViewById(R.id.profileName);
 
+
+
+
+
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
+
+    private void updateProfile(){
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users");
         userID = user.getUid();
-
-
-
 
         reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -122,14 +133,12 @@ public class profileFragment extends Fragment {
 
             }
         });
-
-
-
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
+    public static profileFragment getInstance(){
+        if(instance==null){
+            instance = new profileFragment();
+        }
+        return instance;
     }
 }

@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         //NavigationUI.setupActionBarWithNavController(this,navController);
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment, new NavHostFragment())
+                .replace(R.id.fragment,  profileFragment.getInstance()) //profile fragment
                 .commit();
 
 
@@ -62,27 +62,40 @@ public class MainActivity extends AppCompatActivity {
             Fragment selectedFragment = null;
             switch (item.getItemId()) {
                 case R.id.profileFragment:
-                    selectedFragment = new profileFragment();
+                    selectedFragment = profileFragment.getInstance();
                     break;
                 case R.id.feedFragment:
-                    selectedFragment = new feedFragment();
+                    selectedFragment = feedFragment.getInstance();
                     break;
                 case R.id.searchFragment:
-                    selectedFragment = new searchFragment();
+                    selectedFragment = searchFragment.getInstance();
                     break;
                 case R.id.analyticsFragment:
-                    selectedFragment = new analyticsFragment();
+                    selectedFragment = analyticsFragment.getInstance();
                     break;
                 case R.id.uploadFragment:
-                    selectedFragment = new uploadFragment();
+                    selectedFragment = uploadFragment.getInstance();
                     break;
             }
 
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment, selectedFragment)
+                    .addToBackStack(null)
                     .commit();
             return true;
         }
         };
+
+    public void onBackPressed() {
+        //if on first fragment exit app when back is pressed
+        if(bottomNavigationView.getSelectedItemId() == R.id.profileFragment){
+            super.onBackPressed();
+            finish();
+        }
+        else{
+            bottomNavigationView.setSelectedItemId(R.id.profileFragment);
+        }
+
+    }
 }
