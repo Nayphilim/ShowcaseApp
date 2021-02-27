@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,6 +49,10 @@ public class profileFragment extends Fragment {
     private DatabaseReference reference;
 
     private String userID;
+
+    private RecyclerView recyclerView;
+    private ArrayList<ProfileFeed> profileFeedArrayList = new ArrayList<>();
+    private AdapterProfileFeed adapterProfileFeed;
 
     User userProfile = new User();
 
@@ -83,6 +91,8 @@ public class profileFragment extends Fragment {
 
 
 
+
+
     }
 
     @Override
@@ -101,11 +111,32 @@ public class profileFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         profileName = getView().findViewById(R.id.profileName);
+        recyclerView =getView().findViewById(R.id.profileLineFeed);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        adapterProfileFeed = new AdapterProfileFeed(getContext(), profileFeedArrayList);
+        recyclerView.setAdapter(adapterProfileFeed);
+
+        populateRecyclerView();
 
 
 
 
+    }
 
+    private void populateRecyclerView() {
+        ProfileFeed profileFeed = new ProfileFeed("Project Title", "Project Category", "01/01/01", R.drawable.testpostimg);
+        profileFeedArrayList.add(profileFeed);
+        ProfileFeed profileFeed2 = new ProfileFeed("Project Title", "Project Category", "01/01/01", R.drawable.testpostimg);
+        profileFeedArrayList.add(profileFeed);
+        ProfileFeed profileFeed3 = new ProfileFeed("Project Title", "Project Category", "01/01/01", R.drawable.testpostimg);
+        profileFeedArrayList.add(profileFeed);
+        ProfileFeed profileFeed4 = new ProfileFeed("Project Title", "Project Category", "01/01/01", R.drawable.testpostimg);
+        profileFeedArrayList.add(profileFeed);
+
+        adapterProfileFeed.notifyDataSetChanged();
     }
 
     @Override
