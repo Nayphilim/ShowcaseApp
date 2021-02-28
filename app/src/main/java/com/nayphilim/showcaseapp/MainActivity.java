@@ -10,6 +10,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -74,18 +75,28 @@ public class MainActivity extends AppCompatActivity {
                     selectedFragment = analyticsFragment.getInstance();
                     break;
                 case R.id.uploadFragment:
-                    selectedFragment = uploadFragment.getInstance();
+                    //selectedFragment = uploadFragment.getInstance();
+                    startUploadActivity();
                     break;
             }
 
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment, selectedFragment)
-                    .addToBackStack(null)
-                    .commit();
+            if(selectedFragment != null){
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment, selectedFragment)
+                        .addToBackStack(null)
+                        .commit();
+
+            }
+
             return true;
         }
         };
+
+    private void startUploadActivity() {
+        Intent intent = new Intent(MainActivity.this,UploadActivity.class );
+        startActivity(intent);
+    }
 
     public void onBackPressed() {
         //if on first fragment exit app when back is pressed
