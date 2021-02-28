@@ -127,6 +127,9 @@ public class profileFragment extends Fragment {
     }
 
     private void populateRecyclerView() {
+        //WIP
+        //change method to get title, category, date and img read from database for the amount of projects
+        //ISSUE WITH METHOD BEING CALLED EVERY ITEM FRAGMENT IS OPENED
         ProfileFeed profileFeed = new ProfileFeed("Project Title", "Project Category", "01/01/01", R.drawable.testpostimg);
         profileFeedArrayList.add(profileFeed);
         ProfileFeed profileFeed2 = new ProfileFeed("Project Title", "Project Category", "01/01/01", R.drawable.testpostimg);

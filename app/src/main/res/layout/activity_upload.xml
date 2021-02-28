@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UploadActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/cancel_publish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/uploadCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/bold"
+                android:text="Cancel"
+                android:textColor="@color/light_purple"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true">
+
+            <TextView
+                android:id="@+id/uploadPublish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:fontFamily="@font/bold"
+                android:text="Publish"
+                android:textColor="@color/light_purple"
+                android:textSize="20dp" />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/uploadImageArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cancel_publish"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_centerHorizontal="true"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/uploadTitleArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/uploadImageArea"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
+
+                <EditText
+                    android:id="@+id/uploadProjectTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Project Title"
+                    android:inputType="textPersonName"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"/>
+        </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/uploadCategoryArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/uploadTitleArea"
+                android:orientation="vertical"
+                android:layout_centerHorizontal="true">
+
+                <Spinner
+                    android:id="@+id/uploadCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    />
+            </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/uploadDescriptionArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/uploadCategoryArea"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
+
+            <EditText
+                android:inputType="textMultiLine"
+                android:id="@+id/uploadDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:ems="10"
+                android:hint="Project Description"
+                android:lines="8"
+                android:maxLength="255"
+                 />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/uploadCreditsArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/uploadDescriptionArea"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
+
+            <EditText
+                android:id="@+id/uploadCredits"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:ems="10"
+                android:hint="Credits"
+                android:inputType="textPersonName" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/uploadRepositoryArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/uploadCreditsArea"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
+
+            <EditText
+                android:id="@+id/uploadRepository"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:ems="10"
+                android:hint="Github Repository"
+                android:inputType="textPersonName" />
+        </RelativeLayout>
+
+
+
+
+    </RelativeLayout>
+</RelativeLayout>

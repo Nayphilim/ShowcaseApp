@@ -10,9 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShowcaseApp"
         android:usesCleartextTraffic="true">
+        <activity android:name=".UploadActivity"></activity>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"/>
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
         <activity
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register"
