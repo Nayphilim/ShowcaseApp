@@ -1,14 +1,16 @@
 package com.nayphilim.showcaseapp;
 
 public class Project {
-    private String Title, Category, Description, Credits, Repository, UploadDate;
+    private String Title, Category, Description, Credits, Repository, UploadDate, User;
     private String ImageUrls;
+
+
 
     public Project(){
 
     }
 
-    public Project(String title, String category, String description, String credits, String repository, String uploadDate, String imageUrls){
+    public Project(String title, String category, String description, String credits, String repository, String uploadDate, String imageUrls, String user){
         this.Title = title;
         this.Category = category;
         this.Description = description;
@@ -16,6 +18,7 @@ public class Project {
         this.Repository = repository;
         this.UploadDate = uploadDate;
         this.ImageUrls = imageUrls;
+        this.User = user;
     }
 
 
@@ -73,5 +76,13 @@ public class Project {
 
     public void setImageUrls(String imageUrls) {
         ImageUrls = imageUrls;
+    }
+
+    public String getUser() {
+        return User;
+    }
+
+    public void setUser(String user) {
+        User = user;
     }
 }

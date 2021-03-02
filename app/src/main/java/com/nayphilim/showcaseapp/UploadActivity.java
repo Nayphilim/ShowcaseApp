@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
@@ -30,6 +31,10 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 public class UploadActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     private Spinner uploadCategories;
@@ -39,12 +44,12 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
     private DatabaseReference ProjectReference = FirebaseDatabase.getInstance().getReference("Projects");
     private DatabaseReference UserReference = FirebaseDatabase.getInstance().getReference("Users");
     private StorageReference StorageReference = FirebaseStorage.getInstance().getReference();
-    private Uri imageUri;
     private TextView cancelButton,publishButton;
     private EditText titleBox, descriptionBox,creditsBox,repositoryBox;
     private String Category;
     private FirebaseUser user;
     private String userID;
+    List<Uri> imageUrls = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +85,23 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode ==2 && resultCode == RESULT_OK && data != null){
+            ClipData clipData = data.getClipData();
 
-            imageUri = data.getData();
-            uploadImageBox.setImageURI(imageUri);
+            if(clipData != null){
+                for(int i = 0;i<clipData.getItemCount();i++){
+                    ClipData.Item item = clipData.getItemAt(i);
+                    Uri imageUri = item.getUri();
+                    imageUrls.add(imageUri);
+
+                }
+            }
+            else{
+                Uri imageUri = data.getData();
+                imageUrls.add(imageUri);
+                uploadImageBox.setImageURI(imageUri);
+            }
+
+            //uploadImageBox.setImageURI(imageUri);
         }
     }
 
@@ -130,53 +149,28 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
             return;
         }
 
-        if(imageUri == null){
-            return;
+
+
+        for(Uri imageUri : imageUrls){
+            StorageReference fileRef = StorageReference.child(System.currentTimeMillis() + "."  + getFileExtension(imageUri));
+
+            fileRef.putFile(imageUri).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(UploadActivity.this, "Upload Failed, please try again", Toast.LENGTH_LONG);
+                    progressBar.setVisibility(View.GONE);
+                    finish();
+                }
+            });
         }
 
+        uploadProject(title, category, description, credits, repository);
 
-        StorageReference fileRef = StorageReference.child(System.currentTimeMillis() + "."  + getFileExtension(imageUri));
-
-        fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        //uploaded successfully
-                        Project project = new Project();
-                        project.setTitle(title);
-                        project.setCategory(category);
-                        project.setDescription(description);
-                        project.setImageUrls(uri.toString());
-                        if(!credits.isEmpty()){
-                            project.setCredits(credits);
-                        }
-                        if(!repository.isEmpty()){
-                            project.setRepository(repository);
-                        }
-
-                        String projectId = ProjectReference.push().getKey();
-                        ProjectReference.child(projectId).setValue(project);
-
-                        user = FirebaseAuth.getInstance().getCurrentUser();
-                        userID = user.getUid();
-                        UserReference.child(userID).child("projects").setValue(projectId);
-
-                    }
-                });
-            }
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                progressBar.setVisibility(View.VISIBLE);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(UploadActivity.this, "Upload Failed, please try again", Toast.LENGTH_LONG);
-            }
-        });
 
 
     }
@@ -190,7 +184,49 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
     private void uploadImage() {
         Intent galleryIntent = new Intent();
         galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-        galleryIntent.setType("image/*");
+        galleryIntent.setType("*/*");
+        String[] extraMimeTypes = {"image/*", "video/mp4"};
+        galleryIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes);
+        galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         startActivityForResult(galleryIntent, 2);
     }
+
+    private void uploadProject(String title, String category, String description, String credits, String repository){
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        userID = user.getUid();
+        String projectId = ProjectReference.push().getKey();
+        String projectList = User.getProjectList(userID);
+
+        StringBuffer sb = new StringBuffer();
+        for(Uri imageUri : imageUrls){
+            sb.append(imageUri.toString());
+            sb.append(",");
+
+        }
+        String imageUrlList = sb.toString();
+
+        if(projectList != null) {
+            Project project = new Project();
+            project.setTitle(title);
+            project.setCategory(category);
+            project.setDescription(description);
+            project.setImageUrls(imageUrlList);
+            project.setUser(userID);
+            if (!credits.isEmpty()) {
+                project.setCredits(credits);
+            }
+            if (!repository.isEmpty()) {
+                project.setRepository(repository);
+            }
+
+            ProjectReference.child(projectId).setValue(project);
+
+            projectList += "," + projectId;
+            UserReference.child(userID).child("projects").setValue(projectList);
+            progressBar.setVisibility(View.GONE);
+        }
+            finish();
+
+    }
+
 }
