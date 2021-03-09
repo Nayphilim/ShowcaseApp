@@ -1,5 +1,6 @@
 package com.nayphilim.showcaseapp;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -46,7 +47,8 @@ public class profileFragment extends Fragment {
     private TextView profileName;
 
     private FirebaseUser user;
-    private DatabaseReference reference;
+    private DatabaseReference UserReference = FirebaseDatabase.getInstance().getReference("Users");
+    private DatabaseReference ProjectReference = FirebaseDatabase.getInstance().getReference("Projects");
 
     private String userID;
 
@@ -98,10 +100,24 @@ public class profileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        profileName = v.findViewById(R.id.profileName);
+        recyclerView = v.findViewById(R.id.profileLineFeed);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        adapterProfileFeed = new AdapterProfileFeed(getContext(), profileFeedArrayList);
+        recyclerView.setAdapter(adapterProfileFeed);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        userID = user.getUid();
+
         updateProfile();
+        populateRecyclerView();
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        return v;
 
 
     }
@@ -110,16 +126,10 @@ public class profileFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        profileName = getView().findViewById(R.id.profileName);
-        recyclerView =getView().findViewById(R.id.profileLineFeed);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
 
-        adapterProfileFeed = new AdapterProfileFeed(getContext(), profileFeedArrayList);
-        recyclerView.setAdapter(adapterProfileFeed);
 
-        populateRecyclerView();
+
 
 
 
@@ -128,32 +138,45 @@ public class profileFragment extends Fragment {
 
     private void populateRecyclerView() {
         //WIP
-        //change method to get title, category, date and img read from database for the amount of projects
         //ISSUE WITH METHOD BEING CALLED EVERY ITEM FRAGMENT IS OPENED
-        ProfileFeed profileFeed = new ProfileFeed("Project Title", "Project Category", "01/01/01", R.drawable.testpostimg);
-        profileFeedArrayList.add(profileFeed);
-        ProfileFeed profileFeed2 = new ProfileFeed("Project Title", "Project Category", "01/01/01", R.drawable.testpostimg);
-        profileFeedArrayList.add(profileFeed);
-        ProfileFeed profileFeed3 = new ProfileFeed("Project Title", "Project Category", "01/01/01", R.drawable.testpostimg);
-        profileFeedArrayList.add(profileFeed);
-        ProfileFeed profileFeed4 = new ProfileFeed("Project Title", "Project Category", "01/01/01", R.drawable.testpostimg);
-        profileFeedArrayList.add(profileFeed);
 
-        adapterProfileFeed.notifyDataSetChanged();
+          profileFeedArrayList.clear();
+          String projectListStr = User.getProjectList(userID);
+          if(projectListStr != null) {
+              String[] projectList = projectListStr.split(",");
+              for (String projectId : projectList) {
+                  ProjectReference.child(projectId).addListenerForSingleValueEvent(new ValueEventListener() {
+                      @Override
+                      public void onDataChange(@NonNull DataSnapshot snapshot) {
+                          String imageUrlsStr = snapshot.child("imageUrls").getValue().toString().trim();
+                          String[] imageUrls = imageUrlsStr.split(",");
+                          Uri imageUri = Uri.parse(imageUrls[0]);
+                          ProfileFeed profileFeed = new ProfileFeed(snapshot.child("title").getValue().toString().trim(), snapshot.child("category").getValue().toString().trim(), snapshot.child("uploadDate").getValue().toString().trim(), imageUri);
+                          profileFeedArrayList.add(profileFeed);
+                          adapterProfileFeed.notifyDataSetChanged();
+                      }
+
+                      @Override
+                      public void onCancelled(@NonNull DatabaseError error) {
+
+                      }
+                  });
+
+              }
+          }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
     }
 
     private void updateProfile(){
         user = FirebaseAuth.getInstance().getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference("Users");
         userID = user.getUid();
-
-        reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+        UserReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userProfile.setFirstName(snapshot.child("firstName").getValue().toString().trim());
@@ -167,6 +190,7 @@ public class profileFragment extends Fragment {
 
             }
         });
+
     }
 
     public static profileFragment getInstance(){

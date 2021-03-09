@@ -30,7 +30,9 @@ public class User {
         reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-               ProjectList = snapshot.child("projects").getValue().toString().trim();
+                if(snapshot.child("projects").getValue() != null) {
+                    ProjectList = snapshot.child("projects").getValue().toString().trim();
+                }
             }
 
             @Override

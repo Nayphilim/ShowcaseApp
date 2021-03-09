@@ -44,7 +44,7 @@ public class AdapterProfileFeed extends RecyclerView.Adapter<AdapterProfileFeed.
         holder.projectCategory.setText(profileFeed.getCategory());
 
 
-        if(profileFeed.getPostPic()==0){
+        if(profileFeed.getPostPic()==null){
             holder.postImage.setVisibility(View.GONE);
         }
         else{

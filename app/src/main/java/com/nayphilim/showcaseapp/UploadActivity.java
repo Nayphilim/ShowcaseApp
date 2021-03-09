@@ -32,7 +32,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class UploadActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
@@ -183,7 +185,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
 
     private void uploadImage() {
         Intent galleryIntent = new Intent();
-        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+        galleryIntent.setAction(Intent.ACTION_OPEN_DOCUMENT);
         galleryIntent.setType("*/*");
         String[] extraMimeTypes = {"image/*", "video/mp4"};
         galleryIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes);
@@ -197,6 +199,10 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         String projectId = ProjectReference.push().getKey();
         String projectList = User.getProjectList(userID);
 
+        if(projectList == null){
+            projectList = "";
+        }
+
         StringBuffer sb = new StringBuffer();
         for(Uri imageUri : imageUrls){
             sb.append(imageUri.toString());
@@ -205,13 +211,13 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         }
         String imageUrlList = sb.toString();
 
-        if(projectList != null) {
             Project project = new Project();
             project.setTitle(title);
             project.setCategory(category);
             project.setDescription(description);
             project.setImageUrls(imageUrlList);
             project.setUser(userID);
+            project.setUploadDate(getCurrentDate());
             if (!credits.isEmpty()) {
                 project.setCredits(credits);
             }
@@ -224,9 +230,16 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
             projectList += "," + projectId;
             UserReference.child(userID).child("projects").setValue(projectList);
             progressBar.setVisibility(View.GONE);
-        }
+
             finish();
 
+    }
+
+    private String getCurrentDate() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+        String currentDate = formatter.format(date);
+        return currentDate;
     }
 
 }
