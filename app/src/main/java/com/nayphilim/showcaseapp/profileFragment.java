@@ -33,7 +33,7 @@ import java.util.ArrayList;
  * Use the {@link profileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class profileFragment extends Fragment implements View.OnClickListener {
+public class profileFragment extends Fragment implements View.OnClickListener, AdapterProfileFeed.OnProjectListener {
 
     private static profileFragment instance;
     // TODO: Rename parameter arguments, choose names that match
@@ -116,7 +116,7 @@ public class profileFragment extends Fragment implements View.OnClickListener {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapterProfileFeed = new AdapterProfileFeed(getContext(), profileFeedArrayList);
+        adapterProfileFeed = new AdapterProfileFeed(getContext(), profileFeedArrayList, this);
         recyclerView.setAdapter(adapterProfileFeed);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -237,6 +237,19 @@ public class profileFragment extends Fragment implements View.OnClickListener {
 
     private void startSettingsActivity() {
         Intent intent = new Intent(getActivity(),profileSettingsActivity.class );
+        startActivity(intent);
+    }
+
+
+    @Override
+    public void onProjectClick(int position) {
+        profileFeedArrayList.get(position);
+
+        //need to implement method of getting the project id of selected project to pass to the project view activity
+
+
+
+        Intent intent = new Intent(getContext(), projectViewAcitivty.class);
         startActivity(intent);
     }
 }

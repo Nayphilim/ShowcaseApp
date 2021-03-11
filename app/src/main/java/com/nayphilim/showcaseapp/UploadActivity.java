@@ -36,6 +36,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UploadActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
@@ -133,6 +135,9 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         String description = descriptionBox.getText().toString().trim();
         String credits = creditsBox.getText().toString().trim();
         String repository = repositoryBox.getText().toString().trim();
+        final String RepoPattern = "^(https://github\\.com/).+/.+";
+        Pattern pattern = Pattern.compile(RepoPattern);
+        Matcher matcher;
 
         if(title.isEmpty()){
             titleBox.setError("Project Title is required");
@@ -149,6 +154,14 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
             descriptionBox.setError("Project description is required");
             descriptionBox.requestFocus();
             return;
+        }
+
+        if(!repository.isEmpty()){
+            if(!pattern.matcher(repository).matches()){
+                repositoryBox.setError("Please enter a valid repository link");
+                repositoryBox.requestFocus();
+                return;
+            }
         }
 
 

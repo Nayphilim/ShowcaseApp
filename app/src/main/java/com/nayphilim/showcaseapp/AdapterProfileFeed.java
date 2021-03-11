@@ -20,10 +20,12 @@ public class AdapterProfileFeed extends RecyclerView.Adapter<AdapterProfileFeed.
     Context context;
     ArrayList<ProfileFeed> profileFeedArrayList = new ArrayList<>();
     RequestManager glide;
+    private OnProjectListener onProjectListener;
 
-    public AdapterProfileFeed(Context context , ArrayList<ProfileFeed> profileFeedArrayList){
+    public AdapterProfileFeed(Context context , ArrayList<ProfileFeed> profileFeedArrayList, OnProjectListener onProjectListener){
         this.context = context;
         this.profileFeedArrayList = profileFeedArrayList;
+        this.onProjectListener = onProjectListener;
         glide = Glide.with(context);
     }
 
@@ -31,7 +33,7 @@ public class AdapterProfileFeed extends RecyclerView.Adapter<AdapterProfileFeed.
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_feed, parent, false);
-       MyViewHolder viewHolder = new MyViewHolder(view);
+       MyViewHolder viewHolder = new MyViewHolder(view, onProjectListener);
         return viewHolder;
     }
 
@@ -52,6 +54,8 @@ public class AdapterProfileFeed extends RecyclerView.Adapter<AdapterProfileFeed.
             glide.load(profileFeed.getPostPic()).into(holder.postImage);
 
         }
+
+
     }
 
     @Override
@@ -59,12 +63,13 @@ public class AdapterProfileFeed extends RecyclerView.Adapter<AdapterProfileFeed.
         return profileFeedArrayList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView projectTitle, projectCategory, projectDate;
         ImageView postImage;
+        OnProjectListener onProjectListener;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, OnProjectListener onProjectListener) {
             super(itemView);
 
             projectTitle = itemView.findViewById(R.id.projectTitle);
@@ -72,6 +77,23 @@ public class AdapterProfileFeed extends RecyclerView.Adapter<AdapterProfileFeed.
             projectDate = itemView.findViewById(R.id.projectDate);
 
             postImage = itemView.findViewById(R.id.postImage);
+
+            this.onProjectListener = onProjectListener;
+
+            itemView.setOnClickListener(this);
+
         }
+
+
+        @Override
+        public void onClick(View v) {
+            onProjectListener.onProjectClick(getAdapterPosition());
+
+        }
+    }
+
+    public interface OnProjectListener{
+        void onProjectClick(int position);
+
     }
 }

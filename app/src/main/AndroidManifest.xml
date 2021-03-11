@@ -10,7 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShowcaseApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".profileSettingsActivity"></activity>
+        <activity android:name=".projectViewAcitivty"></activity>
+        <activity android:name=".profileSettingsActivity" />
         <activity android:name=".UploadActivity" />
         <activity
             android:name=".MainActivity"

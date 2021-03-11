@@ -22,6 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hbb20.CountryCodePicker;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class profileSettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, CountryCodePicker.OnCountryChangeListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private CountryCodePicker ccp;
@@ -109,6 +112,10 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
     private void applyChanges() {
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
+        String githubLink = githubLinkText.getText().toString().trim();
+        final String GithubPattern = "^(https://github\\.com/).+";
+        Pattern pattern = Pattern.compile(GithubPattern);
+        Matcher matcher;
 
         UserReference.child(userID).child("showLocation").setValue(ShowLocation);
 
@@ -118,6 +125,18 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
 
         if(Specialization != null && SpecializationChanged){
             UserReference.child(userID).child("specialization").setValue(Specialization);
+        }
+
+
+        if(!githubLink.isEmpty()){
+            if(!pattern.matcher(githubLink).matches()){
+                githubLinkText.setError("Please enter a valid github profile link");
+                githubLinkText.requestFocus();
+                return;
+            }
+            else{
+                UserReference.child(userID).child("githubLink").setValue(githubLink);
+            }
         }
 
         finish();
