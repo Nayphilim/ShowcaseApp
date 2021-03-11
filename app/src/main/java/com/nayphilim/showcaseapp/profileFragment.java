@@ -1,5 +1,6 @@
 package com.nayphilim.showcaseapp;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,7 +33,7 @@ import java.util.ArrayList;
  * Use the {@link profileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class profileFragment extends Fragment {
+public class profileFragment extends Fragment implements View.OnClickListener {
 
     private static profileFragment instance;
     // TODO: Rename parameter arguments, choose names that match
@@ -44,7 +46,7 @@ public class profileFragment extends Fragment {
     private String mParam2;
     
 
-    private TextView profileName;
+    private TextView profileName, profileLocation, profileSpecialization;
 
     private FirebaseUser user;
     private DatabaseReference UserReference = FirebaseDatabase.getInstance().getReference("Users");
@@ -55,6 +57,8 @@ public class profileFragment extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<ProfileFeed> profileFeedArrayList = new ArrayList<>();
     private AdapterProfileFeed adapterProfileFeed;
+
+    private ImageButton profileSettingsButton;
 
     User userProfile = new User();
 
@@ -102,7 +106,12 @@ public class profileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
         profileName = v.findViewById(R.id.profileName);
+        profileLocation = v.findViewById(R.id.profileLocation);
+        profileSpecialization = v.findViewById(R.id.profileSpecialization);
         recyclerView = v.findViewById(R.id.profileLineFeed);
+        profileSettingsButton = v.findViewById(R.id.profileSettingsButton);
+
+        profileSettingsButton.setOnClickListener(this);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -182,7 +191,25 @@ public class profileFragment extends Fragment {
                 userProfile.setFirstName(snapshot.child("firstName").getValue().toString().trim());
                 userProfile.setLastName(snapshot.child("lastName").getValue().toString().trim());
                 userProfile.setEmail(snapshot.child("email").getValue().toString().trim());
+
+                if((snapshot.child("showLocation").getValue() != null)){
+                    userProfile.setShowLocation(snapshot.child("showLocation").getValue().toString().trim());
+                }
+                if((snapshot.child("location").getValue() != null)){
+                    userProfile.setLocation(snapshot.child("location").getValue().toString().trim());
+                }
+                if((snapshot.child("specialization").getValue() != null)){
+                    userProfile.setSpecialization(snapshot.child("specialization").getValue().toString().trim());
+                    profileSpecialization.setText(userProfile.getSpecialization());
+                    profileSpecialization.setVisibility(View.VISIBLE);
+                }
+
                 profileName.setText(userProfile.getFirstName() + " " + userProfile.getLastName());
+
+                if(userProfile.getShowLocation() == "true"){
+                    profileLocation.setText(userProfile.getLocation());
+                    profileLocation.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -198,5 +225,18 @@ public class profileFragment extends Fragment {
             instance = new profileFragment();
         }
         return instance;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.profileSettingsButton:
+                startSettingsActivity();
+        }
+    }
+
+    private void startSettingsActivity() {
+        Intent intent = new Intent(getActivity(),profileSettingsActivity.class );
+        startActivity(intent);
     }
 }

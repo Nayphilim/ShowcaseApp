@@ -11,7 +11,7 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    
+
     <string-array name="categories">
         <item>Category 1</item>
         <item>Category 2</item>
@@ -23,5 +23,18 @@
         <item>Category 8</item>
         <item>Category 9</item>
         <item>Category 10</item>
+    </string-array>
+
+    <string-array name="specializations">
+        <item>No Specialization</item>
+        <item>Specialization 2</item>
+        <item>Specialization 3</item>
+        <item>Specialization 4</item>
+        <item>Specialization 5</item>
+        <item>Specialization 6</item>
+        <item>Specialization 7</item>
+        <item>Specialization 8</item>
+        <item>Specialization 9</item>
+        <item>Specialization 10</item>
     </string-array>
 </resources>

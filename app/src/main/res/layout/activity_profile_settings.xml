@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".profileSettingsActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/cancel_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/profileSettingsCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:fontFamily="@font/bold"
+                android:text="Cancel"
+                android:textColor="@color/light_purple"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true">
+
+            <TextView
+                android:id="@+id/profileSettingsSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:clickable="true"
+                android:fontFamily="@font/bold"
+                android:text="Save"
+                android:textColor="@color/light_purple"
+                android:textSize="20dp" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/profileSettingsTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cancel_save"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Profile Customisation"
+            android:fontFamily="@font/bold"
+            android:textColor="@color/black"
+            android:textSize="28dp"
+            android:gravity="center"
+            android:layout_marginTop="24dp"/>
+
+        </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/profileSettingsLocationTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profileSettingsTitle"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:fontFamily="@font/bold"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="32dp"/>
+    </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profileSettingsLocationArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profileSettingsLocationTitle"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
+
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/profileSettingsCountryPicker"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                app:ccp_showFullName="true"
+                app:ccp_showPhoneCode="false"
+                app:ccp_showNameCode="true"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="8dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profileSettingsToggleLocationArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profileSettingsLocationArea"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:id="@+id/showLocationText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show Location?"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="40dp"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/toggleLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/showLocationText"
+                android:layout_marginLeft="8dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profileSettingsSpecTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profileSettingsToggleLocationArea"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Specialization"
+                android:fontFamily="@font/bold"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="32dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profileSettingsSpecArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profileSettingsSpecTitle"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
+
+            <Spinner
+                android:id="@+id/profileSettingsSpec"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="8dp"
+
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profileSettingsThemeTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profileSettingsSpecArea"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Theme"
+                android:fontFamily="@font/bold"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="32dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profileSettingsThemeArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profileSettingsThemeTitle"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
+
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profileSettingsGithubTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profileSettingsThemeArea"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Github"
+                android:fontFamily="@font/bold"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="32dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profileSettingsGithubArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profileSettingsGithubTitle"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
+
+            <EditText
+                android:id="@+id/profileSettingsGithubLink"
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="32dp"
+                android:hint="Paste your Github link here"
+                android:layout_marginTop="8dp"/>
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+</ScrollView>

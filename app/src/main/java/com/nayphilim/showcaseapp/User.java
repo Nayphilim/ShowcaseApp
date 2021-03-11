@@ -12,16 +12,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class User {
-    private  String FirstName,LastName,Email;
+    private  String FirstName,LastName,Email, Location, Specialization,showLocation;
     private static String ProjectList;
+
+
     public User(){
 
     }
 
-    public User(String firstName, String lastName,String email){
+    public User(String firstName, String lastName,String email, String showLocation){
         this.FirstName = firstName;
         this.LastName = lastName;
         this.Email = email;
+        this.showLocation = showLocation;
     }
 
     public static String getProjectList(String userID) {
@@ -67,5 +70,29 @@ public class User {
 
     public  String getLastName() {
         return LastName;
+    }
+
+    public String getLocation() {
+        return Location;
+    }
+
+    public void setLocation(String location) {
+        Location = location;
+    }
+
+    public String getSpecialization() {
+        return Specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        Specialization = specialization;
+    }
+
+    public String getShowLocation() {
+        return showLocation;
+    }
+
+    public void setShowLocation(String showLocation) {
+        this.showLocation = showLocation;
     }
 }
