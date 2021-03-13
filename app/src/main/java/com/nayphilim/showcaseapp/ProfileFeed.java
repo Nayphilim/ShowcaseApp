@@ -3,16 +3,17 @@ package com.nayphilim.showcaseapp;
 import android.net.Uri;
 
 public class ProfileFeed {
-    String Title, Category, Date;
+    String Title, Category, Date, ProjectId;
     Uri PostPic;
 
 
 
-    public ProfileFeed(String title, String category, String date, Uri postPic){
+    public ProfileFeed(String projectId, String title, String category, String date, Uri postPic){
         this.Title = title;
         this.Category = category;
         this.Date = date;
         this.PostPic = postPic;
+        this.ProjectId = projectId;
     }
 
     public String getTitle() {
@@ -45,5 +46,13 @@ public class ProfileFeed {
 
     public void setPostPic(Uri postPic) {
         PostPic = postPic;
+    }
+
+    public String getProjectId() {
+        return ProjectId;
+    }
+
+    public void setProjectId(String projectId) {
+        ProjectId = projectId;
     }
 }

@@ -146,8 +146,6 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
     }
 
     private void populateRecyclerView() {
-        //WIP
-        //ISSUE WITH METHOD BEING CALLED EVERY ITEM FRAGMENT IS OPENED
 
           profileFeedArrayList.clear();
           String projectListStr = User.getProjectList(userID);
@@ -160,7 +158,7 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
                           String imageUrlsStr = snapshot.child("imageUrls").getValue().toString().trim();
                           String[] imageUrls = imageUrlsStr.split(",");
                           Uri imageUri = Uri.parse(imageUrls[0]);
-                          ProfileFeed profileFeed = new ProfileFeed(snapshot.child("title").getValue().toString().trim(), snapshot.child("category").getValue().toString().trim(), snapshot.child("uploadDate").getValue().toString().trim(), imageUri);
+                          ProfileFeed profileFeed = new ProfileFeed(projectId, snapshot.child("title").getValue().toString().trim(), snapshot.child("category").getValue().toString().trim(), snapshot.child("uploadDate").getValue().toString().trim(), imageUri);
                           profileFeedArrayList.add(profileFeed);
                           adapterProfileFeed.notifyDataSetChanged();
                       }
@@ -243,13 +241,14 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
 
     @Override
     public void onProjectClick(int position) {
-        profileFeedArrayList.get(position);
-
+        ProfileFeed selectedProject =  profileFeedArrayList.get(position);
+        String projectId = selectedProject.getProjectId();
         //need to implement method of getting the project id of selected project to pass to the project view activity
 
 
 
         Intent intent = new Intent(getContext(), projectViewAcitivty.class);
+        intent.putExtra("selectedProjectId", projectId);
         startActivity(intent);
     }
 }

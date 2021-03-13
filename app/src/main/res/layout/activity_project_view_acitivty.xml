@@ -39,8 +39,8 @@
 
             <com.denzcoskun.imageslider.ImageSlider
                 android:id="@+id/image_slider"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
                 app:iss_period="1000"
                 app:iss_delay="0"
                 app:iss_selected_dot="@drawable/default_selected_dot"
@@ -48,11 +48,78 @@
 
 
         </RelativeLayout>
-    </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:id="@+id/projViewTitleArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/projViewSlideshowArea"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/projViewTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/bold"
+                android:text="Project Title"
+                android:textColor="@color/black"
+                android:textSize="28dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/projViewDateArea"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/projViewTitleArea"
+            android:layout_below="@+id/projViewSlideshowArea"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/projViewDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/regular"
+                android:text="uploadDate"
+                android:textColor="@color/light_purple"
+                android:textSize="16dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginLeft="16dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/projViewUserArea"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/projViewTitleArea"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/projViewUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/regular"
+                android:text="uploadDate"
+                android:textColor="@color/light_purple"
+                android:textSize="16dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginLeft="16dp"/>
+
+        </RelativeLayout>
 
 
 
     </RelativeLayout>
+
+    </RelativeLayout>
+
+
 
 
 </ScrollView>
