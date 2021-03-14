@@ -60,7 +60,7 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
 
     private ImageButton profileSettingsButton;
 
-    User userProfile = new User();
+    private User userProfile = new User();
 
     public profileFragment() {
         // Required empty public constructor
