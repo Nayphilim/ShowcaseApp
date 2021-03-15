@@ -8,144 +8,195 @@
     android:background="@color/white"
     tools:context=".profileFragment">
 
-
-
-    <ImageView
-        android:id="@+id/profileImage"
+    <RelativeLayout
+        android:id="@+id/profileInfoBarArea"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content">
 
-    <TextView
-            android:id="@+id/profileName"
+
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:src="@drawable/profile_background"
+            android:scaleType="matrix"
+            android:tint="#6F000000"/>
+
+        <RelativeLayout
+            android:id="@+id/profileNameArea"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/bold"
-            android:freezesText="true"
-            android:text="User name"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.494"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.021" />
-
-    <TextView
-        android:id="@+id/profileLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:fontFamily="@font/bold"
-        android:text="Location"
-        android:textColor="@color/black"
-        android:textSize="8sp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileName" />
+            android:layout_below="@+id/profileSettingsButtonArea"
+            android:layout_centerHorizontal="true">
 
             <TextView
-                android:id="@+id/profileProjects"
+                android:id="@+id/profileName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/bold"
-                android:text="Projects"
-                android:textColor="@color/black"
-                android:textSize="8sp"
-                app:layout_constraintEnd_toStartOf="@+id/profileYearsNum"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/profileProjectsNum"
-                app:layout_constraintTop_toBottomOf="@+id/profileName" />
+                android:freezesText="true"
+                android:text="User name"
+                android:textColor="@color/white"
+                android:textSize="26sp" />
 
-            <TextView
-                android:id="@+id/profileYears"
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/profileLPYArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profileNameArea"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/profileLocationArea"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="48dp"
-                android:layout_marginRight="48dp"
-                android:fontFamily="@font/bold"
-                android:text="Years"
-                android:textColor="@color/black"
-                android:textSize="8sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/profileYearsNum"
-                app:layout_constraintTop_toBottomOf="@+id/profileName" />
+                android:layout_marginLeft="8dp">
+
+                <TextView
+                    android:id="@+id/profileLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bold"
+                    android:text="Location"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/profileProjectsNumArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/profileLocationArea"
+                android:layout_marginLeft="8dp">
+
+                <TextView
+                    android:id="@+id/profileProjectsNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bold"
+                    android:text="#"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/profileProjectArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/profileProjectsNumArea"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp">
+
+                <TextView
+                    android:id="@+id/profileProjects"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bold"
+                    android:text="Projects"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/profileYearsNumArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/profileProjectArea"
+                android:layout_marginLeft="8dp">
+
+                <TextView
+                    android:id="@+id/profileYearsNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bold"
+                    android:text="#"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/profileYearsArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/profileYearsNumArea"
+                android:layout_marginLeft="8dp">
+
+                <TextView
+                    android:id="@+id/profileYears"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bold"
+                    android:text="Years"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/profileSpecializationArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profileLPYArea"
+            android:layout_centerHorizontal="true">
 
             <TextView
-                android:id="@+id/profileProjectsNum"
+                android:id="@+id/profileSpecialization"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/bold"
-                android:text="#"
-                android:textColor="@color/black"
-                android:textSize="8sp"
-                app:layout_constraintEnd_toStartOf="@+id/profileProjects"
-                app:layout_constraintStart_toEndOf="@+id/profileLocation"
-                app:layout_constraintTop_toBottomOf="@+id/profileName" />
-
-            <TextView
-                android:id="@+id/profileYearsNum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/bold"
-                android:text="#"
-                android:textColor="@color/black"
-                android:textSize="8sp"
-                app:layout_constraintEnd_toStartOf="@+id/profileYears"
-                app:layout_constraintStart_toEndOf="@+id/profileProjects"
-                app:layout_constraintTop_toBottomOf="@+id/profileName" />
-
-    <TextView
-        android:id="@+id/profileSpecialization"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/bold"
-        android:text="specialization"
-        android:textColor="@color/gray"
-        android:textSize="8sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileLocation"
-        app:layout_constraintVertical_bias="0.0" />
-
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    android:layout_below="@+id/profileImage"
-    >
+                android:text="specialization"
+                android:textColor="@color/light_purple"
+                android:textSize="16sp"
+                android:visibility="invisible" />
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/profileLineFeed"
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/profileSettingsButtonArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right">
+
+            <ImageButton
+                android:id="@+id/profileSettingsButton"
+                android:layout_width="57dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="?android:selectableItemBackground"
+                app:srcCompat="@drawable/ic_settings"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/profileInfoBarArea"
+        android:layout_marginBottom="50dp">
 
-</RelativeLayout>
 
-    <ImageButton
-        android:id="@+id/profileSettingsButton"
-        android:layout_width="57dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.975"
-        app:layout_constraintStart_toStartOf="@+id/profileImage"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.01"
-        app:srcCompat="@drawable/ic_settings" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/profileLineFeed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>

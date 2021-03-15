@@ -163,6 +163,10 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
                    String specializationPreset = snapshot.child("specialization").getValue().toString();
                    specializationSpinner.setSelection(adapter.getPosition(specializationPreset));
                 }
+                if((snapshot.child("githubLink").getValue() != null)){
+                    String githublinkPreset = snapshot.child("githubLink").getValue().toString();
+                    githubLinkText.setText(githublinkPreset);
+                }
             }
 
             @Override

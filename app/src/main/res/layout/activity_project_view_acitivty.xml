@@ -162,6 +162,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/projViewCategoryArea"
             android:orientation="horizontal"
+            android:background="@color/white"
             >
 
             <TextView
@@ -183,7 +184,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_below="@+id/projViewDescriptionTitleArea"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@drawable/project_view_border"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
 
             <TextView
                 android:id="@+id/projViewDescription"
@@ -193,7 +197,8 @@
                 android:text="Description"
                 android:textColor="@color/black"
                 android:textSize="16dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:maxLength="255"
@@ -229,7 +234,10 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/projViewCreditsTitleArea"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:background="@drawable/project_view_border"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
 
             <TextView
                 android:id="@+id/projViewCredits"
@@ -239,7 +247,8 @@
                 android:text="Credits"
                 android:textColor="@color/black"
                 android:textSize="16dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:maxLength="99"

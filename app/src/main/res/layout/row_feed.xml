@@ -1,73 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="200dp">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:cardCornerRadius="12dp"
+            android:elevation="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
         <ImageView
             android:id="@+id/postImage"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:scaleType="fitXY"
+            android:scaleType="matrix"
             android:tint="#6F000000"
             />
 
-        <LinearLayout
-            android:id="@+id/postLeft"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:orientation="vertical"
-            android:layout_alignParentBottom="true">
 
-
-
-        <TextView
-            android:id="@+id/projectTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="@font/bold"
-            android:textColor="@color/white"
-            />
-
-            <TextView
-                android:id="@+id/projectCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:layout_marginBottom="30dp"
-                android:fontFamily="@font/bold"
-                android:textColor="@color/white"
-                />
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true">
             <LinearLayout
-                android:id="@+id/postRight"
+                android:id="@+id/postLeft"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:orientation="vertical"
                 android:layout_alignParentBottom="true">
+
+
+
                 <TextView
-                    android:id="@+id/projectDate"
+                    android:id="@+id/projectTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="30dp"
                     android:text="TextView"
+                    android:layout_marginBottom="4dp"
                     android:fontFamily="@font/bold"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    />
+
+                <TextView
+                    android:id="@+id/projectCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/bold"
+                    android:textColor="@color/white"
+                    />
 
             </LinearLayout>
-        </RelativeLayout>
-    </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true">
+                <LinearLayout
+                    android:id="@+id/postRight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:orientation="vertical"
+                    android:layout_alignParentBottom="true">
+                    <TextView
+                        android:id="@+id/projectDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="TextView"
+                        android:fontFamily="@font/bold"
+                        android:textColor="@color/white"/>
+
+                </LinearLayout>
+            </RelativeLayout>
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+
+
     
 </RelativeLayout>
