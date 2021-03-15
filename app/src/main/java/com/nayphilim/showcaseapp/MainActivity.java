@@ -48,8 +48,12 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.fragment,  profileFragment.getInstance()) //profile fragment
                 .commit();
 
-
-
+//        Fragment homeFragment = profileFragment.getInstance();
+//        getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.fragment, homeFragment)
+//                .addToBackStack(null)
+//                .commit();
 
 
 

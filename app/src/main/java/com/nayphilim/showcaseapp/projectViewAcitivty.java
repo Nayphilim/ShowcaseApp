@@ -124,7 +124,7 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             userProfile.setFirstName(snapshot.child("firstName").getValue().toString().trim());
-                            userProfile.setLastName(snapshot.child("firstName").getValue().toString().trim());
+                            userProfile.setLastName(snapshot.child("lastName").getValue().toString().trim());
                             projectUsername.setText(userProfile.getFirstName() + " " + userProfile.getLastName());
                         }
 

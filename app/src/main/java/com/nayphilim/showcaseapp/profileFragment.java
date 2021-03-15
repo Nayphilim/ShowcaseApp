@@ -105,25 +105,6 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
-        profileName = v.findViewById(R.id.profileName);
-        profileLocation = v.findViewById(R.id.profileLocation);
-        profileSpecialization = v.findViewById(R.id.profileSpecialization);
-        recyclerView = v.findViewById(R.id.profileLineFeed);
-        profileSettingsButton = v.findViewById(R.id.profileSettingsButton);
-
-        profileSettingsButton.setOnClickListener(this);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-
-        adapterProfileFeed = new AdapterProfileFeed(getContext(), profileFeedArrayList, this);
-        recyclerView.setAdapter(adapterProfileFeed);
-
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        userID = user.getUid();
-
-        updateProfile();
-        populateRecyclerView();
 
         // Inflate the layout for this fragment
         return v;
@@ -132,8 +113,16 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        profileName = view.findViewById(R.id.profileName);
+        profileLocation = view.findViewById(R.id.profileLocation);
+        profileSpecialization = view.findViewById(R.id.profileSpecialization);
+        recyclerView = view.findViewById(R.id.profileLineFeed);
+        profileSettingsButton = view.findViewById(R.id.profileSettingsButton);
+
+        profileSettingsButton.setOnClickListener(this);
 
 
 
@@ -141,12 +130,20 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
 
 
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        userID = user.getUid();
+
+        updateProfile();
+        populateRecyclerView();
 
 
     }
 
     private void populateRecyclerView() {
-
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        adapterProfileFeed = new AdapterProfileFeed(getContext(), profileFeedArrayList, this);
+        recyclerView.setAdapter(adapterProfileFeed);
           profileFeedArrayList.clear();
           String projectListStr = User.getProjectList(userID);
           if(projectListStr != null) {
@@ -160,7 +157,7 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
                           Uri imageUri = Uri.parse(imageUrls[0]);
                           ProfileFeed profileFeed = new ProfileFeed(projectId, snapshot.child("title").getValue().toString().trim(), snapshot.child("category").getValue().toString().trim(), snapshot.child("uploadDate").getValue().toString().trim(), imageUri);
                           profileFeedArrayList.add(profileFeed);
-                          adapterProfileFeed.notifyDataSetChanged();
+                          adapterProfileFeed.notifyItemInserted(profileFeedArrayList.size());
                       }
 
                       @Override
@@ -171,13 +168,6 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
 
               }
           }
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
     }
 
     private void updateProfile(){
@@ -243,9 +233,6 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
     public void onProjectClick(int position) {
         ProfileFeed selectedProject =  profileFeedArrayList.get(position);
         String projectId = selectedProject.getProjectId();
-        //need to implement method of getting the project id of selected project to pass to the project view activity
-
-
 
         Intent intent = new Intent(getContext(), projectViewAcitivty.class);
         intent.putExtra("selectedProjectId", projectId);

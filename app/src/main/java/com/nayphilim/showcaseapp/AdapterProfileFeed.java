@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -15,7 +17,7 @@ import com.bumptech.glide.RequestManager;
 
 import java.util.ArrayList;
 
-public class AdapterProfileFeed extends RecyclerView.Adapter<AdapterProfileFeed.MyViewHolder> {
+public class AdapterProfileFeed extends RecyclerView.Adapter<AdapterProfileFeed.MyViewHolder>{
 
     Context context;
     ArrayList<ProfileFeed> profileFeedArrayList = new ArrayList<>();
@@ -62,6 +64,7 @@ public class AdapterProfileFeed extends RecyclerView.Adapter<AdapterProfileFeed.
     public int getItemCount() {
         return profileFeedArrayList.size();
     }
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frameLayout"
@@ -8,14 +8,12 @@
     android:background="@color/white"
     tools:context=".profileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
 
     <ImageView
         android:id="@+id/profileImage"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        app:layout_constraintBottom_toTopOf="@+id/profileLineFeed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -118,19 +116,21 @@
         app:layout_constraintTop_toBottomOf="@+id/profileLocation"
         app:layout_constraintVertical_bias="0.0" />
 
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:layout_below="@+id/profileImage"
+    >
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/profileLineFeed"
         android:layout_width="match_parent"
-        android:layout_height="663dp"
-        android:layout_marginTop="66dp"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileImage"
-        app:layout_constraintVertical_bias="1.0" />
+        android:layout_height="wrap_content"
+        />
+
+</RelativeLayout>
 
     <ImageButton
         android:id="@+id/profileSettingsButton"
@@ -148,4 +148,4 @@
         app:layout_constraintVertical_bias="0.01"
         app:srcCompat="@drawable/ic_settings" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
