@@ -106,6 +106,7 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
+
         // Inflate the layout for this fragment
         return v;
 
@@ -133,8 +134,15 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
 
+
         updateProfile();
         populateRecyclerView();
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
 
     }
