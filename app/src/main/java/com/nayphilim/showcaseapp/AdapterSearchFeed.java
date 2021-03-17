@@ -86,6 +86,10 @@ public class AdapterSearchFeed extends RecyclerView.Adapter<AdapterSearchFeed.My
             onProfileListener.onProfileClick(getAdapterPosition());
 
         }
+
+        public void setDetails(String userName,String location,String category){
+            searchUserName.setText(userName);
+        }
     }
 
     public interface OnProfileListener{

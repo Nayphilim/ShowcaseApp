@@ -6,11 +6,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 
@@ -19,7 +28,7 @@ import java.util.ArrayList;
  * Use the {@link feedFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class feedFragment extends Fragment {
+public class feedFragment extends Fragment implements AdapterSearchFeed.OnProfileListener {
 
     private static feedFragment instance;
     // TODO: Rename parameter arguments, choose names that match
@@ -30,6 +39,12 @@ public class feedFragment extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<SearchFeed> searchFeedArrayList = new ArrayList<>();
     private AdapterSearchFeed adapterSearchFeed;
+
+    private DatabaseReference UserReference = FirebaseDatabase.getInstance().getReference("Users");
+    
+    private EditText searchBox;
+
+    private User user = new User();
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -80,13 +95,69 @@ public class feedFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        recyclerView = view.findViewById(R.id.searchFeed);
+        searchBox = view.findViewById(R.id.searchBar);
+
+        //wip not working
+        searchBox.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    firebaseUserSearch(searchBox.getText().toString().trim());
+                    return true;
+                }
+
+                return false;
+            }
+
+        });
+        
+
+
+
+
+
 
     }
+
+    private void firebaseUserSearch(String searchTerm) {
+        Query firebaseSearchQuery = UserReference.orderByChild("firstName").startAt(searchTerm).endAt(searchTerm + "\uf8ff");
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        FirebaseRecyclerOptions<User> options = new FirebaseRecyclerOptions.Builder<User>()
+                .setQuery(firebaseSearchQuery, User.class)
+                .build();
+
+        FirebaseRecyclerAdapter<User, AdapterSearchFeed.MyViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<User, AdapterSearchFeed.MyViewHolder>(options) {
+            @NonNull
+            @Override
+            public AdapterSearchFeed.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return null;
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull AdapterSearchFeed.MyViewHolder holder, int position, @NonNull User model) {
+                holder.setDetails(model.getFirstName(), model.getLocation(), model.getSpecialization());
+            }
+        };
+
+        recyclerView.setAdapter(firebaseRecyclerAdapter);
+
+
+    }
+
 
     public static feedFragment getInstance(){
         if(instance==null){
             instance = new feedFragment();
         }
         return instance;
+    }
+
+    @Override
+    public void onProfileClick(int position) {
+
     }
 }
