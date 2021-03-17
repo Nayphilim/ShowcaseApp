@@ -3,20 +3,18 @@ package com.nayphilim.showcaseapp;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,12 +28,12 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link profileFragment#newInstance} factory method to
+ * Use the {@link profileViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class profileFragment extends Fragment implements View.OnClickListener, AdapterProfileFeed.OnProjectListener {
+public class profileViewFragment extends Fragment implements View.OnClickListener, AdapterProfileFeed.OnProjectListener {
 
-    private static profileFragment instance;
+    private static profileViewFragment instance;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -44,7 +42,7 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    
+
 
     private TextView profileName, profileLocation, profileSpecialization, profileProjectNum;
 
@@ -58,11 +56,11 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
     private ArrayList<ProfileFeed> profileFeedArrayList = new ArrayList<>();
     private AdapterProfileFeed adapterProfileFeed;
 
-    private ImageButton profileSettingsButton;
+    private ImageButton profileGithubButton;
 
     private User userProfile = new User();
 
-    public profileFragment() {
+    public profileViewFragment() {
         // Required empty public constructor
     }
 
@@ -75,8 +73,8 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
      * @return A new instance of fragment profileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static profileFragment newInstance(String param1, String param2) {
-        profileFragment fragment = new profileFragment();
+    public static profileViewFragment newInstance(String param1, String param2) {
+        profileViewFragment fragment = new profileViewFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -104,7 +102,7 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        View v = inflater.inflate(R.layout.fragment_view_profile, container, false);
 
 
         // Inflate the layout for this fragment
@@ -121,15 +119,15 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
         profileLocation = view.findViewById(R.id.profileLocation);
         profileSpecialization = view.findViewById(R.id.profileSpecialization);
         recyclerView = view.findViewById(R.id.profileLineFeed);
-        profileSettingsButton = view.findViewById(R.id.profileSettingsButton);
+        profileGithubButton = view.findViewById(R.id.profileGithubButton);
         profileProjectNum = view.findViewById(R.id.profileProjectsNum);
 
-        profileSettingsButton.setOnClickListener(this);
+        profileGithubButton.setOnClickListener(this);
 
 
 
 
-
+        //get instance bundle and set user
 
 
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -206,6 +204,10 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
                     profileSpecialization.setText(userProfile.getSpecialization());
                     profileSpecialization.setVisibility(View.VISIBLE);
                 }
+                if((snapshot.child("githubLink").getValue() != null)){
+                    userProfile.setGithubLink(snapshot.child("githubLink").getValue().toString().trim());
+                    profileGithubButton.setVisibility(View.VISIBLE);
+                }
 
                 profileName.setText(userProfile.getFirstName() + " " + userProfile.getLastName());
 
@@ -223,9 +225,9 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
 
     }
 
-    public static profileFragment getInstance(){
+    public static profileViewFragment getInstance(){
         if(instance==null){
-            instance = new profileFragment();
+            instance = new profileViewFragment();
         }
         return instance;
     }
@@ -251,6 +253,14 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
 
         Intent intent = new Intent(getContext(), projectViewAcitivty.class);
         intent.putExtra("selectedProjectId", projectId);
+        startActivity(intent);
+    }
+
+    private void openGithubBrowser() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+        intent.setData(Uri.parse(userProfile.getGithubLink()));
         startActivity(intent);
     }
 }

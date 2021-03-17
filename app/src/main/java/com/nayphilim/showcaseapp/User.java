@@ -12,7 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class User {
-    private  String FirstName,LastName,Email, Location, Specialization,showLocation;
+    private  String FirstName,LastName,Email, Location, Specialization,showLocation, GithubLink;
     private static String ProjectList;
 
 
@@ -94,5 +94,13 @@ public class User {
 
     public void setShowLocation(String showLocation) {
         this.showLocation = showLocation;
+    }
+
+    public String getGithubLink() {
+        return GithubLink;
+    }
+
+    public void setGithubLink(String githubLink) {
+        GithubLink = githubLink;
     }
 }
