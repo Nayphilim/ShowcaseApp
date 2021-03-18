@@ -82,6 +82,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         uploadImageBox.setOnClickListener(this);
 
         publishButton.setOnClickListener(this);
+        cancelButton.setOnClickListener(this);
 
     }
 
@@ -124,8 +125,13 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         switch (v.getId()){
             case R.id.uploadImageBox:
                 uploadImage();
+                break;
             case R.id.uploadPublish:
                 publishProject();
+                break;
+            case R.id.uploadCancel:
+                finish();
+                break;
         }
     }
 

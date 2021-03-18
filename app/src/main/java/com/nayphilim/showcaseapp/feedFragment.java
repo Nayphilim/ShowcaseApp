@@ -9,10 +9,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -39,10 +43,13 @@ public class feedFragment extends Fragment implements AdapterSearchFeed.OnProfil
     private RecyclerView recyclerView;
     private ArrayList<SearchFeed> searchFeedArrayList = new ArrayList<>();
     private AdapterSearchFeed adapterSearchFeed;
+    private FirebaseRecyclerAdapter<User, SearchFeedViewHolder> firebaseRecyclerAdapter;
 
     private DatabaseReference UserReference = FirebaseDatabase.getInstance().getReference("Users");
     
     private EditText searchBox;
+
+    private Button searchButton;
 
     private User user = new User();
 
@@ -97,12 +104,19 @@ public class feedFragment extends Fragment implements AdapterSearchFeed.OnProfil
 
         recyclerView = view.findViewById(R.id.searchFeed);
         searchBox = view.findViewById(R.id.searchBar);
+        searchButton = view.findViewById(R.id.searchButton);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         //wip not working
         searchBox.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                if (keyCode == EditorInfo.IME_ACTION_SEARCH ||
+                        keyCode == EditorInfo.IME_ACTION_DONE ||
+                        event.getAction() == KeyEvent.ACTION_DOWN &&
+                                event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
                     firebaseUserSearch(searchBox.getText().toString().trim());
                     return true;
                 }
@@ -111,11 +125,32 @@ public class feedFragment extends Fragment implements AdapterSearchFeed.OnProfil
             }
 
         });
-        
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseUserSearch(searchBox.getText().toString().trim());
+            }
+        });
+
+        searchBox.addTextChangedListener(new TextWatcher() {
 
 
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                firebaseUserSearch(searchBox.getText().toString().trim());
+            }
+        });
 
 
     }
@@ -123,27 +158,30 @@ public class feedFragment extends Fragment implements AdapterSearchFeed.OnProfil
     private void firebaseUserSearch(String searchTerm) {
         Query firebaseSearchQuery = UserReference.orderByChild("firstName").startAt(searchTerm).endAt(searchTerm + "\uf8ff");
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+
 
         FirebaseRecyclerOptions<User> options = new FirebaseRecyclerOptions.Builder<User>()
                 .setQuery(firebaseSearchQuery, User.class)
                 .build();
 
-        FirebaseRecyclerAdapter<User, AdapterSearchFeed.MyViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<User, AdapterSearchFeed.MyViewHolder>(options) {
+        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<User, SearchFeedViewHolder>(options) {
             @NonNull
             @Override
-            public AdapterSearchFeed.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                return null;
+            public SearchFeedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_row_feed, parent, false);
+                return new SearchFeedViewHolder(v);
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull AdapterSearchFeed.MyViewHolder holder, int position, @NonNull User model) {
+            protected void onBindViewHolder(@NonNull SearchFeedViewHolder holder, int position, @NonNull User model) {
                 holder.setDetails(model.getFirstName(), model.getLocation(), model.getSpecialization());
             }
         };
 
+        firebaseRecyclerAdapter.startListening();
         recyclerView.setAdapter(firebaseRecyclerAdapter);
+
+
 
 
     }

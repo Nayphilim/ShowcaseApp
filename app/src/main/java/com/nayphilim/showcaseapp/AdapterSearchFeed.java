@@ -15,30 +15,30 @@ import com.bumptech.glide.RequestManager;
 
 import java.util.ArrayList;
 
-public class AdapterSearchFeed extends RecyclerView.Adapter<AdapterSearchFeed.MyViewHolder>{
+public class AdapterSearchFeed extends RecyclerView.Adapter<SearchFeedViewHolder>{
 
     Context context;
     ArrayList<SearchFeed> searchFeedArrayList = new ArrayList<>();
     RequestManager glide;
     private OnProfileListener onProfileListener;
 
-    public AdapterSearchFeed(Context context , ArrayList<SearchFeed> profileFeedArrayList, OnProfileListener onProfileListener){
+    public AdapterSearchFeed(Context context , ArrayList<SearchFeed> searchFeedArrayList, OnProfileListener onProfileListener){
         this.context = context;
-        this.searchFeedArrayList = profileFeedArrayList;
+        this.searchFeedArrayList = searchFeedArrayList;
         this.onProfileListener = onProfileListener;
         glide = Glide.with(context);
     }
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SearchFeedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_row_feed, parent, false);
-       MyViewHolder viewHolder = new MyViewHolder(view, onProfileListener);
+        SearchFeedViewHolder viewHolder = new SearchFeedViewHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SearchFeedViewHolder holder, int position) {
         final SearchFeed searchFeed = searchFeedArrayList.get(position);
 
         holder.searchUserName.setText(searchFeed.getUserName());
@@ -53,6 +53,8 @@ public class AdapterSearchFeed extends RecyclerView.Adapter<AdapterSearchFeed.My
             holder.searchCategory.setVisibility(View.VISIBLE);
         }
 
+
+
     }
 
     @Override
@@ -61,36 +63,7 @@ public class AdapterSearchFeed extends RecyclerView.Adapter<AdapterSearchFeed.My
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        TextView searchUserName, searchLocation, searchCategory;
-        OnProfileListener onProfileListener;
-
-        public MyViewHolder(@NonNull View itemView, OnProfileListener onProfileListener) {
-            super(itemView);
-
-            searchUserName = itemView.findViewById(R.id.searchUser);
-            searchLocation = itemView.findViewById(R.id.searchCountry);
-            searchCategory = itemView.findViewById(R.id.searchSpecialization);
-
-
-            this.onProfileListener = onProfileListener;
-
-            itemView.setOnClickListener(this);
-
-        }
-
-
-        @Override
-        public void onClick(View v) {
-            onProfileListener.onProfileClick(getAdapterPosition());
-
-        }
-
-        public void setDetails(String userName,String location,String category){
-            searchUserName.setText(userName);
-        }
-    }
 
     public interface OnProfileListener{
         void onProfileClick(int position);

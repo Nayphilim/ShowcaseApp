@@ -12,10 +12,11 @@
 
         <RelativeLayout
             android:id="@+id/searchBarArea"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp">
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp">
             
             <EditText
                 android:id="@+id/searchBar"
@@ -23,9 +24,26 @@
                 android:layout_height="wrap_content"
                 android:hint="search..."
                 android:textColor="@color/light_purple"
-                android:textSize="18dp">
+                android:textSize="18dp"
+                android:maxLines="1">
             </EditText>
             
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/searchButtonArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@+id/searchBarArea">
+
+            <Button
+                android:id="@+id/searchButton"
+                android:layout_width="52dp"
+                android:layout_height= "36dp"/>
+
         </RelativeLayout>
 
         <RelativeLayout
