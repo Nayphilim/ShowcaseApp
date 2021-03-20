@@ -37,4 +37,5 @@
         <item>Specialization 9</item>
         <item>Specialization 10</item>
     </string-array>
+    <string name="title_activity_search_test">searchTest</string>
 </resources>

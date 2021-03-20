@@ -6,62 +6,20 @@
     tools:context=".searchFragment"
     android:background="@color/white">
 
-    <RelativeLayout
+    <AutoCompleteTextView
+        android:id="@+id/userSearch"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <RelativeLayout
-            android:id="@+id/searchBarArea"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp">
-            
-            <EditText
-                android:id="@+id/searchBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="search..."
-                android:textColor="@color/light_purple"
-                android:textSize="18dp"
-                android:maxLines="1">
-            </EditText>
-            
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/searchButtonArea"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_toRightOf="@+id/searchBarArea">
-
-            <Button
-                android:id="@+id/searchButton"
-                android:layout_width="52dp"
-                android:layout_height= "36dp"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/searchFeedArea"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_below="@+id/searchBarArea">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/searchFeed"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-        </RelativeLayout>
-
-
-    </RelativeLayout>
+        android:layout_height="60dp"
+        android:layout_margin="20dp"
+        android:hint="Search.."
+        android:drawableLeft="@drawable/ic_search"
+        android:completionThreshold="1"
+        android:layout_weight="1"/>
+    
+    <ListView
+        android:id="@+id/searchListData"
+        android:layout_below="@+id/userSearch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

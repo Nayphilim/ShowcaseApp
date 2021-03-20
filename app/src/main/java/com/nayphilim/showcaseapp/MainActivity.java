@@ -43,10 +43,11 @@ public class MainActivity extends AppCompatActivity {
 
         //navController= Navigation.findNavController(this,R.id.fragment);
         //NavigationUI.setupActionBarWithNavController(this,navController);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment,  profileFragment.getInstance()) //profile fragment
-                .commit();
+
+//        getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.fragment,  profileFragment.getInstance()) //profile fragment
+//                .commit();
 
 
 
@@ -76,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.searchFragment:
                     selectedFragment = searchFragment.getInstance();
+//                    Intent intent = new Intent(MainActivity.this,searchTest.class );
+//                    startActivity(intent);
                     break;
                 case R.id.analyticsFragment:
                     selectedFragment = analyticsFragment.getInstance();

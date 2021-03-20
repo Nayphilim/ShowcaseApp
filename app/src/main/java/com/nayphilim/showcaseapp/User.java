@@ -12,19 +12,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class User {
-    private  String FirstName,LastName,Email, Location, Specialization,showLocation, GithubLink;
-    private static String ProjectList;
+    private  String firstName,lastName,email, location, specialization,showLocation, githubLink;
+    private static String projects;
 
 
     public User(){
 
     }
 
-    public User(String firstName, String lastName,String email, String showLocation){
-        this.FirstName = firstName;
-        this.LastName = lastName;
-        this.Email = email;
+    public User(String email, String firstName, String githubLink, String lastName,String location, String projects, String showLocation, String specialization){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
         this.showLocation = showLocation;
+        this.specialization = specialization;
+        this.location = location;
+        this.projects = projects;
+        this.githubLink = githubLink;
     }
 
     public static String getProjectList(String userID) {
@@ -34,7 +38,7 @@ public class User {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.child("projects").getValue() != null) {
-                    ProjectList = snapshot.child("projects").getValue().toString().trim();
+                    projects = snapshot.child("projects").getValue().toString().trim();
                 }
             }
 
@@ -44,48 +48,48 @@ public class User {
             }
         });
 
-        return ProjectList;
+        return projects;
 
     }
 
     public  void setFirstName(String firstName) {
-        this.FirstName = firstName;
+        this.firstName = firstName;
     }
 
     public  void setEmail(String email) {
-        this.Email = email;
+        this.email = email;
     }
 
     public  void setLastName(String lastName) {
-        this.LastName = lastName;
+        this.lastName = lastName;
     }
 
     public  String getEmail() {
-        return Email;
+        return email;
     }
 
     public  String getFirstName() {
-        return FirstName;
+        return firstName;
     }
 
     public  String getLastName() {
-        return LastName;
+        return lastName;
     }
 
     public String getLocation() {
-        return Location;
+        return location;
     }
 
     public void setLocation(String location) {
-        Location = location;
+        this.location = location;
     }
 
     public String getSpecialization() {
-        return Specialization;
+        return specialization;
     }
 
     public void setSpecialization(String specialization) {
-        Specialization = specialization;
+        this.specialization = specialization;
     }
 
     public String getShowLocation() {
@@ -97,10 +101,10 @@ public class User {
     }
 
     public String getGithubLink() {
-        return GithubLink;
+        return githubLink;
     }
 
     public void setGithubLink(String githubLink) {
-        GithubLink = githubLink;
+        this.githubLink = githubLink;
     }
 }
