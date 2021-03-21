@@ -118,10 +118,13 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
 
         profileGithubButton.setOnClickListener(this);
 
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        adapterProfileFeed = new AdapterProfileFeed(getContext(), profileFeedArrayList, this);
+        recyclerView.setAdapter(adapterProfileFeed);
 
         updateProfile();
         populateRecyclerView();
-        adapterProfileFeed.notifyDataSetChanged();
 
 
     }
@@ -134,50 +137,43 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
     }
 
     private void populateRecyclerView() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        adapterProfileFeed = new AdapterProfileFeed(getContext(), profileFeedArrayList, this);
-        recyclerView.setAdapter(adapterProfileFeed);
+
         profileFeedArrayList.clear();
 
-          String projectListStr = getProjectList(userID);
-        Toast.makeText(getActivity(),projectListStr, Toast.LENGTH_LONG).show();
-          profileName.setText(projectListStr);
-          if(projectListStr != null) {
-              String[] projectList = projectListStr.split(",");
-              profileProjectNum.setText(Integer.toString(projectList.length));
-
-              for (String projectId : projectList) {
-                  ProjectReference.child(projectId).addListenerForSingleValueEvent(new ValueEventListener() {
-                      @Override
-                      public void onDataChange(@NonNull DataSnapshot snapshot) {
-                          String imageUrlsStr = snapshot.child("imageUrls").getValue().toString().trim();
-                          String[] imageUrls = imageUrlsStr.split(",");
-                          Uri imageUri = Uri.parse(imageUrls[0]);
-                          ProfileFeed profileFeed = new ProfileFeed(projectId, snapshot.child("title").getValue().toString().trim(), snapshot.child("category").getValue().toString().trim(), snapshot.child("uploadDate").getValue().toString().trim(), imageUri);
-                          profileFeedArrayList.add(profileFeed);
-                          adapterProfileFeed.notifyItemInserted(profileFeedArrayList.size());
-                      }
-
-                      @Override
-                      public void onCancelled(@NonNull DatabaseError error) {
-
-                      }
-                  });
-
-              }
-          }
-          else{
-              profileProjectNum.setText("0");
-          }
-    }
-
-    private String getProjectList(String userID) {
+        profileFeedArrayList.clear();
         UserReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.child("projects").getValue() != null) {
-                     projects = snapshot.child("projects").getValue().toString().trim();
+                    projects = snapshot.child("projects").getValue().toString().trim();
+                    if(projects != null) {
+                        String[] projectList = projects.split(",");
+                        profileProjectNum.setText(Integer.toString(projectList.length));
+
+                        for (String projectId : projectList) {
+
+                            ProjectReference.child(projectId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    String imageUrlsStr = snapshot.child("imageUrls").getValue().toString().trim();
+                                    String[] imageUrls = imageUrlsStr.split(",");
+                                    Uri imageUri = Uri.parse(imageUrls[0]);
+                                    ProfileFeed profileFeed = new ProfileFeed(projectId, snapshot.child("title").getValue().toString().trim(), snapshot.child("category").getValue().toString().trim(), snapshot.child("uploadDate").getValue().toString().trim(), imageUri);
+                                    profileFeedArrayList.add(profileFeed);
+                                    adapterProfileFeed.notifyItemInserted(profileFeedArrayList.size());
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
+                        }
+                    }
+                    else{
+                        profileProjectNum.setText("0");
+                    }
                 }
             }
 
@@ -186,9 +182,8 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
 
             }
         });
-
-        return projects;
     }
+    
 
     private void updateProfile(){
         UserReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
