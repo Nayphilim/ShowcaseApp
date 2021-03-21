@@ -27,7 +27,7 @@
             android:id="@+id/profileNameArea"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/profileSettingsButtonArea"
+            android:layout_below="@+id/profileGithubButtonArea"
             android:layout_centerHorizontal="true">
 
             <TextView

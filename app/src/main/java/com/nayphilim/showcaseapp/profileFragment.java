@@ -2,12 +2,14 @@ package com.nayphilim.showcaseapp;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -49,14 +54,18 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
     private TextView profileName, profileLocation, profileSpecialization, profileProjectNum;
 
     private FirebaseUser user;
-    private DatabaseReference UserReference = FirebaseDatabase.getInstance().getReference("Users");
+    private DatabaseReference  UserReference = FirebaseDatabase.getInstance().getReference("Users");
     private DatabaseReference ProjectReference = FirebaseDatabase.getInstance().getReference("Projects");
 
     private String userID;
+    private String projects;
 
     private RecyclerView recyclerView;
     private ArrayList<ProfileFeed> profileFeedArrayList = new ArrayList<>();
     private AdapterProfileFeed adapterProfileFeed;
+
+    FirebaseRecyclerAdapter adapter;
+    FirebaseRecyclerOptions options;
 
     private ImageButton profileSettingsButton;
 
@@ -66,20 +75,11 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment profileFragment.
-     */
     // TODO: Rename and change types and number of parameters
-    public static profileFragment newInstance(String param1, String param2) {
+    public static profileFragment newInstance(String userId) {
         profileFragment fragment = new profileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString("userId", userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -89,11 +89,11 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
         super.onCreate(savedInstanceState);
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            userID = getArguments().getString("userId");
 
 
         }
+
 
 
 
@@ -106,8 +106,6 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
-
-        // Inflate the layout for this fragment
         return v;
 
 
@@ -124,20 +122,26 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
         profileSettingsButton = view.findViewById(R.id.profileSettingsButton);
         profileProjectNum = view.findViewById(R.id.profileProjectsNum);
 
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        adapterProfileFeed = new AdapterProfileFeed(getContext(), profileFeedArrayList, this);
+        recyclerView.setAdapter(adapterProfileFeed);
+        adapterProfileFeed.notifyDataSetChanged();
+
         profileSettingsButton.setOnClickListener(this);
-
-
-
-
-
-
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
 
+        String projectListStr = getProjectList(userID);
 
         updateProfile();
-        populateRecyclerView();
+        populateRecyclerView(projectListStr);
+
+
+
+
+
 
 
     }
@@ -149,18 +153,17 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
 
     }
 
-    private void populateRecyclerView() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        adapterProfileFeed = new AdapterProfileFeed(getContext(), profileFeedArrayList, this);
-        recyclerView.setAdapter(adapterProfileFeed);
+    private void populateRecyclerView(String projectListStr) {
+
           profileFeedArrayList.clear();
-          String projectListStr = User.getProjectList(userID);
+          Toast.makeText(getActivity(),projectListStr, Toast.LENGTH_LONG).show();
+
           if(projectListStr != null) {
               String[] projectList = projectListStr.split(",");
               profileProjectNum.setText(Integer.toString(projectList.length));
 
               for (String projectId : projectList) {
+                  
                   ProjectReference.child(projectId).addListenerForSingleValueEvent(new ValueEventListener() {
                       @Override
                       public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -183,6 +186,7 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
           else{
               profileProjectNum.setText("0");
           }
+
     }
 
     private void updateProfile(){
@@ -215,12 +219,31 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
                 }
             }
 
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
 
+    }
+
+    private String getProjectList(String userID) {
+        UserReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child("projects").getValue() != null) {
+                    projects = snapshot.child("projects").getValue().toString().trim();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return projects;
     }
 
     public static profileFragment getInstance(){
@@ -253,4 +276,11 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
         intent.putExtra("selectedProjectId", projectId);
         startActivity(intent);
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
 }

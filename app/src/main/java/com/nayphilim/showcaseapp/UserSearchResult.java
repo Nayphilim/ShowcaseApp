@@ -4,9 +4,9 @@ public class UserSearchResult {
     private String Name = "";
     private String  Specialization= "";
     private String Location= "";
-    private String ShowLocation= "";
+    private Boolean ShowLocation;
 
-    public UserSearchResult(String name, String specialization, String location, String showLocation) {
+    public UserSearchResult(String name, String specialization, String location, Boolean showLocation) {
         Name = name;
         Specialization = specialization;
         Location = location;
@@ -37,11 +37,11 @@ public class UserSearchResult {
         Location = location;
     }
 
-    public String getShowLocation() {
+    public Boolean getShowLocation() {
         return ShowLocation;
     }
 
-    public void setShowLocation(String showLocation) {
+    public void setShowLocation(Boolean showLocation) {
         ShowLocation = showLocation;
     }
 }

@@ -24,8 +24,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -53,6 +56,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
     private String Category;
     private FirebaseUser user;
     private String userID;
+    private String projects;
     List<Uri> imageUrls = new ArrayList<>();
 
     @Override
@@ -216,7 +220,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
         String projectId = ProjectReference.push().getKey();
-        String projectList = User.getProjectList(userID);
+        String projectList = getProjectList(userID);
 
         if(projectList == null){
             projectList = "";
@@ -259,6 +263,24 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         Date date = new Date();
         String currentDate = formatter.format(date);
         return currentDate;
+    }
+
+    private String getProjectList(String userID) {
+        UserReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child("projects").getValue() != null) {
+                    projects = snapshot.child("projects").getValue().toString().trim();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return projects;
     }
 
 }

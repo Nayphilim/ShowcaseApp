@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,24 +61,18 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
 
     private User userProfile = new User();
 
+    private String projects;
+
     public profileViewFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment profileFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
-    public static profileViewFragment newInstance(String param1, String param2) {
+    public static profileViewFragment newInstance(String userId) {
         profileViewFragment fragment = new profileViewFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString("userId", userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -87,8 +82,7 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
         super.onCreate(savedInstanceState);
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            userID = getArguments().getString("userId");
 
 
         }
@@ -125,17 +119,9 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
         profileGithubButton.setOnClickListener(this);
 
 
-
-
-        //get instance bundle and set user
-
-
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        userID = user.getUid();
-
-
         updateProfile();
         populateRecyclerView();
+        adapterProfileFeed.notifyDataSetChanged();
 
 
     }
@@ -152,8 +138,11 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
         recyclerView.setLayoutManager(layoutManager);
         adapterProfileFeed = new AdapterProfileFeed(getContext(), profileFeedArrayList, this);
         recyclerView.setAdapter(adapterProfileFeed);
-          profileFeedArrayList.clear();
-          String projectListStr = User.getProjectList(userID);
+        profileFeedArrayList.clear();
+
+          String projectListStr = getProjectList(userID);
+        Toast.makeText(getActivity(),projectListStr, Toast.LENGTH_LONG).show();
+          profileName.setText(projectListStr);
           if(projectListStr != null) {
               String[] projectList = projectListStr.split(",");
               profileProjectNum.setText(Integer.toString(projectList.length));
@@ -183,9 +172,25 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
           }
     }
 
+    private String getProjectList(String userID) {
+        UserReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child("projects").getValue() != null) {
+                     projects = snapshot.child("projects").getValue().toString().trim();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return projects;
+    }
+
     private void updateProfile(){
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        userID = user.getUid();
         UserReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -215,6 +220,7 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
                     profileLocation.setText(userProfile.getLocation());
                     profileLocation.setVisibility(View.VISIBLE);
                 }
+                return;
             }
 
             @Override
@@ -222,6 +228,7 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
 
             }
         });
+
 
     }
 
@@ -235,15 +242,11 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.profileSettingsButton:
-                startSettingsActivity();
+            case R.id.profileGithubButton:
+                openGithubBrowser();
         }
     }
 
-    private void startSettingsActivity() {
-        Intent intent = new Intent(getActivity(),profileSettingsActivity.class );
-        startActivity(intent);
-    }
 
 
     @Override

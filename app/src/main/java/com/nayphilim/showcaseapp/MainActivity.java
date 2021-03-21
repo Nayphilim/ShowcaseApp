@@ -3,6 +3,7 @@ package com.nayphilim.showcaseapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavHostController;
@@ -28,7 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity {
      BottomNavigationView bottomNavigationView;
      NavController navController;
-
+     Fragment hostFragment;
 
 
 
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
+        bottomNavigationView.setSelectedItemId(R.id.profileFragment);
         //navController= Navigation.findNavController(this,R.id.fragment);
         //NavigationUI.setupActionBarWithNavController(this,navController);
 
@@ -57,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
 //                .replace(R.id.fragment, homeFragment)
 //                .addToBackStack(null)
 //                .commit();
-
 
 
 
@@ -101,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         };
+
 
     private void startUploadActivity() {
         Intent intent = new Intent(MainActivity.this,UploadActivity.class );
