@@ -16,6 +16,7 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = "true"
+
     }
 
     buildTypes {
@@ -49,6 +50,7 @@ dependencies {
     implementation 'com.github.denzcoskun:ImageSlideshow:0.1.0'
     implementation 'com.firebaseui:firebase-ui-auth:6.4.0'
     implementation 'com.firebaseui:firebase-ui-database:7.1.1'
+    implementation 'com.synnapps:carouselview:0.1.5'
     annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

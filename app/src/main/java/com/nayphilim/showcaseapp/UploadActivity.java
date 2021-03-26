@@ -20,8 +20,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,7 +37,6 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,7 +59,15 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
     private FirebaseUser user;
     private String userID;
     private String projects;
-    List<Uri> imageUrls = new ArrayList<>();
+    ArrayList<Uri> imageUris = new ArrayList<>();
+    ArrayList<String> imageUrls = new ArrayList<>();
+    Project project;
+    private String projectId;
+    private String title;
+    private String category;
+    private String description;
+    private String credits;
+    private String repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +87,10 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         descriptionBox = findViewById(R.id.uploadDescription);
         creditsBox = findViewById(R.id.uploadCredits);
         repositoryBox = findViewById(R.id.uploadRepository);
+
+        project = new Project();
+
+        projectId = ProjectReference.push().getKey();
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories, R.layout.support_simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -100,13 +114,13 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
                 for(int i = 0;i<clipData.getItemCount();i++){
                     ClipData.Item item = clipData.getItemAt(i);
                     Uri imageUri = item.getUri();
-                    imageUrls.add(imageUri);
+                    imageUris.add(imageUri);
 
                 }
             }
             else{
                 Uri imageUri = data.getData();
-                imageUrls.add(imageUri);
+                imageUris.add(imageUri);
                 uploadImageBox.setImageURI(imageUri);
             }
 
@@ -128,26 +142,33 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.uploadImageBox:
-                uploadImage();
+                keyboardController.hideKeyboard(this);
+                openImageGallery();
                 break;
             case R.id.uploadPublish:
+                keyboardController.hideKeyboard(this);
                 publishProject();
                 break;
             case R.id.uploadCancel:
+                keyboardController.hideKeyboard(this);
                 finish();
                 break;
         }
     }
 
     private void publishProject() {
-        String title = titleBox.getText().toString().trim();
-        String category = Category;
-        String description = descriptionBox.getText().toString().trim();
-        String credits = creditsBox.getText().toString().trim();
-        String repository = repositoryBox.getText().toString().trim();
+        title = titleBox.getText().toString().trim();
+        category = Category;
+        description = descriptionBox.getText().toString().trim();
+        credits = creditsBox.getText().toString().trim();
+        repository = repositoryBox.getText().toString().trim();
         final String RepoPattern = "^(https://github\\.com/).+/.+";
         Pattern pattern = Pattern.compile(RepoPattern);
         Matcher matcher;
+
+
+
+
 
         if(title.isEmpty()){
             titleBox.setError("Project Title is required");
@@ -176,25 +197,63 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
 
 
 
-        for(Uri imageUri : imageUrls){
-            StorageReference fileRef = StorageReference.child(System.currentTimeMillis() + "."  + getFileExtension(imageUri));
+        uploadImages(new ArrayList<>(),imageUris);
+//
+//        for(Uri imageUri : imageUris){
+//            StorageReference fileRef = StorageReference.child(System.currentTimeMillis() + "."  + getFileExtension(imageUri));
+//            UploadTask uploadTask = fileRef.putFile(imageUri);
+//
+//
+//            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+//                        @Override
+//                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+//                            if (!task.isSuccessful()) {
+//                                throw task.getException();
+//                            }
+//
+//                            // Continue with the task to get the download URL
+//
+//                            return fileRef.getDownloadUrl();
+//                        }
+//                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Uri> task) {
+//                            //if (task.isSuccessful()) {
+//                                Uri downloadUri = task.getResult();
+//                                imageUrls.add(downloadUri.toString());
+//
+//                            //} else {
+//                                // Handle failures
+//                                // ...
+//                           // }
+//                        }
+//                    });
+//                }
+//            }).addOnProgressListener(new OnProgressListener() {
+//                @Override
+//                public void onProgress(@NonNull Object snapshot) {
+//                    progressBar.setVisibility(View.VISIBLE);
+//                }
+//            }).addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception e) {
+//                    Toast.makeText(UploadActivity.this, "Failed to upload, please try again", Toast.LENGTH_LONG).show();
+//                    progressBar.setVisibility(View.GONE);
+//                    finish();
+//                }
+//            });
+//
+//
+//
+//
+//        }
 
-            fileRef.putFile(imageUri).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                    progressBar.setVisibility(View.VISIBLE);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(UploadActivity.this, "Upload Failed, please try again", Toast.LENGTH_LONG);
-                    progressBar.setVisibility(View.GONE);
-                    finish();
-                }
-            });
-        }
 
-        uploadProject(title, category, description, credits, repository);
+
+       // uploadProject(title, category, description, credits, repository, imageUrlList);
 
 
 
@@ -206,7 +265,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         return mime.getExtensionFromMimeType(contentResolver.getType(imageUri));
     }
 
-    private void uploadImage() {
+    private void openImageGallery() {
         Intent galleryIntent = new Intent();
         galleryIntent.setAction(Intent.ACTION_OPEN_DOCUMENT);
         galleryIntent.setType("*/*");
@@ -216,29 +275,96 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         startActivityForResult(galleryIntent, 2);
     }
 
-    private void uploadProject(String title, String category, String description, String credits, String repository){
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        userID = user.getUid();
-        String projectId = ProjectReference.push().getKey();
-        String projectList = getProjectList(userID);
+    private void uploadImages(@NonNull ArrayList<String> imagesUrl,ArrayList<Uri> imageUriList){
 
-        if(projectList == null){
-            projectList = "";
-        }
+        Uri uri = imageUriList.get(imagesUrl.size());
 
+        StorageReference fileRef = StorageReference.child(System.currentTimeMillis() + "."  + getFileExtension(uri));
+        UploadTask uploadTask = fileRef.putFile(uri);
+
+
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+
+                        // Continue with the task to get the download URL
+
+                        return fileRef.getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        //if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        imagesUrl.add(downloadUri.toString());
+
+                        if(imagesUrl.size()  == imageUriList.size()){
+                            allImageUploadedNow(imagesUrl);
+                        }else {
+                            uploadImages(imagesUrl, imageUriList);
+                        }
+
+                        //} else {
+                        // Handle failures
+                        // ...
+                        // }
+                    }
+                });
+            }
+        }).addOnProgressListener(new OnProgressListener() {
+            @Override
+            public void onProgress(@NonNull Object snapshot) {
+                progressBar.setVisibility(View.VISIBLE);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(UploadActivity.this, "Failed to upload, please try again", Toast.LENGTH_LONG).show();
+                progressBar.setVisibility(View.GONE);
+                finish();
+            }
+        });
+    }
+
+    private void allImageUploadedNow(ArrayList<String> imagesUrl) {
         StringBuffer sb = new StringBuffer();
-        for(Uri imageUri : imageUrls){
-            sb.append(imageUri.toString());
+        for(String imageUrl : imageUrls){
+            sb.append(imageUrl);
             sb.append(",");
 
         }
         String imageUrlList = sb.toString();
 
-            Project project = new Project();
+        uploadProject(title, category, description, credits, repository, imageUrlList);
+
+    }
+
+    private void uploadProject(String title, String category, String description, String credits, String repository, String imageUrlList){
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        userID = user.getUid();
+
+        String projectList = getProjectList(userID);
+
+//        Toast.makeText(UploadActivity.this, projectList, Toast.LENGTH_LONG).show();
+
+
+        if(projectList == null){
+            projectList = "";
+        }
+
+
+
+
             project.setTitle(title);
             project.setCategory(category);
-            project.setDescription(description);
             project.setImageUrls(imageUrlList);
+            project.setDescription(description);
             project.setUser(userID);
             project.setUploadDate(getCurrentDate());
             if (!credits.isEmpty()) {
@@ -250,10 +376,15 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
 
             ProjectReference.child(projectId).setValue(project);
 
-            projectList += "," + projectId;
+            if(projectList == ""){
+                projectList += projectId;
+            }
+            else {
+                projectList += "," + projectId;
+            }
             UserReference.child(userID).child("projects").setValue(projectList);
-            progressBar.setVisibility(View.GONE);
 
+            progressBar.setVisibility(View.GONE);
             finish();
 
     }
@@ -270,7 +401,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.child("projects").getValue() != null) {
-                    projects = snapshot.child("projects").getValue().toString().trim();
+                     project.setProjectList(snapshot.child("projects").getValue().toString().trim());
                 }
             }
 
@@ -280,7 +411,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
             }
         });
 
-        return projects;
+        return project.getProjectList();
     }
 
 }

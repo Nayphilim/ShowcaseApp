@@ -183,7 +183,7 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
             }
         });
     }
-    
+
 
     private void updateProfile(){
         UserReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {

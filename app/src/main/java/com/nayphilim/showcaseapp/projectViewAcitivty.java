@@ -14,25 +14,33 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageListener;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class projectViewAcitivty extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageSlider imgSlider;
+   // private ImageSlider imgSlider;
     private String userName;
     private DatabaseReference UserReference = FirebaseDatabase.getInstance().getReference("Users");
     private DatabaseReference ProjectReference = FirebaseDatabase.getInstance().getReference("Projects");
+    private StorageReference StorageReference = FirebaseStorage.getInstance().getReference();
     private List<SlideModel> projectImages = new ArrayList<>();
     private String ProjectId, projectRepository;
     private Project project;
@@ -40,6 +48,10 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
     private RelativeLayout projectRepositoryButtonArea, projectSourceTitleArea, projectCreditsArea, projectCreditsTitleArea;
     private ImageView projectRepositoryButton;
     private ImageButton backArrow;
+
+    private ImageSlider imgSlider;
+
+    //String[] sampleImage = {"content://com.android.providers.media.documents/document/image%3A189"};
 
 
     private User userProfile = new User();
@@ -51,7 +63,7 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_project_view_acitivty);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        imgSlider = findViewById(R.id.image_slider);
+       // imgSlider = findViewById(R.id.image_slider);
         projectTitle = findViewById(R.id.projViewTitle);
         backArrow = findViewById(R.id.projViewBackArrow);
         projectDate = findViewById(R.id.projViewDate);
@@ -65,6 +77,13 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
         projectSourceTitleArea = findViewById(R.id.projViewSourceTitleArea);
         projectCreditsArea = findViewById(R.id.projViewCreditsArea);
         projectCreditsTitleArea = findViewById(R.id.projViewCreditsTitleArea);
+        imgSlider = findViewById(R.id.image_slider);
+
+
+//        if (imgSlider != null) {
+//            imgSlider.setPageCount(sampleImage.length);
+//            imgSlider.setImageListener(imageListener);
+//        }
 
         backArrow.setOnClickListener(this);
         projectRepositoryButton.setOnClickListener(this);
@@ -78,13 +97,11 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
             ProjectId = extras.getString("selectedProjectId");
         }
 
+
         getProjectDetails();
 
     }
 
-    private void populateProjectDetails() {
-        projectTitle.setText(project.getTitle());
-    }
 
     private void getProjectDetails() {
         if (ProjectId != null) {
@@ -135,7 +152,8 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
                     });
 
 
-                    populateSlides(project.getImageUrls());
+                   populateSlides(project.getImageUrls());
+
                 }
 
                 @Override
@@ -160,12 +178,46 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
         String[] imageUrls = imageUrlList.split(",");
 
         for(String url : imageUrls){
-            projectImages.add(new SlideModel(url, ScaleTypes.FIT));
+            Uri uri = Uri.parse(url);
+            projectImages.add(new SlideModel(uri.toString(), ScaleTypes.FIT));
         }
 
         if(projectImages != null) {
             imgSlider.setImageList(projectImages);
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        String[] testUrl = {"content://com.android.providers.media.documents/document/image%3A189"};
+////        ArrayList<Uri> imageUris = new ArrayList<Uri>();
+////
+////        for(String url : imageUrls){
+////            imageUris.add(Uri.parse(url));
+////        }
+//
+//        ImageListener firebaseImages = new ImageListener() {
+//            @Override
+//            public void setImageForPosition(int position, ImageView imageView) {
+//                Glide.with(getApplicationContext()).load(Uri.parse(testUrl[position])).into(imageView);
+//            }
+//        };
+//
+//        imgSlider.setPageCount(imageUrls.length);
+//        imgSlider.setImageListener(firebaseImages);
+
+
+
     }
 
     @Override
@@ -188,5 +240,14 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
         startActivity(intent);
     }
 
+//    ImageListener imageListener = new ImageListener() {
+//
+//
+//        @Override
+//        public void setImageForPosition(int position, ImageView imageView) {
+//            Glide.with(getApplicationContext()).load(Uri.parse(sampleImage[position])).into(imageView);
+//        }
+//    };
+    }
 
-}
+

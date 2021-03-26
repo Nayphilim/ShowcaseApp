@@ -1,7 +1,7 @@
 package com.nayphilim.showcaseapp;
 
 public class Project {
-    private String Title, Category, Description, Credits, Repository, UploadDate, User;
+    private String Title, Category, Description, Credits, Repository, UploadDate, User, ProjectList;
     private String ImageUrls;
 
 
@@ -84,5 +84,13 @@ public class Project {
 
     public void setUser(String user) {
         User = user;
+    }
+
+    public String getProjectList() {
+        return ProjectList;
+    }
+
+    public void setProjectList(String projectList) {
+        ProjectList = projectList;
     }
 }

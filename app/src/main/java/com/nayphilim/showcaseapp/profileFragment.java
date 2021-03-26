@@ -160,7 +160,7 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.child("projects").getValue() != null) {
                     projects = snapshot.child("projects").getValue().toString().trim();
-                    if(projects != null) {
+                    if(projects != "") {
                         String[] projectList = projects.split(",");
                         profileProjectNum.setText(Integer.toString(projectList.length));
 

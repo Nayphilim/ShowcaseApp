@@ -46,6 +46,11 @@
                 app:iss_selected_dot="@drawable/default_selected_dot"
                 app:iss_unselected_dot="@drawable/default_unselected_dot"/>
 
+<!--            <com.synnapps.carouselview.CarouselView-->
+<!--                android:id="@+id/image_slider"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="360dp" />-->
+
 
         </RelativeLayout>
 
