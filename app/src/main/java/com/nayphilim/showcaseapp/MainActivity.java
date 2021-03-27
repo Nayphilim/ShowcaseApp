@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
      BottomNavigationView bottomNavigationView;
      NavController navController;
      Fragment hostFragment;
+     private DatabaseReference UserReference = FirebaseDatabase.getInstance().getReference("Users");
+     private String currentProjectList;
 
 
 
@@ -37,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
@@ -105,8 +106,25 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void startUploadActivity() {
-        Intent intent = new Intent(MainActivity.this,UploadActivity.class );
-        startActivity(intent);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userID = user.getUid();
+        UserReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String projectList = "";
+                if(snapshot.child("projects").getValue() != null) {
+                    projectList = snapshot.child("projects").getValue().toString();
+
+                }
+                Intent intent = new Intent(MainActivity.this, UploadActivity.class);
+                intent.putExtra("projectList", projectList);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     public void onBackPressed() {
@@ -119,5 +137,11 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.setSelectedItemId(R.id.profileFragment);
         }
 
+    }
+
+    private String getProjectList(String userID) {
+
+
+        return currentProjectList;
     }
 }

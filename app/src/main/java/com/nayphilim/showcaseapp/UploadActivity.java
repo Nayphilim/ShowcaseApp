@@ -58,16 +58,18 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
     private String Category;
     private FirebaseUser user;
     private String userID;
-    private String projects;
+
     ArrayList<Uri> imageUris = new ArrayList<>();
     ArrayList<String> imageUrls = new ArrayList<>();
-    Project project;
+
+
     private String projectId;
     private String title;
     private String category;
     private String description;
     private String credits;
     private String repository;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +90,10 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         creditsBox = findViewById(R.id.uploadCredits);
         repositoryBox = findViewById(R.id.uploadRepository);
 
-        project = new Project();
-
         projectId = ProjectReference.push().getKey();
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        userID = user.getUid();
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories, R.layout.support_simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -101,6 +104,8 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
 
         publishButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
+
+
 
     }
 
@@ -167,9 +172,6 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         Matcher matcher;
 
 
-
-
-
         if(title.isEmpty()){
             titleBox.setError("Project Title is required");
             titleBox.requestFocus();
@@ -197,63 +199,74 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
 
 
 
-        uploadImages(new ArrayList<>(),imageUris);
-//
-//        for(Uri imageUri : imageUris){
-//            StorageReference fileRef = StorageReference.child(System.currentTimeMillis() + "."  + getFileExtension(imageUri));
-//            UploadTask uploadTask = fileRef.putFile(imageUri);
-//
-//
-//            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                @Override
-//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-//                        @Override
-//                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-//                            if (!task.isSuccessful()) {
-//                                throw task.getException();
-//                            }
-//
-//                            // Continue with the task to get the download URL
-//
-//                            return fileRef.getDownloadUrl();
-//                        }
-//                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Uri> task) {
-//                            //if (task.isSuccessful()) {
-//                                Uri downloadUri = task.getResult();
-//                                imageUrls.add(downloadUri.toString());
-//
-//                            //} else {
-//                                // Handle failures
-//                                // ...
-//                           // }
-//                        }
-//                    });
-//                }
-//            }).addOnProgressListener(new OnProgressListener() {
-//                @Override
-//                public void onProgress(@NonNull Object snapshot) {
-//                    progressBar.setVisibility(View.VISIBLE);
-//                }
-//            }).addOnFailureListener(new OnFailureListener() {
-//                @Override
-//                public void onFailure(@NonNull Exception e) {
-//                    Toast.makeText(UploadActivity.this, "Failed to upload, please try again", Toast.LENGTH_LONG).show();
-//                    progressBar.setVisibility(View.GONE);
-//                    finish();
-//                }
-//            });
-//
-//
-//
-//
-//        }
+
+
+        for(Uri imageUri : imageUris){
+            StorageReference fileRef = StorageReference.child(System.currentTimeMillis() + "."  + getFileExtension(imageUri));
+            UploadTask uploadTask = fileRef.putFile(imageUri);
+
+
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful()) {
+                                throw task.getException();
+                            }
+
+                            // Continue with the task to get the download URL
+
+                            return fileRef.getDownloadUrl();
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            //if (task.isSuccessful()) {
+                                Uri downloadUri = task.getResult();
+                                imageUrls.add(downloadUri.toString());
+
+                                StringBuffer sb = new StringBuffer();
+                                for(String imageUrl : imageUrls){
+                                    sb.append(imageUrl);
+                                    sb.append(",");
+
+                                }
+                                String imageUrlList = sb.toString();
+
+                                ProjectReference.child(projectId).child("imageUrls").setValue(imageUrlList);
+
+
+                            //} else {
+                                // Handle failures
+                                // ...
+                           // }
+                        }
+                    });
+                }
+            }).addOnProgressListener(new OnProgressListener() {
+                @Override
+                public void onProgress(@NonNull Object snapshot) {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(UploadActivity.this, "Failed to upload, please try again", Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                    finish();
+                }
+            });
 
 
 
-       // uploadProject(title, category, description, credits, repository, imageUrlList);
+
+        }
+
+
+
+        uploadProject(title, category, description, credits, repository);
 
 
 
@@ -275,114 +288,34 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         startActivityForResult(galleryIntent, 2);
     }
 
-    private void uploadImages(@NonNull ArrayList<String> imagesUrl,ArrayList<Uri> imageUriList){
-
-        Uri uri = imageUriList.get(imagesUrl.size());
-
-        StorageReference fileRef = StorageReference.child(System.currentTimeMillis() + "."  + getFileExtension(uri));
-        UploadTask uploadTask = fileRef.putFile(uri);
 
 
-        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                    @Override
-                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                        if (!task.isSuccessful()) {
-                            throw task.getException();
-                        }
-
-                        // Continue with the task to get the download URL
-
-                        return fileRef.getDownloadUrl();
-                    }
-                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        //if (task.isSuccessful()) {
-                        Uri downloadUri = task.getResult();
-                        imagesUrl.add(downloadUri.toString());
-
-                        if(imagesUrl.size()  == imageUriList.size()){
-                            allImageUploadedNow(imagesUrl);
-                        }else {
-                            uploadImages(imagesUrl, imageUriList);
-                        }
-
-                        //} else {
-                        // Handle failures
-                        // ...
-                        // }
-                    }
-                });
+    private void uploadProject(String title, String category, String description, String credits, String repository){
+        String projects = getIntent().getStringExtra("projectList");
+            if(projects == null){
+                projects = "";
             }
-        }).addOnProgressListener(new OnProgressListener() {
-            @Override
-            public void onProgress(@NonNull Object snapshot) {
-                progressBar.setVisibility(View.VISIBLE);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(UploadActivity.this, "Failed to upload, please try again", Toast.LENGTH_LONG).show();
-                progressBar.setVisibility(View.GONE);
-                finish();
-            }
-        });
-    }
 
-    private void allImageUploadedNow(ArrayList<String> imagesUrl) {
-        StringBuffer sb = new StringBuffer();
-        for(String imageUrl : imageUrls){
-            sb.append(imageUrl);
-            sb.append(",");
-
-        }
-        String imageUrlList = sb.toString();
-
-        uploadProject(title, category, description, credits, repository, imageUrlList);
-
-    }
-
-    private void uploadProject(String title, String category, String description, String credits, String repository, String imageUrlList){
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        userID = user.getUid();
-
-        String projectList = getProjectList(userID);
-
-//        Toast.makeText(UploadActivity.this, projectList, Toast.LENGTH_LONG).show();
-
-
-        if(projectList == null){
-            projectList = "";
-        }
-
-
-
-
-            project.setTitle(title);
-            project.setCategory(category);
-            project.setImageUrls(imageUrlList);
-            project.setDescription(description);
-            project.setUser(userID);
-            project.setUploadDate(getCurrentDate());
+        ProjectReference.child(projectId).child("title").setValue(title);
+        ProjectReference.child(projectId).child("category").setValue(category);
+        ProjectReference.child(projectId).child("description").setValue(description);
+        ProjectReference.child(projectId).child("user").setValue(userID);
+        ProjectReference.child(projectId).child("uploadDate").setValue(getCurrentDate());
             if (!credits.isEmpty()) {
-                project.setCredits(credits);
+                ProjectReference.child(projectId).child("credits").setValue(credits);
             }
             if (!repository.isEmpty()) {
-                project.setRepository(repository);
+                ProjectReference.child(projectId).child("repository").setValue(repository);
             }
 
-            ProjectReference.child(projectId).setValue(project);
 
-            if(projectList == ""){
-                projectList += projectId;
+            if(projects == "" || projects == null){
+                projects = projectId;
             }
             else {
-                projectList += "," + projectId;
+                projects = projectId + "," + projects;
             }
-            UserReference.child(userID).child("projects").setValue(projectList);
+            UserReference.child(userID).child("projects").setValue(projects);
 
             progressBar.setVisibility(View.GONE);
             finish();
@@ -396,22 +329,5 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         return currentDate;
     }
 
-    private String getProjectList(String userID) {
-        UserReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.child("projects").getValue() != null) {
-                     project.setProjectList(snapshot.child("projects").getValue().toString().trim());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        return project.getProjectList();
-    }
 
 }
