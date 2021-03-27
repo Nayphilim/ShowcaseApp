@@ -62,13 +62,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
     ArrayList<Uri> imageUris = new ArrayList<>();
     ArrayList<String> imageUrls = new ArrayList<>();
 
-
     private String projectId;
-    private String title;
-    private String category;
-    private String description;
-    private String credits;
-    private String repository;
 
 
     @Override
@@ -162,11 +156,11 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     private void publishProject() {
-        title = titleBox.getText().toString().trim();
-        category = Category;
-        description = descriptionBox.getText().toString().trim();
-        credits = creditsBox.getText().toString().trim();
-        repository = repositoryBox.getText().toString().trim();
+        String title = titleBox.getText().toString().trim();
+        String category = Category;
+        String description = descriptionBox.getText().toString().trim();
+        String credits = creditsBox.getText().toString().trim();
+        String repository = repositoryBox.getText().toString().trim();
         final String RepoPattern = "^(https://github\\.com/).+/.+";
         Pattern pattern = Pattern.compile(RepoPattern);
         Matcher matcher;
@@ -282,7 +276,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         Intent galleryIntent = new Intent();
         galleryIntent.setAction(Intent.ACTION_OPEN_DOCUMENT);
         galleryIntent.setType("*/*");
-        String[] extraMimeTypes = {"image/*", "video/mp4"};
+        String[] extraMimeTypes = {"image/*"};
         galleryIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes);
         galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         startActivityForResult(galleryIntent, 2);
