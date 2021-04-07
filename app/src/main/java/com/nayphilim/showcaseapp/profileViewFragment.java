@@ -215,6 +215,7 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
                     profileLocation.setText(userProfile.getLocation());
                     profileLocation.setVisibility(View.VISIBLE);
                 }
+
                 return;
             }
 
@@ -248,9 +249,11 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
     public void onProjectClick(int position) {
         ProfileFeed selectedProject =  profileFeedArrayList.get(position);
         String projectId = selectedProject.getProjectId();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         Intent intent = new Intent(getContext(), projectViewAcitivty.class);
         intent.putExtra("selectedProjectId", projectId);
+        intent.putExtra("viewerID", user.getUid());
         startActivity(intent);
     }
 

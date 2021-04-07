@@ -170,7 +170,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:visibility="invisible">
+            >
 
             <ImageButton
                 android:id="@+id/profileGithubButton"
@@ -179,7 +179,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:background="@drawable/ic_github"/>
+                android:background="@drawable/ic_github"
+                android:visibility="invisible"/>
 
         </RelativeLayout>
 

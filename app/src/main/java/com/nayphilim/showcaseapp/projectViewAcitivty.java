@@ -19,6 +19,7 @@ import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,6 +49,7 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
     private RelativeLayout projectRepositoryButtonArea, projectSourceTitleArea, projectCreditsArea, projectCreditsTitleArea;
     private ImageView projectRepositoryButton;
     private ImageButton backArrow;
+    private String viewerID;
 
     private ImageSlider imgSlider;
 
@@ -95,6 +97,7 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
         Bundle extras = intent.getExtras();
         if(extras != null){
             ProjectId = extras.getString("selectedProjectId");
+            viewerID = extras.getString("viewerID");
         }
 
 
@@ -136,6 +139,17 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
                     projectCategory.setText(project.getCategory());
                     projectDescription.setText(project.getDescription()); 
                     projectCredits.setText(project.getCredits());
+
+                    //WIP doesnt not properly authenticate that its not the current users project
+                    if(FirebaseAuth.getInstance().getCurrentUser().getUid() != viewerID){
+                        if(snapshot.child("projectViews").getValue() != null) {
+                            int currentViews = Integer.parseInt(snapshot.child("projectViews").getValue().toString());
+                            ProjectReference.child(ProjectId).child("projectViews").setValue(currentViews + 1);
+                        }
+                        else{
+                            ProjectReference.child(ProjectId).child("projectViews").setValue(1);
+                        }
+                    }
 
                     UserReference.child(project.getUser()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override

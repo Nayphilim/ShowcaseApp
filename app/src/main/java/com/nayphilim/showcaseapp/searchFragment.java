@@ -161,6 +161,7 @@ public class searchFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     String name = userSearch.getText().toString();
+                    keyboardController.hideKeyboard(getActivity());
                     searchUser(name);
 
                 }
