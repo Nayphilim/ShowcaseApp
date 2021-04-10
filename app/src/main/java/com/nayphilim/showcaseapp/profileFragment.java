@@ -1,6 +1,7 @@
 package com.nayphilim.showcaseapp;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,6 +34,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import ru.nikartm.support.BadgePosition;
+import ru.nikartm.support.ImageBadgeView;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link profileFragment#newInstance} factory method to
@@ -64,10 +68,12 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
     private ArrayList<ProfileFeed> profileFeedArrayList = new ArrayList<>();
     private AdapterProfileFeed adapterProfileFeed;
 
+
     FirebaseRecyclerAdapter adapter;
     FirebaseRecyclerOptions options;
 
     private ImageButton profileSettingsButton;
+    private ImageBadgeView profileInboxButton;
 
     private User userProfile = new User();
 
@@ -121,6 +127,7 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
         recyclerView = view.findViewById(R.id.profileLineFeed);
         profileSettingsButton = view.findViewById(R.id.profileSettingsButton);
         profileProjectNum = view.findViewById(R.id.profileProjectsNum);
+        profileInboxButton = view.findViewById(R.id.profileInboxButton);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -129,6 +136,7 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
         adapterProfileFeed.notifyDataSetChanged();
 
         profileSettingsButton.setOnClickListener(this);
+        profileInboxButton.setOnClickListener(this);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
@@ -138,6 +146,11 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
         populateRecyclerView();
 
 
+        //example of setting inbox notif
+        profileInboxButton.setBadgeValue(0)
+                .setBadgeBackground(getResources().getDrawable(R.drawable.inbox_notification_badge))
+                .setBadgePosition(BadgePosition.BOTTOM_RIGHT)
+                .setShowCounter(false);
 
 
 
@@ -252,7 +265,14 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
         switch (v.getId()){
             case R.id.profileSettingsButton:
                 startSettingsActivity();
+            case R.id.profileInboxButton:
+                startInboxActivity();
         }
+    }
+
+    private void startInboxActivity() {
+        Intent intent = new Intent(getActivity(),InboxActivity.class );
+        startActivity(intent);
     }
 
     private void startSettingsActivity() {

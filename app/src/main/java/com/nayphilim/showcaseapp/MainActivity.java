@@ -133,6 +133,11 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
             finish();
         }
+        else if(bottomNavigationView.getSelectedItemId() == R.id.searchFragment){
+            //if selected fragment is search fragment attempt to end recording session
+            Session.endSession();
+            bottomNavigationView.setSelectedItemId(R.id.profileFragment);
+        }
         else{
             bottomNavigationView.setSelectedItemId(R.id.profileFragment);
         }
@@ -144,4 +149,5 @@ public class MainActivity extends AppCompatActivity {
 
         return currentProjectList;
     }
+
 }

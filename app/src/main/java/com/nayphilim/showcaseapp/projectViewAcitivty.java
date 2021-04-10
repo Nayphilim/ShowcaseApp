@@ -3,12 +3,17 @@ package com.nayphilim.showcaseapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -17,8 +22,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.interfaces.ItemChangeListener;
+import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,15 +40,21 @@ import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageListener;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class projectViewAcitivty extends AppCompatActivity implements View.OnClickListener {
 
    // private ImageSlider imgSlider;
     private String userName;
+
+    private  FirebaseUser user;
+
     private DatabaseReference UserReference = FirebaseDatabase.getInstance().getReference("Users");
     private DatabaseReference ProjectReference = FirebaseDatabase.getInstance().getReference("Projects");
+
     private StorageReference StorageReference = FirebaseStorage.getInstance().getReference();
     private List<SlideModel> projectImages = new ArrayList<>();
     private String ProjectId, projectRepository;
@@ -50,13 +64,11 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
     private ImageView projectRepositoryButton;
     private ImageButton backArrow;
     private String viewerID;
-
     private ImageSlider imgSlider;
-
-    //String[] sampleImage = {"content://com.android.providers.media.documents/document/image%3A189"};
-
-
+    private FloatingActionButton fab;
     private User userProfile = new User();
+
+    private String feedbackDialog;
 
 
     @Override
@@ -80,6 +92,20 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
         projectCreditsArea = findViewById(R.id.projViewCreditsArea);
         projectCreditsTitleArea = findViewById(R.id.projViewCreditsTitleArea);
         imgSlider = findViewById(R.id.image_slider);
+        fab = findViewById(R.id.floating_action_button);
+
+        imgSlider.setItemChangeListener(new ItemChangeListener() {
+                                            @Override
+                                            public void onItemChanged(int i) {
+                                                Session.itrInteractions();
+                                            }
+                                        });
+        imgSlider.setItemClickListener(new ItemClickListener() {
+                                           @Override
+                                           public void onItemSelected(int i) {
+                                               Session.itrInteractions();
+                                           }
+                                       });
 
 
 //        if (imgSlider != null) {
@@ -89,8 +115,11 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
 
         backArrow.setOnClickListener(this);
         projectRepositoryButton.setOnClickListener(this);
+        fab.setOnClickListener(this);
 
         project = new Project();
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
 
         Intent intent = getIntent();
@@ -141,14 +170,18 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
                     projectCredits.setText(project.getCredits());
 
                     //WIP doesnt not properly authenticate that its not the current users project
-                    if(FirebaseAuth.getInstance().getCurrentUser().getUid() != viewerID){
+                    if(user.getUid() != viewerID){
                         if(snapshot.child("projectViews").getValue() != null) {
                             int currentViews = Integer.parseInt(snapshot.child("projectViews").getValue().toString());
                             ProjectReference.child(ProjectId).child("projectViews").setValue(currentViews + 1);
                         }
                         else{
+
                             ProjectReference.child(ProjectId).child("projectViews").setValue(1);
                         }
+                    }
+                    else{
+                        fab.setVisibility(View.GONE);
                     }
 
                     UserReference.child(project.getUser()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -183,10 +216,6 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
         projectRepository = repository;
     }
 
-    private void getUsername(String user) {
-
-
-    }
 
     private void populateSlides(String imageUrlList) {
         String[] imageUrls = imageUrlList.split(",");
@@ -200,51 +229,55 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
             imgSlider.setImageList(projectImages);
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-//        String[] testUrl = {"content://com.android.providers.media.documents/document/image%3A189"};
-////        ArrayList<Uri> imageUris = new ArrayList<Uri>();
-////
-////        for(String url : imageUrls){
-////            imageUris.add(Uri.parse(url));
-////        }
-//
-//        ImageListener firebaseImages = new ImageListener() {
-//            @Override
-//            public void setImageForPosition(int position, ImageView imageView) {
-//                Glide.with(getApplicationContext()).load(Uri.parse(testUrl[position])).into(imageView);
-//            }
-//        };
-//
-//        imgSlider.setPageCount(imageUrls.length);
-//        imgSlider.setImageListener(firebaseImages);
-
-
-
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.projViewBackArrow:
+                Session.itrInteractions();
                 finish();
                 break;
             case R.id.projViewGithub:
+                Session.itrInteractions();
                 openGithubBrowser();
+                break;
+            case R.id.floating_action_button:
+                Session.itrInteractions();
+                openFeedbackDialog();
                 break;
         }
     }
+
+    private void openFeedbackDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Leave some feedback?");
+
+        // Set up the input
+        View viewInflated = LayoutInflater.from(this).inflate(R.layout.feedback_box, (ViewGroup) findViewById(android.R.id.content), false);
+        final EditText input = (EditText) viewInflated.findViewById(R.id.input);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        builder.setView(viewInflated);
+
+        // Set up the buttons
+        builder.setPositiveButton("Send", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                feedbackDialog = input.getText().toString();
+                Feedback.submitFeedback(user.getUid(),project.getUser(),feedbackDialog);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+
 
     private void openGithubBrowser() {
         Intent intent = new Intent();

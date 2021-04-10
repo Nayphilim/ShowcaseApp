@@ -89,7 +89,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories, R.layout.support_simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories, R.layout.spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         uploadCategories.setAdapter(adapter);
         uploadCategories.setOnItemSelectedListener(this);

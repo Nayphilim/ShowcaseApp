@@ -93,13 +93,16 @@
 
                 <EditText
                     android:id="@+id/uploadProjectTitle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="Project Title"
                     android:inputType="textPersonName"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/feedback_box"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"/>
 
         </RelativeLayout>
 
@@ -117,7 +120,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
-
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:background="@drawable/spinner_background"
                     />
 
             </RelativeLayout>
@@ -133,14 +138,18 @@
             <EditText
                 android:inputType="textMultiLine"
                 android:id="@+id/uploadDescription"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:ems="10"
+                android:gravity="top"
                 android:hint="Project Description"
+                android:background="@drawable/feedback_box"
                 android:lines="8"
                 android:maxLength="255"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
                  />
         </RelativeLayout>
         <RelativeLayout
@@ -153,15 +162,19 @@
 
             <EditText
                 android:id="@+id/uploadCredits"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:ems="10"
                 android:hint="Credits"
+                android:background="@drawable/feedback_box"
+                android:gravity="top"
                 android:lines="3"
                 android:maxLength="99"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"/>
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/uploadRepositoryArea"
@@ -173,14 +186,17 @@
 
             <EditText
                 android:id="@+id/uploadRepository"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="40dp"
                 android:ems="10"
                 android:hint="Github Repository"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:background="@drawable/feedback_box"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"/>
         </RelativeLayout>
 
 

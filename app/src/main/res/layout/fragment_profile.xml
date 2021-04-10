@@ -172,13 +172,28 @@
 
             <ImageButton
                 android:id="@+id/profileSettingsButton"
-                android:layout_width="57dp"
+                android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginEnd="24dp"
                 android:background="?android:selectableItemBackground"
                 app:srcCompat="@drawable/ic_settings"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profileInboxButtonArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ru.nikartm.support.ImageBadgeView
+                android:id="@+id/profileInboxButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="24dp"
+                android:src="@drawable/ic_baseline_inbox" />
 
         </RelativeLayout>
 

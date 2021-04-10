@@ -126,6 +126,9 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
         updateProfile();
         populateRecyclerView();
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        Session.startSession(user.getUid(),userID); //start recording session
+
 
     }
 
@@ -239,6 +242,7 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.profileGithubButton:
+                Session.itrInteractions();
                 openGithubBrowser();
         }
     }
@@ -247,6 +251,7 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onProjectClick(int position) {
+        Session.itrInteractions();
         ProfileFeed selectedProject =  profileFeedArrayList.get(position);
         String projectId = selectedProject.getProjectId();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -264,4 +269,6 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
         intent.setData(Uri.parse(userProfile.getGithubLink()));
         startActivity(intent);
     }
+
+
 }

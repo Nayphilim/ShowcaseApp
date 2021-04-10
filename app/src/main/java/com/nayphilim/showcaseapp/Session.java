@@ -16,8 +16,8 @@ public class Session {
     static String AccountID;
     static String AccountViewedID;
     static int numInteractions;
-    static long startTime;
-    static long finishTime;
+    static Long startTime;
+    static Long finishTime;
     static private DatabaseReference SessionReference = FirebaseDatabase.getInstance().getReference("Sessions");
     static private DatabaseReference UserReference = FirebaseDatabase.getInstance().getReference("Users");
     static FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -32,20 +32,24 @@ public class Session {
         AccountViewedID = accountViewedID;
     }
 
-    static public void endSession(){
-        finishTime = System.nanoTime();
-        long elapsedTime = finishTime - startTime; //sessions length in seconds
-        long sessionLength = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
-        String sessionID = database.getReference("Sessions").push().getKey();
-
-        SessionReference.child(sessionID).child("accountID").setValue(AccountID);
-        SessionReference.child(sessionID).child("accountViewedID").setValue(AccountViewedID);
-        SessionReference.child(sessionID).child("interactions").setValue(numInteractions);
-        SessionReference.child(sessionID).child("sessionLength").setValue(sessionLength);
-        SessionReference.child(sessionID).child("sessionDateTime").setValue(getCurrentDateTime());
+    static public void endSession() {
+        if (startTime != null) {
+            finishTime = System.nanoTime();
+            Long elapsedTime = finishTime - startTime; //sessions length in seconds
+            Long sessionLength = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
+            String sessionID = database.getReference("Sessions").push().getKey();
 
 
-        updatePageViews();
+            SessionReference.child(sessionID).child("accountID").setValue(AccountID);
+            SessionReference.child(sessionID).child("accountViewedID").setValue(AccountViewedID);
+            SessionReference.child(sessionID).child("interactions").setValue(numInteractions);
+            SessionReference.child(sessionID).child("sessionLength").setValue(sessionLength);
+            SessionReference.child(sessionID).child("sessionDateTime").setValue(getCurrentDateTime());
+
+
+
+            updatePageViews();
+        }
     }
 
     static public void updatePageViews() {
@@ -53,11 +57,11 @@ public class Session {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot){
                 if(snapshot.child("pageViews").getValue() != null){
-                int currentViews = Integer.parseInt(snapshot.child("pageViews").getValue().toString());
-                UserReference.child(AccountViewedID).child("pageViews").setValue(currentViews+1);
+                    int currentViews = Integer.parseInt(snapshot.child("pageViews").getValue().toString());
+                    itrPageViews(currentViews);
                 }
                 else{
-                    UserReference.child(AccountViewedID).child("pageViews").setValue(1);
+                    setPageViews();
                 }
             }
 
@@ -66,6 +70,8 @@ public class Session {
 
             }
         });
+
+
     }
 
     static public void itrInteractions(){
@@ -78,5 +84,14 @@ public class Session {
         String currentDate = formatter.format(date);
         return currentDate;
     }
+
+    static public void setPageViews(){
+        UserReference.child(AccountViewedID).child("pageViews").setValue(1);
+    }
+
+    static public void itrPageViews(int currentViews){
+        UserReference.child(AccountViewedID).child("pageViews").setValue(currentViews+1);
+    }
+
 
 }
