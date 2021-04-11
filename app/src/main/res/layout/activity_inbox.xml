@@ -6,9 +6,49 @@
     android:layout_height="match_parent"
     tools:context=".InboxActivity">
 
+    <RelativeLayout
+        android:id="@+id/feedbackBackArrowTitleArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp">
+
+        <ImageButton
+            android:id="@+id/feedbackBackArrow"
+            android:layout_width="57dp"
+            android:layout_height="57dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.975"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.01"
+            app:srcCompat="@drawable/ic_back_arrow"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Feedback"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/bold"
+            android:textColor="@color/light_purple"
+            android:textSize="28dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/feedbackRecyclerViewArea"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/feedbackBackArrowTitleArea">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/inboxUnreadFeedbackList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    </RelativeLayout>
 
 </RelativeLayout>

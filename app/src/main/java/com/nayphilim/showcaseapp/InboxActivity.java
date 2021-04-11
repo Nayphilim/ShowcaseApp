@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,7 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class InboxActivity extends AppCompatActivity {
+public class InboxActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseUser user;
     private String userID;
@@ -29,16 +31,22 @@ public class InboxActivity extends AppCompatActivity {
     private ArrayList<FeedbackFeed> feedbackFeedArrayList = new ArrayList<>();
     private AdapterFeedbackFeed adapterFeedbackFeed;
 
+    private ImageButton backArrow;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inbox);
 
         recyclerView = findViewById(R.id.inboxUnreadFeedbackList);
+        backArrow = findViewById(R.id.feedbackBackArrow);
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapterFeedbackFeed = new AdapterFeedbackFeed(this, feedbackFeedArrayList);
         recyclerView.setAdapter(adapterFeedbackFeed);
+
+        backArrow.setOnClickListener(this);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
@@ -69,5 +77,14 @@ public class InboxActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.feedbackBackArrow:
+                finish();
+                break;
+        }
     }
 }
