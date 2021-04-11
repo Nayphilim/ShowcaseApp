@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:elevation="8dp">
+
+
+
+    <RelativeLayout
+        android:id="@+id/feedbackArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/profile_feed_background">
+
+        <RelativeLayout
+            android:id="@+id/feedbackProjectThumbnailArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/feedbackProjectThumbnail"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_margin="4dp"
+                android:clickable="true"
+                android:scaleType="matrix"
+                />
+        </RelativeLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/feedbackNameProjectArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/feedbackProjectThumbnailArea">
+            <RelativeLayout
+                android:id="@+id/feedbackUserArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="4dp">
+
+                <TextView
+                    android:id="@+id/feedbackUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="User name"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/bold"
+                    android:textColor="@color/light_purple"
+                    android:clickable="true"/>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/feedbackOnArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="4dp">
+
+                <TextView
+                    android:id="@+id/feedbackOn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="feedback on"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/regular"
+                    android:textColor="@color/gray" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/feedbackProjectTitleArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="4dp">
+
+                <TextView
+                    android:id="@+id/feedbackProjectTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="project title"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/bold"
+                    android:textColor="@color/light_purple"
+                    android:clickable="true" />
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/feedbackDialogArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_below="@+id/feedbackNameProjectArea"
+            android:layout_toRightOf="@+id/feedbackProjectThumbnailArea">
+
+            <TextView
+                android:id="@+id/feedbackDialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="feedback dialog"
+                android:textSize="18dp"
+                android:fontFamily="@font/regular"
+                android:textColor="@color/black" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/feedbackDateTimeArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_below="@+id/feedbackDialogArea"
+            android:layout_alignParentRight="true"
+            >
+
+            <TextView
+                android:id="@+id/feedbackDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="date"
+                android:textSize="14dp"
+                android:fontFamily="@font/regular"
+                android:textColor="@color/gray"
+                />
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+
+
+</androidx.cardview.widget.CardView>

@@ -1,5 +1,7 @@
 package com.nayphilim.showcaseapp;
 
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,14 +19,18 @@ public class Feedback {
     private static FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static DatabaseReference FeedbackReference = FirebaseDatabase.getInstance().getReference("Feedback");
     private static DatabaseReference UserReference = FirebaseDatabase.getInstance().getReference("Users");
-    private  static String SubmitterID, ReceiverID, FeedbackDialog, FeedbackID;
+    private  static String SubmitterID, ReceiverID, FeedbackDialog, FeedbackID, ProjectID, ProjectTitle;
+    private static Uri PostPic;
     private static boolean successful;
 
 
-    public static boolean submitFeedback(String submitterID,String receiverID, String feedbackDialog) {
+    public static boolean submitFeedback(String submitterID, String receiverID, String feedbackDialog, String projectID, String projectTitle, Uri postPic) {
         SubmitterID = submitterID;
         ReceiverID = receiverID;
         FeedbackDialog = feedbackDialog;
+        ProjectID = projectID;
+        ProjectTitle = projectTitle;
+        PostPic = postPic;
         FeedbackID = database.getReference("Feedback").push().getKey();
         UserReference.child(SubmitterID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -34,8 +40,12 @@ public class Feedback {
                     FeedbackReference.child(FeedbackID).child("submitterID").setValue(SubmitterID);
                     FeedbackReference.child(FeedbackID).child("submitterName").setValue(submitterName);
                     FeedbackReference.child(FeedbackID).child("receiverID").setValue(ReceiverID);
+                    FeedbackReference.child(FeedbackID).child("projectID").setValue(ProjectID);
+                    FeedbackReference.child(FeedbackID).child("projectTitle").setValue(ProjectTitle);
                     FeedbackReference.child(FeedbackID).child("feedbackDialog").setValue(FeedbackDialog);
                     FeedbackReference.child(FeedbackID).child("feedbackDateTime").setValue(getCurrentDateTime());
+                    FeedbackReference.child(FeedbackID).child("projectThumbnail").setValue(PostPic.toString());
+
                     successful = true;
                 }
             }

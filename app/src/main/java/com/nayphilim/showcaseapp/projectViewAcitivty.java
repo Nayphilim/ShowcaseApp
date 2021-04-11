@@ -67,6 +67,7 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
     private ImageSlider imgSlider;
     private FloatingActionButton fab;
     private User userProfile = new User();
+    private String[] imageUrls;
 
     private String feedbackDialog;
 
@@ -218,7 +219,7 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
 
 
     private void populateSlides(String imageUrlList) {
-        String[] imageUrls = imageUrlList.split(",");
+        imageUrls = imageUrlList.split(",");
 
         for(String url : imageUrls){
             Uri uri = Uri.parse(url);
@@ -264,7 +265,7 @@ public class projectViewAcitivty extends AppCompatActivity implements View.OnCli
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 feedbackDialog = input.getText().toString();
-                Feedback.submitFeedback(user.getUid(),project.getUser(),feedbackDialog);
+                Feedback.submitFeedback(user.getUid(),project.getUser(),feedbackDialog, ProjectId, project.getTitle(), Uri.parse(imageUrls[0]) );
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
