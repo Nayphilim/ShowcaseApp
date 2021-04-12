@@ -6,19 +6,45 @@
     tools:context=".searchFragment"
     android:background="@color/white">
 
-    <AutoCompleteTextView
-        android:id="@+id/userSearch"
+    <LinearLayout
+        android:id="@+id/userSearchArea"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_margin="20dp"
-        android:hint="Search.."
-        android:drawableLeft="@drawable/ic_search"
-        android:completionThreshold="1"
-        android:layout_weight="1"/>
+        android:layout_height="wrap_content">
+
+
+        <AutoCompleteTextView
+            android:id="@+id/userSearch"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="8dp"
+            android:hint="Search.."
+            android:drawableLeft="@drawable/ic_search"
+            android:completionThreshold="1"
+            android:layout_weight="1"
+            />
+
+
+        <ImageButton
+            android:id="@+id/QRButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_toRightOf="@+id/userSearch"
+            android:layout_margin="8dp"
+            android:background="?android:selectableItemBackground"
+            android:src="@drawable/ic_baseline_qr_code_scanner"
+            android:scaleType="fitCenter"
+            android:padding="8dp"
+            />
+        </LinearLayout>
+
+
+
+
+
     
     <ListView
         android:id="@+id/searchListData"
-        android:layout_below="@+id/userSearch"
+        android:layout_below="@+id/userSearchArea"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

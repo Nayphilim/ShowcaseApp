@@ -3,18 +3,19 @@ package com.nayphilim.showcaseapp;
 import android.net.Uri;
 
 public class FeedbackFeed {
-    String ProjectTitle, UserName, Date, FeedbackId, FeedbackDialog;
+    String ProjectTitle, UserName, Date, FeedbackId, FeedbackDialog, ProjectId;
     Uri PostPic;
 
 
 
-    public FeedbackFeed(String feedbackId, String title, String userName, String date, Uri postPic, String feedbackDialog){
+    public FeedbackFeed(String feedbackId, String title, String projectId, String userName, String date, Uri postPic, String feedbackDialog){
         this.ProjectTitle = title;
         this.UserName = userName;
         this.Date = date;
         this.PostPic = postPic;
         this.FeedbackId = feedbackId;
         this.FeedbackDialog = feedbackDialog;
+        this.ProjectId = projectId;
     }
 
     public String getProjectTitle() {
@@ -49,14 +50,6 @@ public class FeedbackFeed {
         PostPic = postPic;
     }
 
-    public String getProjectId() {
-        return FeedbackId;
-    }
-
-    public void setProjectId(String feedbackId) {
-        FeedbackId = feedbackId;
-    }
-
     public String getFeedbackId() {
         return FeedbackId;
     }
@@ -71,5 +64,13 @@ public class FeedbackFeed {
 
     public void setFeedbackDialog(String feedbackDialog) {
         FeedbackDialog = feedbackDialog;
+    }
+
+    public String getProjectId() {
+        return ProjectId;
+    }
+
+    public void setProjectId(String projectId) {
+        ProjectId = projectId;
     }
 }

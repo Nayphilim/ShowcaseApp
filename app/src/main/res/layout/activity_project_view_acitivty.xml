@@ -17,10 +17,11 @@
 
         <ImageButton
             android:id="@+id/projViewBackArrow"
-            android:layout_width="57dp"
-            android:layout_height="57dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,10 +48,6 @@
                 app:iss_selected_dot="@drawable/default_selected_dot"
                 app:iss_unselected_dot="@drawable/default_unselected_dot"/>
 
-<!--            <com.synnapps.carouselview.CarouselView-->
-<!--                android:id="@+id/image_slider"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="360dp" />-->
 
 
         </RelativeLayout>

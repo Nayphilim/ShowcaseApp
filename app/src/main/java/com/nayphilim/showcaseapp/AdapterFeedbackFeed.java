@@ -22,7 +22,7 @@ public class AdapterFeedbackFeed extends RecyclerView.Adapter<AdapterFeedbackFee
     RequestManager glide;
     private OnFeedbackListener onFeedbackListener;
 
-    public AdapterFeedbackFeed(Context context , ArrayList<FeedbackFeed> feedbackFeedArrayList){
+    public AdapterFeedbackFeed(Context context , ArrayList<FeedbackFeed> feedbackFeedArrayList, OnFeedbackListener onFeedbackListener){
         this.context = context;
         this.feedbackFeedArrayList = feedbackFeedArrayList;
         this.onFeedbackListener = onFeedbackListener;
@@ -71,7 +71,7 @@ public class AdapterFeedbackFeed extends RecyclerView.Adapter<AdapterFeedbackFee
         ImageView postImage;
         OnFeedbackListener onFeedbackListener;
 
-        public MyViewHolder(@NonNull View itemView, OnFeedbackListener onfeedbackListener) {
+        public MyViewHolder(@NonNull View itemView, OnFeedbackListener onFeedbackListener) {
             super(itemView);
 
 
@@ -92,13 +92,13 @@ public class AdapterFeedbackFeed extends RecyclerView.Adapter<AdapterFeedbackFee
 
         @Override
         public void onClick(View v) {
-            onFeedbackListener.onProjectClick(getAdapterPosition());
+            onFeedbackListener.onFeedbackClick(getAdapterPosition());
 
         }
     }
 
     public interface OnFeedbackListener {
-        void onProjectClick(int position);
+        void onFeedbackClick(int position);
 
     }
 }

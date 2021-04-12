@@ -109,21 +109,20 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-                            User user = new User("email", "firstName","" , "lastName", "No Specialization", "", "", "");
+                            User user = new User(email, firstName,"" , lastName, "", "", "false", "No Specialization");
 
                             FirebaseDatabase.getInstance().getReference("Users")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
+                                    if(task.isSuccessful()) {
                                         Toast.makeText(RegisterActivity.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
-                                        progressBar.setVisibility(View.GONE);
 
                                     } else {
                                         Toast.makeText(RegisterActivity.this, "Failed to register user, please try again", Toast.LENGTH_LONG).show();
-                                        progressBar.setVisibility(View.GONE);
                                     }
+                                    progressBar.setVisibility(View.GONE);
                                 }
                             });
 

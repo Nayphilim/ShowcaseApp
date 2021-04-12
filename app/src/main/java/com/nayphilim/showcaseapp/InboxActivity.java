@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -20,8 +21,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-public class InboxActivity extends AppCompatActivity implements View.OnClickListener {
+public class InboxActivity extends AppCompatActivity implements View.OnClickListener, AdapterFeedbackFeed.OnFeedbackListener {
 
     private FirebaseUser user;
     private String userID;
@@ -44,7 +46,7 @@ public class InboxActivity extends AppCompatActivity implements View.OnClickList
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapterFeedbackFeed = new AdapterFeedbackFeed(this, feedbackFeedArrayList);
+        adapterFeedbackFeed = new AdapterFeedbackFeed(this, feedbackFeedArrayList, this);
         recyclerView.setAdapter(adapterFeedbackFeed);
 
         backArrow.setOnClickListener(this);
@@ -67,10 +69,12 @@ public class InboxActivity extends AppCompatActivity implements View.OnClickList
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        FeedbackFeed feedbackFeed = new FeedbackFeed(ds.getKey(), ds.child("projectTitle").getValue().toString(), ds.child("submitterName").getValue().toString(), ds.child("feedbackDateTime").getValue().toString(), Uri.parse(ds.child("projectThumbnail").getValue().toString()), ds.child("feedbackDialog").getValue().toString());
+                        FeedbackFeed feedbackFeed = new FeedbackFeed(ds.getKey(), ds.child("projectTitle").getValue().toString(),ds.child("projectID").getValue().toString(), ds.child("submitterName").getValue().toString(), ds.child("feedbackDateTime").getValue().toString(), Uri.parse(ds.child("projectThumbnail").getValue().toString()), ds.child("feedbackDialog").getValue().toString());
                         feedbackFeedArrayList.add(feedbackFeed);
-                        adapterFeedbackFeed.notifyItemInserted(feedbackFeedArrayList.size());
+
                     }
+                    Collections.reverse(feedbackFeedArrayList);
+                    adapterFeedbackFeed.notifyDataSetChanged();
                 }
             }
 
@@ -79,6 +83,8 @@ public class InboxActivity extends AppCompatActivity implements View.OnClickList
 
             }
         });
+
+
 
     }
 
@@ -89,5 +95,15 @@ public class InboxActivity extends AppCompatActivity implements View.OnClickList
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public void onFeedbackClick(int position) {
+        FeedbackFeed selectedFeedback =  feedbackFeedArrayList.get(position);
+        String projectId = selectedFeedback.getProjectId();
+
+        Intent intent = new Intent(this, projectViewActivity.class);
+        intent.putExtra("selectedProjectId", projectId);
+        startActivity(intent);
     }
 }

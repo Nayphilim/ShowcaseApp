@@ -165,6 +165,11 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         Pattern pattern = Pattern.compile(RepoPattern);
         Matcher matcher;
 
+        if(imageUris.isEmpty()){
+            uploadImageBox.requestFocus();
+            return;
+        }
+
 
         if(title.isEmpty()){
             titleBox.setError("Project Title is required");

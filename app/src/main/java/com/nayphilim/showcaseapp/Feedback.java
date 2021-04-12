@@ -45,6 +45,7 @@ public class Feedback {
                     FeedbackReference.child(FeedbackID).child("feedbackDialog").setValue(FeedbackDialog);
                     FeedbackReference.child(FeedbackID).child("feedbackDateTime").setValue(getCurrentDateTime());
                     FeedbackReference.child(FeedbackID).child("projectThumbnail").setValue(PostPic.toString());
+                    FeedbackReference.child(FeedbackID).child("read").setValue(false);
 
                     UserReference.child(ReceiverID).child("unreadFeedback").setValue(true);
 

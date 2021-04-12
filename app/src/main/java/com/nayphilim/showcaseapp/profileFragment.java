@@ -270,8 +270,10 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
         switch (v.getId()){
             case R.id.profileSettingsButton:
                 startSettingsActivity();
+                break;
             case R.id.profileInboxButton:
                 startInboxActivity();
+                break;
         }
     }
 
