@@ -46,6 +46,8 @@ public class Feedback {
                     FeedbackReference.child(FeedbackID).child("feedbackDateTime").setValue(getCurrentDateTime());
                     FeedbackReference.child(FeedbackID).child("projectThumbnail").setValue(PostPic.toString());
 
+                    UserReference.child(ReceiverID).child("unreadFeedback").setValue(true);
+
                     successful = true;
                 }
             }

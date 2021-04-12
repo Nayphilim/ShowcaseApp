@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -256,7 +255,7 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
         String projectId = selectedProject.getProjectId();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        Intent intent = new Intent(getContext(), projectViewAcitivty.class);
+        Intent intent = new Intent(getContext(), projectViewActivity.class);
         intent.putExtra("selectedProjectId", projectId);
         intent.putExtra("viewerID", user.getUid());
         startActivity(intent);

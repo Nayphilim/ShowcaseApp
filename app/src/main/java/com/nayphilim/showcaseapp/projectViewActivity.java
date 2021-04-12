@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class projectViewAcitivty extends AppCompatActivity implements View.OnClickListener {
+public class projectViewActivity extends AppCompatActivity implements View.OnClickListener {
 
    // private ImageSlider imgSlider;
     private String userName;

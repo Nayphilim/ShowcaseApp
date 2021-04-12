@@ -25,6 +25,7 @@ public class InboxActivity extends AppCompatActivity implements View.OnClickList
 
     private FirebaseUser user;
     private String userID;
+    private DatabaseReference UserReference = FirebaseDatabase.getInstance().getReference("Users");
     private DatabaseReference FeedbackReference = FirebaseDatabase.getInstance().getReference("Feedback");
 
     private RecyclerView recyclerView;
@@ -50,6 +51,8 @@ public class InboxActivity extends AppCompatActivity implements View.OnClickList
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
+
+        UserReference.child(userID).child("unreadFeedback").setValue(false);
 
         populateFeedbackList();
     }

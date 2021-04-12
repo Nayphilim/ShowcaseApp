@@ -3,15 +3,12 @@ package com.nayphilim.showcaseapp;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,12 +17,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -60,6 +57,7 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
     private FirebaseUser user;
     private DatabaseReference  UserReference = FirebaseDatabase.getInstance().getReference("Users");
     private DatabaseReference ProjectReference = FirebaseDatabase.getInstance().getReference("Projects");
+    private DatabaseReference FeedbackReference = FirebaseDatabase.getInstance().getReference("Feedback");
 
     private String userID;
     private String projects;
@@ -146,11 +144,6 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
         populateRecyclerView();
 
 
-        //example of setting inbox notif
-        profileInboxButton.setBadgeValue(0)
-                .setBadgeBackground(getResources().getDrawable(R.drawable.inbox_notification_badge))
-                .setBadgePosition(BadgePosition.BOTTOM_RIGHT)
-                .setShowCounter(false);
 
 
 
@@ -241,6 +234,18 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
                     profileLocation.setText(userProfile.getLocation());
                     profileLocation.setVisibility(View.VISIBLE);
                 }
+
+
+                if(snapshot.child("unreadFeedback").getValue() != null){
+                    if(snapshot.child("unreadFeedback").getValue().toString().trim() == "true"){
+                        profileInboxButton.setBadgeValue(1)
+                                .setBadgeTextSize(16)
+                                .setMaxBadgeValue(999)
+                                .setBadgeBackground(getResources().getDrawable(R.drawable.inbox_notification_badge))
+                                .setBadgePosition(BadgePosition.BOTTOM_RIGHT)
+                                .setBadgeTextStyle(Typeface.NORMAL);
+                    }
+                }
             }
 
 
@@ -286,7 +291,7 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
         ProfileFeed selectedProject =  profileFeedArrayList.get(position);
         String projectId = selectedProject.getProjectId();
 
-        Intent intent = new Intent(getContext(), projectViewAcitivty.class);
+        Intent intent = new Intent(getContext(), projectViewActivity.class);
         intent.putExtra("selectedProjectId", projectId);
         startActivity(intent);
     }
