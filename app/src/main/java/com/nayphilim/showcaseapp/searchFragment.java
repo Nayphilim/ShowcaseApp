@@ -1,5 +1,8 @@
 package com.nayphilim.showcaseapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +30,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 
@@ -34,7 +40,7 @@ import java.util.ArrayList;
  * Use the {@link searchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class searchFragment extends Fragment {
+public class searchFragment extends Fragment implements View.OnClickListener {
 
     private static searchFragment instance;
     // TODO: Rename parameter arguments, choose names that match
@@ -46,6 +52,7 @@ public class searchFragment extends Fragment {
 
     private AutoCompleteTextView userSearch;
     private ListView searchListData;
+    private ImageButton QRButton;
 
 
 
@@ -99,6 +106,9 @@ public class searchFragment extends Fragment {
 
         userSearch = (AutoCompleteTextView)view.findViewById(R.id.userSearch);
         searchListData =(ListView) view.findViewById(R.id.searchListData);
+        QRButton = view.findViewById(R.id.QRButton);
+
+        QRButton.setOnClickListener(this);
 
         ValueEventListener event = new ValueEventListener() {
             @Override
@@ -233,5 +243,52 @@ public class searchFragment extends Fragment {
             instance = new searchFragment();
         }
         return instance;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.QRButton:
+                startQRScanner();
+                break;
+        }
+    }
+
+    private void startQRScanner() {
+        IntentIntegrator intentIntegrator = new IntentIntegrator(getActivity());
+        intentIntegrator.setBeepEnabled(true);
+        intentIntegrator.setOrientationLocked(true);
+        intentIntegrator.setCaptureActivity(Capture.class);
+        intentIntegrator.initiateScan();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,data);
+        if(intentResult.getContents() != null){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Open this profile?");
+            builder.setMessage(intentResult.getContents());
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            builder.show();
+        }
+        else{
+            Toast.makeText(getActivity(), "Did not scan a valid QR code, please try again.", Toast.LENGTH_SHORT);
+        }
     }
 }

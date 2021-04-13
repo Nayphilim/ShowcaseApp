@@ -4,15 +4,30 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -20,8 +35,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.google.zxing.BarcodeFormat;
 import com.hbb20.CountryCodePicker;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.io.ByteArrayOutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,8 +59,11 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
     private TextView cancel, save;
 
     private DatabaseReference UserReference = FirebaseDatabase.getInstance().getReference("Users");
+    private com.google.firebase.storage.StorageReference StorageReference = FirebaseStorage.getInstance().getReference();
     private FirebaseUser user;
     private String userID;
+    private Button QRGenerationButton;
+    private String userEmail, userName;
 
     private ArrayAdapter<CharSequence> adapter;
 
@@ -53,6 +78,7 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
         githubLinkText = findViewById(R.id.profileSettingsGithubLink);
         cancel = findViewById(R.id.profileSettingsCancel);
         save = findViewById(R.id.profileSettingsSave);
+        QRGenerationButton = findViewById(R.id.QRGenerationButton);
 
         adapter = ArrayAdapter.createFromResource(this, R.array.specializations, R.layout.support_simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -65,6 +91,7 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
 
         cancel.setOnClickListener(this);
         save.setOnClickListener(this);
+        QRGenerationButton.setOnClickListener(this);
 
         setPresets();
     }
@@ -96,8 +123,92 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
             case R.id.profileSettingsSave:
                 applyChanges();
                 break;
+            case R.id.QRGenerationButton:
+                generateQR();
+                break;
         }
     }
+
+    private void generateQR() {
+        try {
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            Bitmap QRCode = barcodeEncoder.encodeBitmap(userID, BarcodeFormat.QR_CODE, 400, 400);
+            ByteArrayOutputStream bao = new ByteArrayOutputStream();
+            QRCode.compress(Bitmap.CompressFormat.PNG, 100, bao); // bmp is bitmap from user image file
+            String QRCodeKey = System.currentTimeMillis()+"";
+            String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), QRCode, "QRCode-"+QRCodeKey, null);
+            Uri QRUri = Uri.parse(path);
+
+            
+
+            StorageReference fileRef = StorageReference.child("QRCodes").child(QRCodeKey);
+            UploadTask uploadTask = fileRef.putFile(QRUri);
+
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful()) {
+                                throw task.getException();
+                            }
+
+                            // Continue with the task to get the download URL
+
+                            return fileRef.getDownloadUrl();
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            Uri downloadUri = task.getResult();
+                            //Toast.makeText(profileSettingsActivity.this, downloadUri.toString(), Toast.LENGTH_LONG).show();
+                            emailQRCode(downloadUri);
+
+                        }
+                    });
+                }
+            }).addOnProgressListener(new OnProgressListener() {
+                @Override
+                public void onProgress(@NonNull Object snapshot) {
+                   // progressBar.setVisibility(View.VISIBLE);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    //Toast.makeText(UploadActivity.this, "Failed to upload, please try again", Toast.LENGTH_LONG).show();
+                   // progressBar.setVisibility(View.GONE);
+                    finish();
+                }
+            });
+        } catch(Exception e) {
+
+        }
+
+
+    }
+
+    private void emailQRCode(Uri QRCode) {
+        try {
+            String subject = "Profile QR Code";
+            String message;
+            if (userName != null) {
+                message = "Dear " + userName + "," + "\n\nHere is your automatically generated QR code, scan this in the app to take you to your profile!\n\n"+ QRCode;
+            } else {
+                message = "Dear User " + "," + "\n\nHere is your automatically generated QR code, scan this in the app to take you to your profile!\n\n" + QRCode;
+            }
+            Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+            emailIntent.setType("plain/text");
+            emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{userEmail});
+            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
+            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+            this.startActivity(Intent.createChooser(emailIntent, "Sending email..."));
+        }
+     catch (Throwable t) {
+
+     }
+    }
+
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -166,6 +277,13 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
                 if((snapshot.child("githubLink").getValue() != null)){
                     String githublinkPreset = snapshot.child("githubLink").getValue().toString();
                     githubLinkText.setText(githublinkPreset);
+                }
+
+                if((snapshot.child("email").getValue() != null)){
+                    userEmail = snapshot.child("email").getValue().toString();
+                }
+                if((snapshot.child("firstName").getValue() != null)){
+                   userName =  snapshot.child("firstName").getValue().toString();
                 }
             }
 
