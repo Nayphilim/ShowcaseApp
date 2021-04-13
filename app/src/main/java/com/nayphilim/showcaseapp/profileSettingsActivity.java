@@ -23,6 +23,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -47,6 +49,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.security.AccessController.getContext;
+
 public class profileSettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, CountryCodePicker.OnCountryChangeListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private CountryCodePicker ccp;
@@ -62,8 +66,11 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
     private com.google.firebase.storage.StorageReference StorageReference = FirebaseStorage.getInstance().getReference();
     private FirebaseUser user;
     private String userID;
-    private Button QRGenerationButton;
+    private Button QRGenerationButton, QREmailButton;
+    private ImageView QRCodeView;
     private String userEmail, userName;
+    private Uri QRCode;
+    private RequestManager glide;
 
     private ArrayAdapter<CharSequence> adapter;
 
@@ -79,6 +86,8 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
         cancel = findViewById(R.id.profileSettingsCancel);
         save = findViewById(R.id.profileSettingsSave);
         QRGenerationButton = findViewById(R.id.QRGenerationButton);
+        QREmailButton = findViewById(R.id.QREmailButton);
+        QRCodeView = findViewById(R.id.QRCodeView);
 
         adapter = ArrayAdapter.createFromResource(this, R.array.specializations, R.layout.support_simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -92,6 +101,10 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
         cancel.setOnClickListener(this);
         save.setOnClickListener(this);
         QRGenerationButton.setOnClickListener(this);
+        QREmailButton.setOnClickListener(this);
+
+        glide = Glide.with(this);
+
 
         setPresets();
     }
@@ -125,6 +138,9 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
                 break;
             case R.id.QRGenerationButton:
                 generateQR();
+                break;
+            case R.id.QREmailButton:
+                emailQRCode(QRCode);
                 break;
         }
     }
@@ -162,8 +178,9 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
                         @Override
                         public void onComplete(@NonNull Task<Uri> task) {
                             Uri downloadUri = task.getResult();
-                            //Toast.makeText(profileSettingsActivity.this, downloadUri.toString(), Toast.LENGTH_LONG).show();
-                            emailQRCode(downloadUri);
+                            Toast.makeText(profileSettingsActivity.this, "QR code has been generated and saved to your device", Toast.LENGTH_SHORT).show();
+                            displayQRCode(downloadUri);
+
 
                         }
                     });
@@ -186,6 +203,13 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
         }
 
 
+    }
+
+    private void displayQRCode(Uri QRCode) {
+        this.QRCode = QRCode;
+        glide.load(QRCode).into(QRCodeView);
+        //QRCodeView.setImageURI(QRCode);
+        QREmailButton.setVisibility(View.VISIBLE);
     }
 
     private void emailQRCode(Uri QRCode) {

@@ -239,13 +239,32 @@
                 android:hint="Paste your Github link here"
                 android:layout_marginTop="8dp"/>
 
+
+
         </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/profileSettingsQRTitleArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profileSettingsGithubArea"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="QR Code"
+            android:fontFamily="@font/bold"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="32dp"/>
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/profileSettingsQRArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/profileSettingsGithubArea"
+        android:layout_below="@id/profileSettingsQRTitleArea"
         android:orientation="vertical"
         android:layout_centerHorizontal="true">
         <Button
@@ -257,6 +276,37 @@
             android:backgroundTint="@color/light_purple"
             android:text="Generate QR Code"/>
     </RelativeLayout>
-
+    <RelativeLayout
+        android:id="@+id/profileSettingsQRImageArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profileSettingsQRArea"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true">
+        <ImageView
+            android:id="@+id/QRCodeView"
+            android:layout_marginTop="8dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:background="@color/gray"/>
+    </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/profileSettingsQREmailArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profileSettingsQRImageArea"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
+            <Button
+                android:id="@+id/QREmailButton"
+                android:layout_marginTop="8dp"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:backgroundTint="@color/light_purple"
+                android:text="Email QR Code"
+                android:visibility="invisible"/>
+        </RelativeLayout>
     </RelativeLayout>
 </ScrollView>
