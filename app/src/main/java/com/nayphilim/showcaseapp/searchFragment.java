@@ -230,6 +230,7 @@ public class searchFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getUserProfile(String userId) {
+        //authenticate user
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         profileViewFragment profileViewFragment = com.nayphilim.showcaseapp.profileViewFragment.newInstance(userId);
         ft.replace(R.id.fragment, profileViewFragment);
@@ -256,10 +257,13 @@ public class searchFragment extends Fragment implements View.OnClickListener {
 
     private void startQRScanner() {
         IntentIntegrator intentIntegrator = new IntentIntegrator(getActivity());
-        intentIntegrator.setBeepEnabled(true);
-        intentIntegrator.setOrientationLocked(true);
+        intentIntegrator.setBeepEnabled(false);
+        intentIntegrator.setOrientationLocked(false);
         intentIntegrator.setCaptureActivity(Capture.class);
-        intentIntegrator.initiateScan();
+        intentIntegrator.setPrompt("Scan a QR Code");
+        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+        intentIntegrator.forSupportFragment(this).initiateScan();
+        //intentIntegrator.initiateScan();
     }
 
 
@@ -269,8 +273,17 @@ public class searchFragment extends Fragment implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,data);
         if(intentResult.getContents() != null){
-            Toast.makeText(getContext(), intentResult.getContents(), Toast.LENGTH_LONG).show();
-            getUserProfile(intentResult.getContents());
+            if(intentResult.getContents().contains("Showcase App User ID: ")){
+                String userID = intentResult.getContents().replace("Showcase App User ID: ", "");
+                //Toast.makeText(getContext(), userID, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Profile found!", Toast.LENGTH_SHORT).show();
+                getUserProfile(userID);
+            }
+            else{
+                Toast.makeText(getContext(), "Did not scan a valid QR code, please try again.", Toast.LENGTH_SHORT).show();
+            }
+
+
         }
         else{
             Toast.makeText(getActivity(), "Did not scan a valid QR code, please try again.", Toast.LENGTH_SHORT);

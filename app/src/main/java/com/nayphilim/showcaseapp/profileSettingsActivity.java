@@ -148,7 +148,7 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
     private void generateQR() {
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            Bitmap QRCode = barcodeEncoder.encodeBitmap(userID, BarcodeFormat.QR_CODE, 400, 400);
+            Bitmap QRCode = barcodeEncoder.encodeBitmap("Showcase App User ID: " +userID, BarcodeFormat.QR_CODE, 400, 400);
             ByteArrayOutputStream bao = new ByteArrayOutputStream();
             QRCode.compress(Bitmap.CompressFormat.PNG, 100, bao); // bmp is bitmap from user image file
             String QRCodeKey = System.currentTimeMillis()+"";
