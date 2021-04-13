@@ -139,7 +139,7 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
             String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), QRCode, "QRCode-"+QRCodeKey, null);
             Uri QRUri = Uri.parse(path);
 
-            
+
 
             StorageReference fileRef = StorageReference.child("QRCodes").child(QRCodeKey);
             UploadTask uploadTask = fileRef.putFile(QRUri);

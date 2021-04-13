@@ -207,8 +207,11 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
                     profileSpecialization.setVisibility(View.VISIBLE);
                 }
                 if((snapshot.child("githubLink").getValue() != null)){
-                    userProfile.setGithubLink(snapshot.child("githubLink").getValue().toString().trim());
-                    profileGithubButton.setVisibility(View.VISIBLE);
+                    String link = snapshot.child("githubLink").getValue().toString().trim();
+                    if(!link.isEmpty()) {
+                        userProfile.setGithubLink(link);
+                        profileGithubButton.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 profileName.setText(userProfile.getFirstName() + " " + userProfile.getLastName());

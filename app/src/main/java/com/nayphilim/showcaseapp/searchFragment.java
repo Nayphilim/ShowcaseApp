@@ -262,33 +262,20 @@ public class searchFragment extends Fragment implements View.OnClickListener {
         intentIntegrator.initiateScan();
     }
 
+
+    //WIP does not work properly
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,data);
         if(intentResult.getContents() != null){
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Open this profile?");
-            builder.setMessage(intentResult.getContents());
-
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-
-            builder.show();
+            Toast.makeText(getContext(), intentResult.getContents(), Toast.LENGTH_LONG).show();
+            getUserProfile(intentResult.getContents());
         }
         else{
             Toast.makeText(getActivity(), "Did not scan a valid QR code, please try again.", Toast.LENGTH_SHORT);
         }
     }
+
+
 }
