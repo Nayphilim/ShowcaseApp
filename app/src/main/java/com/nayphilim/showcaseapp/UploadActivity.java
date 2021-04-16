@@ -235,6 +235,9 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
                                 String imageUrlList = sb.toString();
 
                                 ProjectReference.child(projectId).child("imageUrls").setValue(imageUrlList);
+                                closeActivity();
+
+
 
 
                             //} else {
@@ -266,7 +269,8 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
 
 
         uploadProject(title, category, description, credits, repository);
-
+        progressBar.setVisibility(View.GONE);
+        finish(); //this is the end of the upload process
 
 
     }
@@ -316,8 +320,8 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
             }
             UserReference.child(userID).child("projects").setValue(projects);
 
-            progressBar.setVisibility(View.GONE);
-            finish();
+
+
 
     }
 
@@ -326,6 +330,21 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         Date date = new Date();
         String currentDate = formatter.format(date);
         return currentDate;
+    }
+
+    private synchronized void closeActivity(){
+        if(imageUrls.size() == imageUris.size()){
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            progressBar.setVisibility(View.GONE);
+            finish();
+        }
+        else{
+            return;
+        }
     }
 
 

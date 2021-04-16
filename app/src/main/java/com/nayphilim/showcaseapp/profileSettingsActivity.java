@@ -158,12 +158,12 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
 
 
             StorageReference fileRef = StorageReference.child("QRCodes").child(QRCodeKey);
-            UploadTask uploadTask = fileRef.putFile(QRUri);
+            UploadTask QRUploadTask = fileRef.putFile(QRUri);
 
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            QRUploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    Task<Uri> urlTask = QRUploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                         @Override
                         public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                             if (!task.isSuccessful()) {
