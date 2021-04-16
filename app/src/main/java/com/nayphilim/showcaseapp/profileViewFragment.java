@@ -44,7 +44,7 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
     private String mParam2;
 
 
-    private TextView profileName, profileLocation, profileSpecialization, profileProjectNum;
+    private TextView profileName, profileLocation, profileSpecialization, profileProjectNum, profileYearsNum;
 
     private FirebaseUser user;
     private DatabaseReference UserReference = FirebaseDatabase.getInstance().getReference("Users");
@@ -114,6 +114,7 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
         recyclerView = view.findViewById(R.id.profileLineFeed);
         profileGithubButton = view.findViewById(R.id.profileGithubButton);
         profileProjectNum = view.findViewById(R.id.profileProjectsNum);
+        profileYearsNum = view.findViewById(R.id.profileYearsNum);
 
         profileGithubButton.setOnClickListener(this);
 
@@ -212,6 +213,11 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
                         userProfile.setGithubLink(link);
                         profileGithubButton.setVisibility(View.VISIBLE);
                     }
+                }
+
+                if((snapshot.child("numYears").getValue() != null)){
+                    userProfile.setNumYears(snapshot.child("numYears").getValue().toString().trim());
+                    profileYearsNum.setText(userProfile.getNumYears());
                 }
 
                 profileName.setText(userProfile.getFirstName() + " " + userProfile.getLastName());

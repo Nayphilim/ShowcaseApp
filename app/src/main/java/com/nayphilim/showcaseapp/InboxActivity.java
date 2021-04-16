@@ -102,7 +102,7 @@ public class InboxActivity extends AppCompatActivity implements View.OnClickList
         FeedbackFeed selectedFeedback =  feedbackFeedArrayList.get(position);
         String projectId = selectedFeedback.getProjectId();
 
-        Intent intent = new Intent(this, projectViewActivity.class);
+        Intent intent = new Intent(this, projectActivity.class);
         intent.putExtra("selectedProjectId", projectId);
         startActivity(intent);
     }

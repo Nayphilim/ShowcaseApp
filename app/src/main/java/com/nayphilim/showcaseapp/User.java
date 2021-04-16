@@ -12,7 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class User {
-    private  String firstName,lastName,email, location, specialization,showLocation, githubLink;
+    private  String firstName,lastName,email, location, specialization,showLocation, githubLink,numYears;
     private static String projects;
 
 
@@ -20,7 +20,7 @@ public class User {
 
     }
 
-    public User(String email, String firstName, String githubLink, String lastName,String location, String projects, String showLocation, String specialization){
+    public User(String email, String firstName, String githubLink, String lastName,String location, String projects, String showLocation, String specialization, String numYears){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -29,6 +29,7 @@ public class User {
         this.location = location;
         this.projects = projects;
         this.githubLink = githubLink;
+        this.numYears = numYears;
     }
 
     public static String getProjectList(String userID) {
@@ -106,5 +107,13 @@ public class User {
 
     public void setGithubLink(String githubLink) {
         this.githubLink = githubLink;
+    }
+
+    public String getNumYears() {
+        return numYears;
+    }
+
+    public void setNumYears(String numYears) {
+        this.numYears = numYears;
     }
 }

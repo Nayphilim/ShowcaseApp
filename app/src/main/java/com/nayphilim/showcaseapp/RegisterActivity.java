@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText firstNameText,lastNameText,emailText,passwordText;
+    private EditText firstNameText,lastNameText,emailText,passwordText, numYearsText;
     private Button registerButton;
     private ProgressBar progressBar;
     private FirebaseAuth mAuth;
@@ -38,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         lastNameText = findViewById(R.id.lastNameRegister);
         emailText = findViewById(R.id.emailRegister);
         passwordText = findViewById(R.id.passwordRegister);
+        numYearsText = findViewById(R.id.numYearsRegister);
 
         registerButton = findViewById(R.id.registerButton);
         registerButton.setOnClickListener(this);
@@ -60,6 +61,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         String lastName = lastNameText.getText().toString().trim();
         String email = emailText.getText().toString().trim();
         String password = passwordText.getText().toString().trim();
+        String numYears = numYearsText.getText().toString().trim();
 
         //password should contain one capital, one number and one symbol
         final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
@@ -75,6 +77,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         if(lastName.isEmpty()){
             lastNameText.setError("Last name is required");
             lastNameText.requestFocus();
+            return;
+        }
+
+        if(numYears.isEmpty()){
+            numYearsText.setError("Number of years in the industry is required");
+            numYearsText.requestFocus();
             return;
         }
 
@@ -109,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-                            User user = new User(email, firstName,"" , lastName, "", "", "false", "No Specialization");
+                            User user = new User(email, firstName,"" , lastName, "", "", "false", "No Specialization",numYears);
 
                             FirebaseDatabase.getInstance().getReference("Users")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())

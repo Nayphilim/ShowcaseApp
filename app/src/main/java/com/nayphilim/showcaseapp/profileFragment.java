@@ -22,7 +22,6 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,7 +51,7 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
     private String mParam2;
     
 
-    private TextView profileName, profileLocation, profileSpecialization, profileProjectNum;
+    private TextView profileName, profileLocation, profileSpecialization, profileProjectNum, profileYearsNum;
 
     private FirebaseUser user;
     private DatabaseReference  UserReference = FirebaseDatabase.getInstance().getReference("Users");
@@ -126,6 +125,7 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
         profileSettingsButton = view.findViewById(R.id.profileSettingsButton);
         profileProjectNum = view.findViewById(R.id.profileProjectsNum);
         profileInboxButton = view.findViewById(R.id.profileInboxButton);
+        profileYearsNum = view.findViewById(R.id.profileYearsNum);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -228,6 +228,11 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
                     profileSpecialization.setVisibility(View.VISIBLE);
                 }
 
+                if((snapshot.child("numYears").getValue() != null)){
+                    userProfile.setNumYears(snapshot.child("numYears").getValue().toString().trim());
+                    profileYearsNum.setText(userProfile.getNumYears());
+                }
+
                 profileName.setText(userProfile.getFirstName() + " " + userProfile.getLastName());
 
                 if(userProfile.getShowLocation() == "true"){
@@ -293,7 +298,7 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
         ProfileFeed selectedProject =  profileFeedArrayList.get(position);
         String projectId = selectedProject.getProjectId();
 
-        Intent intent = new Intent(getContext(), projectViewActivity.class);
+        Intent intent = new Intent(getContext(), projectActivity.class);
         intent.putExtra("selectedProjectId", projectId);
         startActivity(intent);
     }

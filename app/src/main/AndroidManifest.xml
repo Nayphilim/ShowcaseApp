@@ -20,6 +20,7 @@
         android:theme="@style/Theme.ShowcaseApp"
         android:usesCleartextTraffic="true">
         <activity android:name=".InboxActivity"></activity>
+        <activity android:name=".projectActivity" />
         <activity android:name=".projectViewActivity" />
         <activity android:name=".profileSettingsActivity" />
         <activity android:name=".UploadActivity" />

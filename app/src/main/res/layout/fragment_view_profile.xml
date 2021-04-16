@@ -52,7 +52,7 @@
                 android:id="@+id/profileLocationArea"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp">
+                android:layout_marginRight="8dp">
 
                 <TextView
                     android:id="@+id/profileLocation"
@@ -70,8 +70,7 @@
                 android:id="@+id/profileProjectsNumArea"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/profileLocationArea"
-                android:layout_marginLeft="8dp">
+                android:layout_alignRight="@+id/profileLocationArea">
 
                 <TextView
                     android:id="@+id/profileProjectsNum"
@@ -108,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@+id/profileProjectArea"
-                android:layout_marginLeft="8dp">
+                android:layout_marginLeft="4dp">
 
                 <TextView
                     android:id="@+id/profileYearsNum"
@@ -155,7 +154,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/bold"
                 android:text="specialization"
-                android:textColor="@color/light_purple"
+                android:textColor="@color/dark_gray"
                 android:textSize="16sp"
                 android:visibility="invisible" />
 

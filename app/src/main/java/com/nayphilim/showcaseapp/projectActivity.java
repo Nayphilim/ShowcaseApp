@@ -1,5 +1,8 @@
 package com.nayphilim.showcaseapp;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,9 +17,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
@@ -37,7 +37,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class projectViewActivity extends AppCompatActivity implements View.OnClickListener {
+public class projectActivity extends AppCompatActivity implements View.OnClickListener {
 
    // private ImageSlider imgSlider;
     private String userName;
@@ -57,7 +57,6 @@ public class projectViewActivity extends AppCompatActivity implements View.OnCli
     private ImageButton backArrow;
     private String viewerID;
     private ImageSlider imgSlider;
-    private FloatingActionButton fab;
     private User userProfile = new User();
     private String[] imageUrls;
 
@@ -67,7 +66,7 @@ public class projectViewActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_project);
+        setContentView(R.layout.activity_project);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
        // imgSlider = findViewById(R.id.image_slider);
@@ -85,7 +84,6 @@ public class projectViewActivity extends AppCompatActivity implements View.OnCli
         projectCreditsArea = findViewById(R.id.projViewCreditsArea);
         projectCreditsTitleArea = findViewById(R.id.projViewCreditsTitleArea);
         imgSlider = findViewById(R.id.image_slider);
-        fab = findViewById(R.id.floating_action_button);
 
         imgSlider.setItemChangeListener(new ItemChangeListener() {
                                             @Override
@@ -108,7 +106,6 @@ public class projectViewActivity extends AppCompatActivity implements View.OnCli
 
         backArrow.setOnClickListener(this);
         projectRepositoryButton.setOnClickListener(this);
-        fab.setOnClickListener(this);
 
         project = new Project();
 
@@ -162,14 +159,6 @@ public class projectViewActivity extends AppCompatActivity implements View.OnCli
                     projectDescription.setText(project.getDescription()); 
                     projectCredits.setText(project.getCredits());
 
-                        if(snapshot.child("projectViews").getValue() != null) {
-                            int currentViews = Integer.parseInt(snapshot.child("projectViews").getValue().toString());
-                            ProjectReference.child(ProjectId).child("projectViews").setValue(currentViews + 1);
-                        }
-                        else{
-
-                            ProjectReference.child(ProjectId).child("projectViews").setValue(1);
-                        }
 
                     UserReference.child(project.getUser()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -229,10 +218,6 @@ public class projectViewActivity extends AppCompatActivity implements View.OnCli
                 Session.itrInteractions();
                 openGithubBrowser();
                 break;
-            case R.id.floating_action_button:
-                Session.itrInteractions();
-                openFeedbackDialog();
-                break;
         }
     }
 
@@ -272,6 +257,10 @@ public class projectViewActivity extends AppCompatActivity implements View.OnCli
         intent.addCategory(Intent.CATEGORY_BROWSABLE);
         intent.setData(Uri.parse(projectRepository));
         startActivity(intent);
+    }
+
+    public void displayProjectOptions(View view) {
+
     }
 
 //    ImageListener imageListener = new ImageListener() {

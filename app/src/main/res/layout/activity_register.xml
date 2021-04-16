@@ -32,7 +32,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/firstNameRegister"
         app:layout_constraintVertical_bias="0.028" />
-
+    <EditText
+        android:id="@+id/numYearsRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Years In Computing"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lastNameRegister"
+        app:layout_constraintVertical_bias="0.028" />
     <EditText
         android:id="@+id/emailRegister"
         android:layout_width="wrap_content"
@@ -43,7 +54,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lastNameRegister"
+        app:layout_constraintTop_toBottomOf="@+id/numYearsRegister"
         app:layout_constraintVertical_bias="0.038" />
 
     <EditText

@@ -47,13 +47,13 @@ import java.util.regex.Pattern;
 public class UploadActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     private Spinner uploadCategories;
-    private ImageView uploadImageBox;
+    private ImageView uploadImageBox, imagePreview1,imagePreview2,imagePreview3,imagePreview4;
     private ProgressBar progressBar;
 
     private DatabaseReference ProjectReference = FirebaseDatabase.getInstance().getReference("Projects");
     private DatabaseReference UserReference = FirebaseDatabase.getInstance().getReference("Users");
     private StorageReference StorageReference = FirebaseStorage.getInstance().getReference();
-    private TextView cancelButton,publishButton;
+    private TextView cancelButton,publishButton, uploadImagePreviewNum;
     private EditText titleBox, descriptionBox,creditsBox,repositoryBox;
     private String Category;
     private FirebaseUser user;
@@ -73,6 +73,13 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         uploadCategories = findViewById(R.id.uploadCategory);
 
         uploadImageBox = findViewById(R.id.uploadImageBox);
+        imagePreview1 = findViewById(R.id.uploadImagePreview1);
+        imagePreview2 = findViewById(R.id.uploadImagePreview2);
+        imagePreview3 = findViewById(R.id.uploadImagePreview3);
+        imagePreview4 = findViewById(R.id.uploadImagePreview4);
+
+        uploadImagePreviewNum = findViewById(R.id.uploadImagePreviewNum);
+
 
         progressBar = findViewById(R.id.uploadProgressBar);
 
@@ -110,10 +117,52 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
             ClipData clipData = data.getClipData();
 
             if(clipData != null){
+                uploadImageBox.setVisibility(View.GONE);
                 for(int i = 0;i<clipData.getItemCount();i++){
                     ClipData.Item item = clipData.getItemAt(i);
                     Uri imageUri = item.getUri();
                     imageUris.add(imageUri);
+
+                }
+                switch(imageUris.size()){
+                    case 2:
+                        imagePreview1.setImageURI(imageUris.get(0));
+                        imagePreview2.setImageURI(imageUris.get(1));
+                        imagePreview3.setImageResource(R.drawable.ic_image_upload);
+                        imagePreview1.setVisibility(View.VISIBLE);
+                        imagePreview2.setVisibility(View.VISIBLE);
+                        imagePreview3.setVisibility(View.VISIBLE);
+                        break;
+                    case 3:
+                        imagePreview1.setImageURI(imageUris.get(0));
+                        imagePreview2.setImageURI(imageUris.get(1));
+                        imagePreview3.setImageURI(imageUris.get(2));
+                        imagePreview4.setImageResource(R.drawable.ic_image_upload);
+                        imagePreview1.setVisibility(View.VISIBLE);
+                        imagePreview2.setVisibility(View.VISIBLE);
+                        imagePreview3.setVisibility(View.VISIBLE);
+                        imagePreview4.setVisibility(View.VISIBLE);
+                        break;
+                    case 4:
+                        imagePreview1.setImageURI(imageUris.get(0));
+                        imagePreview2.setImageURI(imageUris.get(1));
+                        imagePreview3.setImageURI(imageUris.get(2));
+                        imagePreview4.setImageURI(imageUris.get(3));
+                        imagePreview1.setVisibility(View.VISIBLE);
+                        imagePreview2.setVisibility(View.VISIBLE);
+                        imagePreview3.setVisibility(View.VISIBLE);
+                        imagePreview4.setVisibility(View.VISIBLE);
+                        break;
+                    default:
+                        imagePreview1.setImageURI(imageUris.get(0));
+                        imagePreview2.setImageURI(imageUris.get(1));
+                        imagePreview3.setImageURI(imageUris.get(2));
+                        uploadImagePreviewNum.setText("+" + (imageUris.size()-3));
+                        imagePreview1.setVisibility(View.VISIBLE);
+                        imagePreview2.setVisibility(View.VISIBLE);
+                        imagePreview3.setVisibility(View.VISIBLE);
+                        uploadImagePreviewNum.setVisibility(View.VISIBLE);
+
 
                 }
             }
@@ -339,7 +388,9 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
             progressBar.setVisibility(View.GONE);
+            Toast.makeText(UploadActivity.this, "Project successfully uploaded", Toast.LENGTH_LONG).show();
             finish();
         }
         else{
