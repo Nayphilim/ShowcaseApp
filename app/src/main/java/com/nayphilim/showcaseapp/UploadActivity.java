@@ -102,6 +102,11 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         uploadCategories.setOnItemSelectedListener(this);
 
         uploadImageBox.setOnClickListener(this);
+        imagePreview1.setOnClickListener(this);
+        imagePreview2.setOnClickListener(this);
+        imagePreview3.setOnClickListener(this);
+        imagePreview4.setOnClickListener(this);
+
 
         publishButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
@@ -128,30 +133,39 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
                     case 2:
                         imagePreview1.setImageURI(imageUris.get(0));
                         imagePreview2.setImageURI(imageUris.get(1));
+                        imagePreview3.setBackgroundColor(0x00000000);
                         imagePreview3.setImageResource(R.drawable.ic_image_upload);
                         imagePreview1.setVisibility(View.VISIBLE);
                         imagePreview2.setVisibility(View.VISIBLE);
                         imagePreview3.setVisibility(View.VISIBLE);
+                        imagePreview4.setVisibility(View.GONE);
+                        uploadImagePreviewNum.setVisibility(View.GONE);
                         break;
                     case 3:
                         imagePreview1.setImageURI(imageUris.get(0));
                         imagePreview2.setImageURI(imageUris.get(1));
                         imagePreview3.setImageURI(imageUris.get(2));
+                        imagePreview3.setBackgroundColor(getResources().getColor(R.color.black));
+                        imagePreview4.setBackgroundColor(0x00000000);
                         imagePreview4.setImageResource(R.drawable.ic_image_upload);
                         imagePreview1.setVisibility(View.VISIBLE);
                         imagePreview2.setVisibility(View.VISIBLE);
                         imagePreview3.setVisibility(View.VISIBLE);
                         imagePreview4.setVisibility(View.VISIBLE);
+                        uploadImagePreviewNum.setVisibility(View.GONE);
                         break;
                     case 4:
                         imagePreview1.setImageURI(imageUris.get(0));
                         imagePreview2.setImageURI(imageUris.get(1));
                         imagePreview3.setImageURI(imageUris.get(2));
                         imagePreview4.setImageURI(imageUris.get(3));
+                        imagePreview3.setBackgroundColor(getResources().getColor(R.color.black));
+                        imagePreview4.setBackgroundColor(getResources().getColor(R.color.black));
                         imagePreview1.setVisibility(View.VISIBLE);
                         imagePreview2.setVisibility(View.VISIBLE);
                         imagePreview3.setVisibility(View.VISIBLE);
                         imagePreview4.setVisibility(View.VISIBLE);
+                        uploadImagePreviewNum.setVisibility(View.GONE);
                         break;
                     default:
                         imagePreview1.setImageURI(imageUris.get(0));
@@ -161,6 +175,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
                         imagePreview1.setVisibility(View.VISIBLE);
                         imagePreview2.setVisibility(View.VISIBLE);
                         imagePreview3.setVisibility(View.VISIBLE);
+                        imagePreview4.setVisibility(View.GONE);
                         uploadImagePreviewNum.setVisibility(View.VISIBLE);
 
 
@@ -190,7 +205,12 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.uploadImageBox:
+            case R.id.uploadImagePreview1:
+            case R.id.uploadImagePreview2:
+            case R.id.uploadImagePreview3:
+            case R.id.uploadImagePreview4:
                 keyboardController.hideKeyboard(this);
+                resetPreviews();
                 openImageGallery();
                 break;
             case R.id.uploadPublish:
@@ -202,6 +222,12 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
                 finish();
                 break;
         }
+    }
+
+    private void resetPreviews() {
+        imageUris.clear();
+        imageUrls.clear();
+        uploadImagePreviewNum.setVisibility(View.GONE);
     }
 
     private void publishProject() {
