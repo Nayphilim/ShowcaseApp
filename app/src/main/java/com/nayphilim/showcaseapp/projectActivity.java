@@ -234,13 +234,17 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
         options.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if(item.equals(R.id.optionsDelete)){
-                    checkDeleteProject();
-                    return true;
+                switch(item.getItemId()){
+                    case(R.id.optionsDelete):
+                        checkDeleteProject();
+                        return true;
                 }
+
                 return false;
             }
         });
+
+        options.show();
     }
 
     private void checkDeleteProject() {
@@ -248,7 +252,7 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
         builder.setTitle("Are you sure you would like to delete this project?");
 
         // Set up the buttons
-        builder.setPositiveButton("Send", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 deleteProject();

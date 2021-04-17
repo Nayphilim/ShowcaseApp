@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -60,10 +61,13 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
 
     private String userID;
     private String projects;
+    private int projectNum;
 
     private RecyclerView recyclerView;
     private ArrayList<ProfileFeed> profileFeedArrayList = new ArrayList<>();
     private AdapterProfileFeed adapterProfileFeed;
+
+    private ProgressBar progressBar;
 
 
     FirebaseRecyclerAdapter adapter;
@@ -126,6 +130,7 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
         profileProjectNum = view.findViewById(R.id.profileProjectsNum);
         profileInboxButton = view.findViewById(R.id.profileInboxButton);
         profileYearsNum = view.findViewById(R.id.profileYearsNum);
+        progressBar = view.findViewById(R.id.profileProgressBar);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -160,10 +165,14 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
 
     private void populateRecyclerView() {
 
+        progressBar.setVisibility(View.VISIBLE);
         profileFeedArrayList.clear();
+        projectNum = 0;
+
         UserReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 if(snapshot.child("projects").getValue() != null) {
                     projects = snapshot.child("projects").getValue().toString().trim();
                     if(projects != "") {
@@ -177,12 +186,14 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
                                     if(snapshot.child("visibility").getValue().toString().trim().equals("hidden")){
                                     }
                                     else{
+                                        projectNum++;
                                         String imageUrlsStr = snapshot.child("imageUrls").getValue().toString().trim();
                                         String[] imageUrls = imageUrlsStr.split(",");
                                         Uri imageUri = Uri.parse(imageUrls[0]);
                                         ProfileFeed profileFeed = new ProfileFeed(projectId, snapshot.child("title").getValue().toString().trim(), snapshot.child("category").getValue().toString().trim(), snapshot.child("uploadDate").getValue().toString().trim(), imageUri);
                                         profileFeedArrayList.add(profileFeed);
                                         adapterProfileFeed.notifyItemInserted(profileFeedArrayList.size());
+                                        profileProjectNum.setText(Integer.toString(projectNum));
                                     }
                                 }
 
@@ -190,12 +201,15 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
                                 public void onCancelled(@NonNull DatabaseError error) {
 
                                 }
+
                             });
 
                         }
+                        progressBar.setVisibility(View.GONE);
                     }
                     else{
                         profileProjectNum.setText("0");
+                        progressBar.setVisibility(View.GONE);
                     }
                 }
             }
@@ -205,6 +219,8 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
 
             }
         });
+
+
 
 
     }
@@ -312,4 +328,9 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
 }

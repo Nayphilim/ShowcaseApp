@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -55,6 +56,7 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
     private RecyclerView recyclerView;
     private ArrayList<ProfileFeed> profileFeedArrayList = new ArrayList<>();
     private AdapterProfileFeed adapterProfileFeed;
+    private ProgressBar progressBar;
 
     private ImageButton profileGithubButton;
 
@@ -115,6 +117,7 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
         profileGithubButton = view.findViewById(R.id.profileGithubButton);
         profileProjectNum = view.findViewById(R.id.profileProjectsNum);
         profileYearsNum = view.findViewById(R.id.profileYearsNum);
+        progressBar = view.findViewById(R.id.profileProgressBar);
 
         profileGithubButton.setOnClickListener(this);
 
@@ -141,7 +144,7 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
 
     private void populateRecyclerView() {
 
-        profileFeedArrayList.clear();
+        progressBar.setVisibility(View.VISIBLE);
 
         profileFeedArrayList.clear();
         UserReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -177,9 +180,11 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
                             });
 
                         }
+                        progressBar.setVisibility(View.GONE);
                     }
                     else{
                         profileProjectNum.setText("0");
+                        progressBar.setVisibility(View.GONE);
                     }
                 }
             }
