@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -119,6 +120,8 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode ==2 && resultCode == RESULT_OK && data != null){
+            imageUris.clear();
+            imageUrls.clear();
             ClipData clipData = data.getClipData();
 
             if(clipData != null){
@@ -225,8 +228,6 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     private void resetPreviews() {
-        imageUris.clear();
-        imageUrls.clear();
         uploadImagePreviewNum.setVisibility(View.GONE);
     }
 
@@ -309,8 +310,14 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
                                 }
                                 String imageUrlList = sb.toString();
 
-                                ProjectReference.child(projectId).child("imageUrls").setValue(imageUrlList);
-                                closeActivity();
+                                ProjectReference.child(projectId).child("imageUrls").setValue(imageUrlList).addOnCompleteListener(new OnCompleteListener() {
+                                    @Override
+                                    public void onComplete(@NonNull Task task) {
+                                        if(imageUrls.size() == imageUris.size()){
+                                            closeActivity();
+                                        }
+                                    }
+                                });
 
 
 
@@ -337,15 +344,11 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
             });
 
 
-
-
         }
 
 
 
         uploadProject(title, category, description, credits, repository);
-        progressBar.setVisibility(View.GONE);
-        finish(); //this is the end of the upload process
 
 
     }
@@ -379,6 +382,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         ProjectReference.child(projectId).child("description").setValue(description);
         ProjectReference.child(projectId).child("user").setValue(userID);
         ProjectReference.child(projectId).child("uploadDate").setValue(getCurrentDate());
+        ProjectReference.child(projectId).child("visibility").setValue("public");
             if (!credits.isEmpty()) {
                 ProjectReference.child(projectId).child("credits").setValue(credits);
             }
@@ -408,21 +412,12 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     private synchronized void closeActivity(){
-        if(imageUrls.size() == imageUris.size()){
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             progressBar.setVisibility(View.GONE);
             Toast.makeText(UploadActivity.this, "Project successfully uploaded", Toast.LENGTH_LONG).show();
             finish();
         }
-        else{
-            return;
-        }
-    }
+
+
 
 
 }

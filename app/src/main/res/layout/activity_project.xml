@@ -73,8 +73,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
                 android:background="?android:selectableItemBackground"
-                app:srcCompat="@drawable/ic_baseline_more_vert_24"
-                android:onClick="displayProjectOptions"/>
+                app:srcCompat="@drawable/ic_baseline_more_vert_24" />
         </RelativeLayout>
 
 

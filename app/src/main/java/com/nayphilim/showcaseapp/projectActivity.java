@@ -9,12 +9,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -54,7 +56,7 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
     private TextView projectTitle, projectDate, projectUsername, projectCategory, projectDescription, projectCredits, projectSourceTitle;
     private RelativeLayout projectRepositoryButtonArea, projectSourceTitleArea, projectCreditsArea, projectCreditsTitleArea;
     private ImageView projectRepositoryButton;
-    private ImageButton backArrow;
+    private ImageButton backArrow, projectOptions;
     private String viewerID;
     private ImageSlider imgSlider;
     private User userProfile = new User();
@@ -83,6 +85,7 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
         projectSourceTitleArea = findViewById(R.id.projViewSourceTitleArea);
         projectCreditsArea = findViewById(R.id.projViewCreditsArea);
         projectCreditsTitleArea = findViewById(R.id.projViewCreditsTitleArea);
+        projectOptions = findViewById(R.id.projectViewOptions);
         imgSlider = findViewById(R.id.image_slider);
 
         imgSlider.setItemChangeListener(new ItemChangeListener() {
@@ -106,6 +109,7 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
 
         backArrow.setOnClickListener(this);
         projectRepositoryButton.setOnClickListener(this);
+        projectOptions.setOnClickListener(this);
 
         project = new Project();
 
@@ -218,7 +222,50 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
                 Session.itrInteractions();
                 openGithubBrowser();
                 break;
+            case R.id.projectViewOptions:
+                openOptions();
+                break;
         }
+    }
+
+    private void openOptions() {
+        PopupMenu options = new PopupMenu(this, projectOptions);
+        options.getMenuInflater().inflate(R.menu.project_options_popup, options.getMenu());
+        options.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(item.equals(R.id.optionsDelete)){
+                    checkDeleteProject();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void checkDeleteProject() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Are you sure you would like to delete this project?");
+
+        // Set up the buttons
+        builder.setPositiveButton("Send", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteProject();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void deleteProject() {
+        ProjectReference.child(ProjectId).child("visibility").setValue("hidden");
     }
 
     private void openFeedbackDialog() {
@@ -259,9 +306,6 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
         startActivity(intent);
     }
 
-    public void displayProjectOptions(View view) {
-
-    }
 
 //    ImageListener imageListener = new ImageListener() {
 //

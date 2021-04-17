@@ -158,13 +158,17 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
                             ProjectReference.child(projectId).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    String imageUrlsStr = snapshot.child("imageUrls").getValue().toString().trim();
-                                    String[] imageUrls = imageUrlsStr.split(",");
-                                    Uri imageUri = Uri.parse(imageUrls[0]);
-                                    ProfileFeed profileFeed = new ProfileFeed(projectId, snapshot.child("title").getValue().toString().trim(), snapshot.child("category").getValue().toString().trim(), snapshot.child("uploadDate").getValue().toString().trim(), imageUri);
-                                    profileFeedArrayList.add(profileFeed);
-                                    adapterProfileFeed.notifyItemInserted(profileFeedArrayList.size());
-                                }
+                                        if (snapshot.child("visibility").getValue().toString().trim().equals("hidden")) {
+                                        } else {
+                                            String imageUrlsStr = snapshot.child("imageUrls").getValue().toString().trim();
+                                            String[] imageUrls = imageUrlsStr.split(",");
+                                            Uri imageUri = Uri.parse(imageUrls[0]);
+                                            ProfileFeed profileFeed = new ProfileFeed(projectId, snapshot.child("title").getValue().toString().trim(), snapshot.child("category").getValue().toString().trim(), snapshot.child("uploadDate").getValue().toString().trim(), imageUri);
+                                            profileFeedArrayList.add(profileFeed);
+                                            adapterProfileFeed.notifyItemInserted(profileFeedArrayList.size());
+                                        }
+                                    }
+
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
