@@ -69,10 +69,6 @@ public class profileFragment extends Fragment implements View.OnClickListener, A
 
     private ProgressBar progressBar;
 
-
-    FirebaseRecyclerAdapter adapter;
-    FirebaseRecyclerOptions options;
-
     private ImageButton profileSettingsButton;
     private ImageBadgeView profileInboxButton;
 

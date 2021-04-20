@@ -32,6 +32,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -53,6 +55,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
 
     private DatabaseReference ProjectReference = FirebaseDatabase.getInstance().getReference("Projects");
     private DatabaseReference UserReference = FirebaseDatabase.getInstance().getReference("Users");
+    private DatabaseReference AnalyticReference = FirebaseDatabase.getInstance().getReference("Analytics");
     private StorageReference StorageReference = FirebaseStorage.getInstance().getReference();
     private TextView cancelButton,publishButton, uploadImagePreviewNum;
     private EditText titleBox, descriptionBox,creditsBox,repositoryBox;
@@ -376,7 +379,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
             if(projects == null){
                 projects = "";
             }
-
+        //upload project details
         ProjectReference.child(projectId).child("title").setValue(title);
         ProjectReference.child(projectId).child("category").setValue(category);
         ProjectReference.child(projectId).child("description").setValue(description);
@@ -397,7 +400,28 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
             else {
                 projects = projectId + "," + projects;
             }
+
+            //attach project id to user
             UserReference.child(userID).child("projects").setValue(projects);
+
+            //increment total uploaded project count
+            AnalyticReference.child("totalProjectCount").runTransaction(new Transaction.Handler() {
+                @Override
+                public Transaction.Result doTransaction(MutableData mutableData) {
+                    Integer totalProjects = mutableData.getValue(Integer.class);
+                    if (totalProjects == null) {
+                        return Transaction.success(mutableData);
+                    }
+                        mutableData.setValue(totalProjects + 1);
+
+
+                    return Transaction.success(mutableData);
+                }
+
+                @Override
+                public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {}
+            });
+
 
 
 
