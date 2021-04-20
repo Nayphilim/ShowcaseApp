@@ -26,10 +26,10 @@ public class feedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context context;
     ArrayList<ProfileFeed> feedArrayList = new ArrayList<>();
     RequestManager glide;
-    private AdapterProfileFeed.OnProjectListener onProjectListener;
+    private OnProjectListener onProjectListener;
 
 
-    public feedAdapter(Context context, ArrayList<ProfileFeed> profileFeedArrayList, AdapterProfileFeed.OnProjectListener onProjectListener) {
+    public feedAdapter(Context context, ArrayList<ProfileFeed> profileFeedArrayList, OnProjectListener onProjectListener) {
 
         this.context = context;
         this.feedArrayList = profileFeedArrayList;
@@ -42,7 +42,7 @@ public class feedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_feed, parent, false);
-            return new ItemViewHolder(view);
+            return new ItemViewHolder(view,onProjectListener);
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_item_loading, parent, false);
             return new LoadingViewHolder(view);
@@ -82,9 +82,9 @@ public class feedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         TextView projectTitle, projectCategory, projectDate;
         ImageView postImage;
-        AdapterProfileFeed.OnProjectListener onProjectListener;
+        OnProjectListener onProjectListener;
 
-        public ItemViewHolder(@NonNull View itemView) {
+        public ItemViewHolder(@NonNull View itemView, OnProjectListener onProjectListener) {
             super(itemView);
 
             projectTitle = itemView.findViewById(R.id.projectTitle);
@@ -102,6 +102,13 @@ public class feedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void onClick(View v) {
             onProjectListener.onProjectClick(getAdapterPosition());
         }
+
+
+    }
+
+    public interface OnProjectListener{
+        void onProjectClick(int position);
+
     }
 
     private class LoadingViewHolder extends RecyclerView.ViewHolder {

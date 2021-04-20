@@ -38,7 +38,7 @@ import java.util.Random;
  * Use the {@link feedFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class feedFragment extends Fragment implements AdapterProfileFeed.OnProjectListener{
+public class feedFragment extends Fragment implements feedAdapter.OnProjectListener{
 
     private static feedFragment instance;
     // TODO: Rename parameter arguments, choose names that match
@@ -116,7 +116,7 @@ public class feedFragment extends Fragment implements AdapterProfileFeed.OnProje
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapterFeed = new feedAdapter(getContext(), feedArrayList, this);
+        adapterFeed = new feedAdapter(getContext(), feedArrayList,this);
         recyclerView.setAdapter(adapterFeed);
 
         populateRecyclerView();
