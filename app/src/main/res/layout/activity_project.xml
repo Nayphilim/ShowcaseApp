@@ -32,7 +32,15 @@
                 app:iss_period="1000"
                 app:iss_delay="0"
                 app:iss_selected_dot="@drawable/default_selected_dot"
-                app:iss_unselected_dot="@drawable/default_unselected_dot"/>
+                app:iss_unselected_dot="@drawable/default_unselected_dot" />
+
+<!--            <com.asura.library.views.PosterSlider-->
+<!--                android:id="@+id/poster_slider"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="300dp"-->
+<!--                app:defaultIndicator="circle"-->
+<!--                app:hideIndicators="true"-->
+<!--                app:loopSlides="true" />-->
 
 
 

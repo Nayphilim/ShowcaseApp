@@ -47,6 +47,7 @@ public class feedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_item_loading, parent, false);
             return new LoadingViewHolder(view);
         }
+
     }
 
     @Override
@@ -56,6 +57,7 @@ public class feedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             populateItemRows((ItemViewHolder) viewHolder, position);
         } else if (viewHolder instanceof LoadingViewHolder) {
+            //commented due to issue of progress bar not disappearing
             showLoadingView((LoadingViewHolder) viewHolder, position);
         }
 
@@ -123,7 +125,7 @@ public class feedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void showLoadingView(LoadingViewHolder viewHolder, int position) {
         //ProgressBar would be displayed
-        viewHolder.progressBar.setVisibility(View.VISIBLE);
+        //viewHolder.progressBar.setVisibility(View.VISIBLE);
     }
 
     private void populateItemRows(ItemViewHolder viewHolder, int position) {

@@ -55,6 +55,9 @@ dependencies {
     implementation 'com.github.nikartm:image-support:1.1.0'
     implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
+
+    implementation 'com.github.mohan-dev1248:PosterSlider:1.0.2'
+
     annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

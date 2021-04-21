@@ -20,6 +20,10 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.asura.library.posters.Poster;
+import com.asura.library.posters.RemoteImage;
+import com.asura.library.posters.RemoteVideo;
+import com.asura.library.views.PosterSlider;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.interfaces.ItemChangeListener;
@@ -61,6 +65,7 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
     private ImageSlider imgSlider;
     private User userProfile = new User();
     private String[] imageUrls;
+    private PosterSlider posterSlider;
 
     private String feedbackDialog;
 
@@ -71,7 +76,7 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_project);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-       // imgSlider = findViewById(R.id.image_slider);
+        imgSlider = findViewById(R.id.image_slider);
         projectTitle = findViewById(R.id.projViewTitle);
         backArrow = findViewById(R.id.projViewBackArrow);
         projectDate = findViewById(R.id.projViewDate);
@@ -87,6 +92,8 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
         projectCreditsTitleArea = findViewById(R.id.projViewCreditsTitleArea);
         projectOptions = findViewById(R.id.projectViewOptions);
         imgSlider = findViewById(R.id.image_slider);
+
+        //posterSlider = findViewById(R.id.poster_slider);
 
         imgSlider.setItemChangeListener(new ItemChangeListener() {
                                             @Override
@@ -198,11 +205,21 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
 
 
     private void populateSlides(String imageUrlList) {
+
+//       String videoTest =  "gs://showcaseapp-a59c0.appspot.com/2021-04-05 16-23-50.mp4";
+//       String imgTest = "gs://showcaseapp-a59c0.appspot.com/1616704876497.jpg";
+//
+//        List<Poster> posters=new ArrayList<>();
+//        posters.add(new RemoteVideo(Uri.parse("gs://showcaseapp-a59c0.appspot.com/2021-04-05 16-23-50.mp4")));
+//        //posters.add(new RemoteImage(imgTest));
+//        posterSlider.setPosters(posters);
+
+
         imageUrls = imageUrlList.split(",");
 
         for(String url : imageUrls){
             Uri uri = Uri.parse(url);
-            projectImages.add(new SlideModel(uri.toString(), ScaleTypes.FIT));
+            projectImages.add(new SlideModel(uri.toString(), ScaleTypes.CENTER_INSIDE));
         }
 
         if(projectImages != null) {

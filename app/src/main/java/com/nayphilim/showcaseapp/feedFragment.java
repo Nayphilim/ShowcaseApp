@@ -116,10 +116,10 @@ public class feedFragment extends Fragment implements feedAdapter.OnProjectListe
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapterFeed = new feedAdapter(getContext(), feedArrayList,this);
-        recyclerView.setAdapter(adapterFeed);
+
 
         populateRecyclerView();
+        initAdapter();
         initScrollListener();
 
     }
@@ -170,6 +170,11 @@ public class feedFragment extends Fragment implements feedAdapter.OnProjectListe
         }, 2000);
     }
 
+    private void initAdapter() {
+        adapterFeed = new feedAdapter(getContext(), feedArrayList,this);
+        recyclerView.setAdapter(adapterFeed);
+    }
+
     private void populateRecyclerView() {
 
                     ProjectReference.orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
@@ -179,18 +184,20 @@ public class feedFragment extends Fragment implements feedAdapter.OnProjectListe
                             for (DataSnapshot d : snapshot.getChildren()) {
                                 allProjects.add(d.getKey());
                             }
-                            for (int i = 0; i < 10; i++) {
+                            //currently doesnt
+                            for (int i = 0; i <= 10; i++) {
                                 int random = new Random().nextInt(allProjects.size());
                                 DataSnapshot selectedProject = snapshot.child(allProjects.get(random));
                                 allProjects.remove(random);
                                 if (selectedProject.child("visibility").getValue().toString().trim().equals("hidden")) {
+                                   //i--;
                                 } else {
                                     String imageUrlsStr = selectedProject.child("imageUrls").getValue().toString().trim();
                                     String[] imageUrls = imageUrlsStr.split(",");
                                     Uri imageUri = Uri.parse(imageUrls[0]);
                                     ProfileFeed profileFeed = new ProfileFeed(selectedProject.getKey(), selectedProject.child("title").getValue().toString().trim(), selectedProject.child("category").getValue().toString().trim(), selectedProject.child("uploadDate").getValue().toString().trim(), imageUri);
                                     feedArrayList.add(profileFeed);
-                                    adapterFeed.notifyItemInserted(feedArrayList.size());
+                                    adapterFeed.notifyItemInserted(feedArrayList.size()-1);
                                 }
                             }
                         }

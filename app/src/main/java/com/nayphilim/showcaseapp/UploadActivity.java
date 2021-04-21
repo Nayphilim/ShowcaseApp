@@ -130,9 +130,14 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
             if(clipData != null){
                 uploadImageBox.setVisibility(View.GONE);
                 for(int i = 0;i<clipData.getItemCount();i++){
+                    if(i >= 8 ){
+                        Toast.makeText(UploadActivity.this, "More than 8 images have been uploaded, please try again", Toast.LENGTH_LONG).show();
+                        break;
+                    }
                     ClipData.Item item = clipData.getItemAt(i);
                     Uri imageUri = item.getUri();
                     imageUris.add(imageUri);
+
 
                 }
                 switch(imageUris.size()){
