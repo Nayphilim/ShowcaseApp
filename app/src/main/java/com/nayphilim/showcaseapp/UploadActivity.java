@@ -58,7 +58,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
     private DatabaseReference AnalyticReference = FirebaseDatabase.getInstance().getReference("Analytics");
     private StorageReference StorageReference = FirebaseStorage.getInstance().getReference();
     private TextView cancelButton,publishButton, uploadImagePreviewNum;
-    private EditText titleBox, descriptionBox,creditsBox,repositoryBox;
+    private EditText titleBox, descriptionBox,creditsBox,repositoryBox, demoBox;
     private String Category;
     private FirebaseUser user;
     private String userID;
@@ -94,6 +94,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         descriptionBox = findViewById(R.id.uploadDescription);
         creditsBox = findViewById(R.id.uploadCredits);
         repositoryBox = findViewById(R.id.uploadRepository);
+        demoBox = findViewById(R.id.uploadDemo);
 
         projectId = ProjectReference.push().getKey();
 
@@ -244,9 +245,12 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         String category = Category;
         String description = descriptionBox.getText().toString().trim();
         String credits = creditsBox.getText().toString().trim();
+        String demo = demoBox.getText().toString().trim();
         String repository = repositoryBox.getText().toString().trim();
-        final String RepoPattern = "^(https://github\\.com/).+/.+";
-        Pattern pattern = Pattern.compile(RepoPattern);
+        final String repoPatternString = "^(https://github\\.com/).+/.+";
+        final String youtubePatternString = "^https?://.*(?:youtu.be/|v/|u/\\w/|embed/|watch?v=)([^#&?]*).*$";
+        Pattern repoPattern = Pattern.compile(repoPatternString);
+        Pattern youtubePattern = Pattern.compile(youtubePatternString,Pattern.CASE_INSENSITIVE);
         Matcher matcher;
 
         if(imageUris.isEmpty()){
@@ -272,8 +276,16 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
             return;
         }
 
+        if(!demo.isEmpty()){
+            if(!youtubePattern.matcher(demo).matches()){
+                demoBox.setError("Please enter a valid youtube video link");
+                demoBox.requestFocus();
+                return;
+            }
+        }
+
         if(!repository.isEmpty()){
-            if(!pattern.matcher(repository).matches()){
+            if(!repoPattern.matcher(repository).matches()){
                 repositoryBox.setError("Please enter a valid repository link");
                 repositoryBox.requestFocus();
                 return;
@@ -356,7 +368,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
 
 
 
-        uploadProject(title, category, description, credits, repository);
+        uploadProject(title, category, description, credits, repository, demo);
 
 
     }
@@ -379,7 +391,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
 
 
 
-    private void uploadProject(String title, String category, String description, String credits, String repository){
+    private void uploadProject(String title, String category, String description, String credits, String repository, String demo){
         String projects = getIntent().getStringExtra("projectList");
             if(projects == null){
                 projects = "";
@@ -389,6 +401,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         ProjectReference.child(projectId).child("category").setValue(category);
         ProjectReference.child(projectId).child("description").setValue(description);
         ProjectReference.child(projectId).child("user").setValue(userID);
+        ProjectReference.child(projectId).child("demoLink").setValue(demo);
         ProjectReference.child(projectId).child("uploadDate").setValue(getCurrentDate());
         ProjectReference.child(projectId).child("visibility").setValue("public");
             if (!credits.isEmpty()) {

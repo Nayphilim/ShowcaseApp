@@ -68,10 +68,13 @@ public class InboxActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()) {
+                    int i=0;
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        FeedbackFeed feedbackFeed = new FeedbackFeed(ds.getKey(), ds.child("projectTitle").getValue().toString(),ds.child("projectID").getValue().toString(), ds.child("submitterName").getValue().toString(), ds.child("feedbackDateTime").getValue().toString(), Uri.parse(ds.child("projectThumbnail").getValue().toString()), ds.child("feedbackDialog").getValue().toString());
-                        feedbackFeedArrayList.add(feedbackFeed);
-
+                        if(i<=30) {
+                            FeedbackFeed feedbackFeed = new FeedbackFeed(ds.getKey(), ds.child("projectTitle").getValue().toString(), ds.child("projectID").getValue().toString(), ds.child("submitterName").getValue().toString(), ds.child("feedbackDateTime").getValue().toString(), Uri.parse(ds.child("projectThumbnail").getValue().toString()), ds.child("feedbackDialog").getValue().toString());
+                            feedbackFeedArrayList.add(feedbackFeed);
+                        }
+                        i++;
                     }
                     Collections.reverse(feedbackFeedArrayList);
                     adapterFeedbackFeed.notifyDataSetChanged();

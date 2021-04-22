@@ -248,10 +248,33 @@
                 android:layout_marginRight="50dp"/>
         </RelativeLayout>
         <RelativeLayout
-            android:id="@+id/uploadRepositoryArea"
+            android:id="@+id/uploadDemoArea"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/uploadCreditsArea"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
+
+            <EditText
+                android:id="@+id/uploadDemo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="40dp"
+                android:ems="10"
+                android:hint="Youtube Demo"
+                android:inputType="textPersonName"
+                android:background="@drawable/feedback_box"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/uploadRepositoryArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/uploadDemoArea"
             android:orientation="vertical"
             android:layout_centerHorizontal="true">
 

@@ -57,8 +57,8 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
     private List<SlideModel> projectImages = new ArrayList<>();
     private String ProjectId, projectRepository;
     private Project project;
-    private TextView projectTitle, projectDate, projectUsername, projectCategory, projectDescription, projectCredits, projectSourceTitle;
-    private RelativeLayout projectRepositoryButtonArea, projectSourceTitleArea, projectCreditsArea, projectCreditsTitleArea;
+    private TextView projectTitle, projectDate, projectUsername, projectCategory, projectDescription, projectCredits, projectSourceTitle, projectDemo;
+    private RelativeLayout projectRepositoryButtonArea, projectSourceTitleArea, projectCreditsArea, projectCreditsTitleArea, projectDemoTitleArea,projectDemoArea;
     private ImageView projectRepositoryButton;
     private ImageButton backArrow, projectOptions;
     private String viewerID;
@@ -90,6 +90,9 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
         projectSourceTitleArea = findViewById(R.id.projViewSourceTitleArea);
         projectCreditsArea = findViewById(R.id.projViewCreditsArea);
         projectCreditsTitleArea = findViewById(R.id.projViewCreditsTitleArea);
+        projectDemo = findViewById(R.id.projViewDemo);
+        projectDemoArea = findViewById(R.id.projViewDemoArea);
+        projectDemoTitleArea = findViewById(R.id.projViewDemoTitleArea);
         projectOptions = findViewById(R.id.projectViewOptions);
         imgSlider = findViewById(R.id.image_slider);
 
@@ -117,6 +120,7 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
         backArrow.setOnClickListener(this);
         projectRepositoryButton.setOnClickListener(this);
         projectOptions.setOnClickListener(this);
+        projectDemo.setOnClickListener(this);
 
         project = new Project();
 
@@ -156,6 +160,11 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
                         projectCreditsTitleArea.setVisibility(View.VISIBLE);
                         projectCreditsArea.setVisibility(View.VISIBLE);
                     }
+                    if(snapshot.child("demoLink").getValue() != null) {
+                        project.setDemo(snapshot.child("demoLink").getValue().toString().trim());
+                        projectDemoTitleArea.setVisibility(View.VISIBLE);
+                        projectDemoArea.setVisibility(View.VISIBLE);
+                    }
                     if(snapshot.child("repository").getValue() != null) {
                         project.setRepository(snapshot.child("repository").getValue().toString().trim());
                         setRepositoryUrl(project.getRepository());
@@ -169,6 +178,7 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
                     projectCategory.setText(project.getCategory());
                     projectDescription.setText(project.getDescription()); 
                     projectCredits.setText(project.getCredits());
+                    projectDemo.setText(project.getDemo());
 
 
                     UserReference.child(project.getUser()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -242,7 +252,18 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.projectViewOptions:
                 openOptions();
                 break;
+            case R.id.projViewDemo:
+                openDemoLink();
+                break;
         }
+    }
+
+    private void openDemoLink() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+        intent.setData(Uri.parse(project.getDemo()));
+        startActivity(intent);
     }
 
     private void openOptions() {

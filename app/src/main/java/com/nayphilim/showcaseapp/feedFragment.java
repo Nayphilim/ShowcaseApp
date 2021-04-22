@@ -23,6 +23,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -233,11 +235,14 @@ public class feedFragment extends Fragment implements feedAdapter.OnProjectListe
 
     @Override
     public void onProjectClick(int position) {
+        Session.itrInteractions();
         ProfileFeed selectedProject =  feedArrayList.get(position);
         String projectId = selectedProject.getProjectId();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        Intent intent = new Intent(getContext(), projectActivity.class);
+        Intent intent = new Intent(getContext(), projectViewActivity.class);
         intent.putExtra("selectedProjectId", projectId);
+        intent.putExtra("viewerID", user.getUid());
         startActivity(intent);
     }
 }

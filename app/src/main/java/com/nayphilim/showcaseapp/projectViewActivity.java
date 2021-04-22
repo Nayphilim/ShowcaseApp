@@ -13,10 +13,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import androidx.fragment.app.Fragment;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
@@ -51,8 +53,8 @@ public class projectViewActivity extends AppCompatActivity implements View.OnCli
     private List<SlideModel> projectImages = new ArrayList<>();
     private String ProjectId, projectRepository;
     private Project project;
-    private TextView projectTitle, projectDate, projectUsername, projectCategory, projectDescription, projectCredits, projectSourceTitle;
-    private RelativeLayout projectRepositoryButtonArea, projectSourceTitleArea, projectCreditsArea, projectCreditsTitleArea;
+    private TextView projectTitle, projectDate, projectUsername, projectCategory, projectDescription, projectCredits, projectSourceTitle, projectDemo;
+    private RelativeLayout projectRepositoryButtonArea, projectSourceTitleArea, projectCreditsArea, projectCreditsTitleArea, projectDemoTitleArea,projectDemoArea;
     private ImageView projectRepositoryButton;
     private ImageButton backArrow;
     private String viewerID;
@@ -84,6 +86,9 @@ public class projectViewActivity extends AppCompatActivity implements View.OnCli
         projectSourceTitleArea = findViewById(R.id.projViewSourceTitleArea);
         projectCreditsArea = findViewById(R.id.projViewCreditsArea);
         projectCreditsTitleArea = findViewById(R.id.projViewCreditsTitleArea);
+        projectDemo = findViewById(R.id.projViewDemo);
+        projectDemoArea = findViewById(R.id.projViewDemoArea);
+        projectDemoTitleArea = findViewById(R.id.projViewDemoTitleArea);
         imgSlider = findViewById(R.id.image_slider);
         fab = findViewById(R.id.floating_action_button);
 
@@ -109,6 +114,8 @@ public class projectViewActivity extends AppCompatActivity implements View.OnCli
         backArrow.setOnClickListener(this);
         projectRepositoryButton.setOnClickListener(this);
         fab.setOnClickListener(this);
+        projectDemo.setOnClickListener(this);
+        projectUsername.setOnClickListener(this);
 
         project = new Project();
 
@@ -148,6 +155,11 @@ public class projectViewActivity extends AppCompatActivity implements View.OnCli
                         projectCreditsTitleArea.setVisibility(View.VISIBLE);
                         projectCreditsArea.setVisibility(View.VISIBLE);
                     }
+                    if(snapshot.child("demoLink").getValue() != null) {
+                        project.setDemo(snapshot.child("demoLink").getValue().toString().trim());
+                        projectDemoTitleArea.setVisibility(View.VISIBLE);
+                        projectDemoArea.setVisibility(View.VISIBLE);
+                    }
                     if(snapshot.child("repository").getValue() != null) {
                         project.setRepository(snapshot.child("repository").getValue().toString().trim());
                         setRepositoryUrl(project.getRepository());
@@ -161,6 +173,7 @@ public class projectViewActivity extends AppCompatActivity implements View.OnCli
                     projectCategory.setText(project.getCategory());
                     projectDescription.setText(project.getDescription()); 
                     projectCredits.setText(project.getCredits());
+                    projectDemo.setText(project.getDemo());
 
                         if(snapshot.child("projectViews").getValue() != null) {
                             int currentViews = Integer.parseInt(snapshot.child("projectViews").getValue().toString());
@@ -233,9 +246,30 @@ public class projectViewActivity extends AppCompatActivity implements View.OnCli
                 Session.itrInteractions();
                 openFeedbackDialog();
                 break;
+            case R.id.projViewDemo:
+                Session.itrInteractions();
+                openDemoLink();
+                break;
+            case R.id.projViewUser:
+                Session.itrInteractions();
+                openUserProfile();
+                break;
         }
     }
 
+    private void openUserProfile() {
+//        Intent intent = new Intent(this, profileViewFragment.class);
+//        intent.putExtra("userId", project.getUser());
+//        startActivity(intent);
+
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        profileViewFragment profileViewFragment = com.nayphilim.showcaseapp.profileViewFragment.newInstance(project.getUser());
+//        ft.replace(R.id.fragment, profileViewFragment);
+//        ft.addToBackStack(null);
+//        ft.commit();
+
+
+    }
     private void openFeedbackDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Leave some feedback?");
@@ -243,13 +277,14 @@ public class projectViewActivity extends AppCompatActivity implements View.OnCli
         // Set up the input
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.feedback_box, (ViewGroup) findViewById(android.R.id.content), false);
         final EditText input = (EditText) viewInflated.findViewById(R.id.input);
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+
         builder.setView(viewInflated);
 
         // Set up the buttons
         builder.setPositiveButton("Send", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Session.itrInteractions();
                 feedbackDialog = input.getText().toString();
                 Feedback.submitFeedback(user.getUid(),project.getUser(),feedbackDialog, ProjectId, project.getTitle(), Uri.parse(imageUrls[0]) );
             }
@@ -263,6 +298,15 @@ public class projectViewActivity extends AppCompatActivity implements View.OnCli
 
         builder.show();
     }
+
+    private void openDemoLink() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+        intent.setData(Uri.parse(project.getDemo()));
+        startActivity(intent);
+    }
+
 
 
 

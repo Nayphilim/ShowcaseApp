@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     public void onBackPressed() {
         //if on first fragment exit app when back is pressed
         if(bottomNavigationView.getSelectedItemId() == R.id.profileFragment){
