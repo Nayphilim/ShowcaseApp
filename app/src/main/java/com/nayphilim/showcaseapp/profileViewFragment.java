@@ -186,6 +186,11 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
                         profileProjectNum.setText("0");
                         progressBar.setVisibility(View.GONE);
                     }
+
+                }
+                else {
+                    profileProjectNum.setText("0");
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 
