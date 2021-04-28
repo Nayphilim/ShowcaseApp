@@ -308,6 +308,7 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
 
     private void deleteProject() {
         ProjectReference.child(ProjectId).child("visibility").setValue("hidden");
+        finish();
     }
 
     private void openFeedbackDialog() {
