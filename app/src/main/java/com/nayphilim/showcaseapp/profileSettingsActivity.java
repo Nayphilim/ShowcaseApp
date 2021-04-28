@@ -249,7 +249,9 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
         userID = user.getUid();
         String githubLink = githubLinkText.getText().toString().trim();
         final String GithubPattern = "^(https://github\\.com/).+";
+        final String GithubPatternNoHttps = "^((https://)?github\\.com/).+";
         Pattern pattern = Pattern.compile(GithubPattern);
+        Pattern patternNoHttps = Pattern.compile(GithubPatternNoHttps);
         Matcher matcher;
 
         UserReference.child(userID).child("showLocation").setValue(ShowLocation);
@@ -264,6 +266,9 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
 
 
         if(!githubLink.isEmpty()){
+            if(patternNoHttps.matcher(githubLink).matches()){
+                githubLink = "https://" + githubLink;
+            }
             if(!pattern.matcher(githubLink).matches()){
                 githubLinkText.setError("Please enter a valid github profile link");
                 githubLinkText.requestFocus();

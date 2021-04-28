@@ -247,6 +247,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         String credits = creditsBox.getText().toString().trim();
         String demo = demoBox.getText().toString().trim();
         String repository = repositoryBox.getText().toString().trim();
+        final String repoPatternStringNoHttps = "^((https://)?github\\.com/).+/.+";
         final String repoPatternString = "^(https://github\\.com/).+/.+";
                /*
            Possibile Youtube urls.
@@ -261,6 +262,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         */
         final String youtubePatternString = "^(http(s)?:\\/\\/)?((w){3}.)?youtu(be|.be)?(\\.com)?\\/.+";
         Pattern repoPattern = Pattern.compile(repoPatternString);
+        Pattern repoPatternNoHttps = Pattern.compile(repoPatternStringNoHttps);
         Pattern youtubePattern = Pattern.compile(youtubePatternString,Pattern.CASE_INSENSITIVE);
         Matcher matcher;
 
@@ -296,6 +298,9 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         }
 
         if(!repository.isEmpty()){
+            if(repoPatternNoHttps.matcher(repository).matches()){
+                repository = "https://" + repository;
+            }
             if(!repoPattern.matcher(repository).matches()){
                 repositoryBox.setError("Please enter a valid repository link");
                 repositoryBox.requestFocus();
@@ -421,6 +426,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
                 ProjectReference.child(projectId).child("credits").setValue(credits);
             }
             if (!repository.isEmpty()) {
+
                 ProjectReference.child(projectId).child("repository").setValue(repository);
             }
 
