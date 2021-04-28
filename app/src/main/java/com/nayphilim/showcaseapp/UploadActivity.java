@@ -248,7 +248,18 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         String demo = demoBox.getText().toString().trim();
         String repository = repositoryBox.getText().toString().trim();
         final String repoPatternString = "^(https://github\\.com/).+/.+";
-        final String youtubePatternString = "^https?://.*(?:youtu.be/|v/|u/\\w/|embed/|watch?v=)([^#&?]*).*$";
+               /*
+           Possibile Youtube urls.
+           http://www.youtube.com/watch?v=WK0YhfKqdaI
+           http://www.youtube.com/embed/WK0YhfKqdaI
+           http://www.youtube.com/v/WK0YhfKqdaI
+           http://www.youtube-nocookie.com/v/WK0YhfKqdaI?version=3&hl=en_US&rel=0
+           http://www.youtube.com/watch?v=WK0YhfKqdaI
+           http://www.youtube.com/watch?feature=player_embedded&v=WK0YhfKqdaI
+           http://www.youtube.com/e/WK0YhfKqdaI
+           http://youtu.be/WK0YhfKqdaI
+        */
+        final String youtubePatternString = "^(http(s)?:\\/\\/)?((w){3}.)?youtu(be|.be)?(\\.com)?\\/.+";
         Pattern repoPattern = Pattern.compile(repoPatternString);
         Pattern youtubePattern = Pattern.compile(youtubePatternString,Pattern.CASE_INSENSITIVE);
         Matcher matcher;
@@ -401,9 +412,11 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         ProjectReference.child(projectId).child("category").setValue(category);
         ProjectReference.child(projectId).child("description").setValue(description);
         ProjectReference.child(projectId).child("user").setValue(userID);
-        ProjectReference.child(projectId).child("demoLink").setValue(demo);
         ProjectReference.child(projectId).child("uploadDate").setValue(getCurrentDate());
         ProjectReference.child(projectId).child("visibility").setValue("public");
+            if (!demo.isEmpty()) {
+                ProjectReference.child(projectId).child("demoLink").setValue(demo);
+            }
             if (!credits.isEmpty()) {
                 ProjectReference.child(projectId).child("credits").setValue(credits);
             }
