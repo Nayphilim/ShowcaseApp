@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
+import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -66,7 +68,7 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
     private com.google.firebase.storage.StorageReference StorageReference = FirebaseStorage.getInstance().getReference();
     private FirebaseUser user;
     private String userID;
-    private Button QRGenerationButton, QREmailButton;
+    private Button QRGenerationButton, QREmailButton, LogoutButton;
     private ImageView QRCodeView;
     private String userEmail, userName;
     private Uri QRCode;
@@ -88,6 +90,7 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
         QRGenerationButton = findViewById(R.id.QRGenerationButton);
         QREmailButton = findViewById(R.id.QREmailButton);
         QRCodeView = findViewById(R.id.QRCodeView);
+        LogoutButton = findViewById(R.id.profileSettingsLogout);
 
         adapter = ArrayAdapter.createFromResource(this, R.array.specializations, R.layout.support_simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -104,6 +107,7 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
         save.setOnClickListener(this);
         QRGenerationButton.setOnClickListener(this);
         QREmailButton.setOnClickListener(this);
+        LogoutButton.setOnClickListener(this);
 
         glide = Glide.with(this);
 
@@ -147,7 +151,37 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
             case R.id.profileSettingsGithubLink:
                 githubLinkText.setHint("https://github.com/User");
                 break;
+            case R.id.profileSettingsLogout:
+                logUserOut();
+                break;
         }
+    }
+
+    private void logUserOut() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Are you sure you would like to sign out?");
+
+        // Set up the buttons
+        builder.setPositiveButton("Sign out", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                mAuth.signOut();
+                Intent intent = new Intent(profileSettingsActivity.this, SignInActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);//make sure user cant go back
+                startActivity(intent);
+                finish();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
     }
 
     private void generateQR() {

@@ -311,35 +311,6 @@ public class projectActivity extends AppCompatActivity implements View.OnClickLi
         finish();
     }
 
-    private void openFeedbackDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Leave some feedback?");
-
-        // Set up the input
-        View viewInflated = LayoutInflater.from(this).inflate(R.layout.feedback_box, (ViewGroup) findViewById(android.R.id.content), false);
-        final EditText input = (EditText) viewInflated.findViewById(R.id.input);
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        builder.setView(viewInflated);
-
-        // Set up the buttons
-        builder.setPositiveButton("Send", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                feedbackDialog = input.getText().toString();
-                Feedback.submitFeedback(user.getUid(),project.getUser(),feedbackDialog, ProjectId, project.getTitle(), Uri.parse(imageUrls[0]) );
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
-    }
-
-
 
     private void openGithubBrowser() {
         Intent intent = new Intent();

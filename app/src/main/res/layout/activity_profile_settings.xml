@@ -308,5 +308,22 @@
                 android:text="Email QR Code"
                 android:visibility="invisible"/>
         </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/profileSettingsLogoutArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profileSettingsQREmailArea"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
+            <Button
+                android:id="@+id/profileSettingsLogout"
+                android:layout_marginTop="16dp"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:backgroundTint="@color/light_purple"
+                android:text="Log out"
+                android:visibility="visible"/>
+        </RelativeLayout>
     </RelativeLayout>
 </ScrollView>

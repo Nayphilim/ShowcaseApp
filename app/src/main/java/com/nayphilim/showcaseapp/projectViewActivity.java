@@ -223,7 +223,7 @@ public class projectViewActivity extends AppCompatActivity implements View.OnCli
 
         for(String url : imageUrls){
             Uri uri = Uri.parse(url);
-            projectImages.add(new SlideModel(uri.toString(), ScaleTypes.FIT));
+            projectImages.add(new SlideModel(uri.toString(), ScaleTypes.CENTER_INSIDE));
         }
 
         if(projectImages != null) {
