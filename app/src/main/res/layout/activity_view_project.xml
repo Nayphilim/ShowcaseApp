@@ -195,7 +195,6 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/projViewDescriptionTitleArea"
             android:orientation="horizontal"
-            android:background="@drawable/project_view_border"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp">
 
@@ -207,10 +206,6 @@
                 android:text="Description"
                 android:textColor="@color/black"
                 android:textSize="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:maxLength="255"
                 android:ems="10" />
 
@@ -245,7 +240,6 @@
             android:layout_below="@+id/projViewCreditsTitleArea"
             android:orientation="horizontal"
             android:visibility="gone"
-            android:background="@drawable/project_view_border"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp">
 
@@ -257,10 +251,6 @@
                 android:text="Credits"
                 android:textColor="@color/black"
                 android:textSize="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:maxLength="99"
                 android:ems="10" />
 
@@ -272,10 +262,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/projViewCreditsArea"
             android:orientation="horizontal"
-            android:visibility="gone"
-            android:background="@drawable/project_view_border"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/projViewDemoTitle"
@@ -298,7 +285,6 @@
             android:layout_below="@+id/projViewDemoTitleArea"
             android:orientation="horizontal"
             android:visibility="gone"
-            android:background="@drawable/project_view_border"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp">
 
@@ -310,10 +296,6 @@
                 android:text="Demo"
                 android:textColor="@color/light_purple"
                 android:textSize="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:maxLength="99"
                 android:ems="10"
                 android:clickable="true"/>

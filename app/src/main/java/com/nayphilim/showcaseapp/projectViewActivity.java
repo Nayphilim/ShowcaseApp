@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import androidx.fragment.app.Fragment;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -285,8 +286,13 @@ public class projectViewActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Session.itrInteractions();
-                feedbackDialog = input.getText().toString();
-                Feedback.submitFeedback(user.getUid(),project.getUser(),feedbackDialog, ProjectId, project.getTitle(), Uri.parse(imageUrls[0]) );
+                feedbackDialog = input.getText().toString().trim();
+                if(!feedbackDialog.isEmpty()) {
+                    Feedback.submitFeedback(user.getUid(), project.getUser(), feedbackDialog, ProjectId, project.getTitle(), Uri.parse(imageUrls[0]));
+                }
+                else{
+                    Toast.makeText(projectViewActivity.this, "You cannot send feedback without a message, please try again", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
