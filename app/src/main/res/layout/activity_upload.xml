@@ -73,6 +73,18 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:src="@drawable/ic_image_upload"
                 android:padding="75dp"/>
+            <TextView
+                android:id="@+id/uploadImageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="225dp"
+                android:clickable="true"
+                android:fontFamily="@font/bold"
+                android:text="Click to upload an image"
+                android:textColor="@color/gray"
+                android:textSize="21dp"
+                android:layout_marginBottom="4dp"
+                android:layout_centerHorizontal="true"/>
 
             <RelativeLayout
                 android:id="@+id/uploadImagePreviewArea"

@@ -57,7 +57,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
     private DatabaseReference UserReference = FirebaseDatabase.getInstance().getReference("Users");
     private DatabaseReference AnalyticReference = FirebaseDatabase.getInstance().getReference("Analytics");
     private StorageReference StorageReference = FirebaseStorage.getInstance().getReference();
-    private TextView cancelButton,publishButton, uploadImagePreviewNum;
+    private TextView cancelButton,publishButton, uploadImagePreviewNum, uploadImageText;
     private EditText titleBox, descriptionBox,creditsBox,repositoryBox, demoBox;
     private String Category;
     private FirebaseUser user;
@@ -101,6 +101,8 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
 
+        uploadImageText = findViewById(R.id.uploadImageText);
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories, R.layout.spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         uploadCategories.setAdapter(adapter);
@@ -124,12 +126,14 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode ==2 && resultCode == RESULT_OK && data != null){
+            uploadImageText.setVisibility(View.GONE);
             imageUris.clear();
             imageUrls.clear();
             ClipData clipData = data.getClipData();
 
             if(clipData != null){
                 uploadImageBox.setVisibility(View.GONE);
+
                 for(int i = 0;i<clipData.getItemCount();i++){
                     if(i >= 8 ){
                         Toast.makeText(UploadActivity.this, "More than 8 images have been uploaded, please try again", Toast.LENGTH_LONG).show();
