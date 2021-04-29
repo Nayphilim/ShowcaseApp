@@ -254,7 +254,7 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
         userID = user.getUid();
         String githubLink = githubLinkText.getText().toString().trim();
         final String GithubPattern = "^(https://github\\.com/).+";
-        final String GithubPatternNoHttps = "^((https://)?github\\.com/).+";
+        final String GithubPatternNoHttps = "^(github\\.com/).+";
         Pattern pattern = Pattern.compile(GithubPattern);
         Pattern patternNoHttps = Pattern.compile(GithubPatternNoHttps);
         Matcher matcher;
