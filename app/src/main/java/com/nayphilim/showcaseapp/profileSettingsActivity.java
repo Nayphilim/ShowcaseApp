@@ -96,6 +96,8 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
 
         ccp.setOnCountryChangeListener(this);
 
+        githubLinkText.setOnClickListener(this);
+
         toggleLocation.setOnCheckedChangeListener(this);
 
         cancel.setOnClickListener(this);
@@ -141,6 +143,9 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
                 break;
             case R.id.QREmailButton:
                 emailQRCode(QRCode);
+                break;
+            case R.id.profileSettingsGithubLink:
+                githubLinkText.setHint("https://github.com/User");
                 break;
         }
     }

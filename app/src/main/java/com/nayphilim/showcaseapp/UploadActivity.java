@@ -108,6 +108,9 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         uploadCategories.setAdapter(adapter);
         uploadCategories.setOnItemSelectedListener(this);
 
+        demoBox.setOnClickListener(this);
+        repositoryBox.setOnClickListener(this);
+
         uploadImageBox.setOnClickListener(this);
         imagePreview1.setOnClickListener(this);
         imagePreview2.setOnClickListener(this);
@@ -237,6 +240,11 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
                 keyboardController.hideKeyboard(this);
                 finish();
                 break;
+            case R.id.uploadDemo:
+                demoBox.setHint("https://www.youtube.com/watch?v=xxxxxxxchannel=xxxxx");
+                break;
+            case R.id.uploadRepository:
+                repositoryBox.setHint("https://github.com/User/Repository");
         }
     }
 
@@ -255,16 +263,46 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         final String repoPatternString = "^(https://github\\.com/).+/.+";
                /*
            Possibile Youtube urls.
-           http://www.youtube.com/watch?v=WK0YhfKqdaI
-           http://www.youtube.com/embed/WK0YhfKqdaI
-           http://www.youtube.com/v/WK0YhfKqdaI
-           http://www.youtube-nocookie.com/v/WK0YhfKqdaI?version=3&hl=en_US&rel=0
-           http://www.youtube.com/watch?v=WK0YhfKqdaI
-           http://www.youtube.com/watch?feature=player_embedded&v=WK0YhfKqdaI
-           http://www.youtube.com/e/WK0YhfKqdaI
-           http://youtu.be/WK0YhfKqdaI
+           https://www.youtube.com/watch?v=DFYRQ_zQ-gk&feature=featured
+            https://www.youtube.com/watch?v=DFYRQ_zQ-gk
+            http://www.youtube.com/watch?v=DFYRQ_zQ-gk
+            //www.youtube.com/watch?v=DFYRQ_zQ-gk
+            www.youtube.com/watch?v=DFYRQ_zQ-gk
+            https://youtube.com/watch?v=DFYRQ_zQ-gk
+            http://youtube.com/watch?v=DFYRQ_zQ-gk
+            //youtube.com/watch?v=DFYRQ_zQ-gk
+            youtube.com/watch?v=DFYRQ_zQ-gk
+
+            https://m.youtube.com/watch?v=DFYRQ_zQ-gk
+            http://m.youtube.com/watch?v=DFYRQ_zQ-gk
+            //m.youtube.com/watch?v=DFYRQ_zQ-gk
+            m.youtube.com/watch?v=DFYRQ_zQ-gk
+
+            https://www.youtube.com/v/DFYRQ_zQ-gk?fs=1&hl=en_US
+            http://www.youtube.com/v/DFYRQ_zQ-gk?fs=1&hl=en_US
+            //www.youtube.com/v/DFYRQ_zQ-gk?fs=1&hl=en_US
+            www.youtube.com/v/DFYRQ_zQ-gk?fs=1&hl=en_US
+            youtube.com/v/DFYRQ_zQ-gk?fs=1&hl=en_US
+
+            https://www.youtube.com/embed/DFYRQ_zQ-gk?autoplay=1
+            https://www.youtube.com/embed/DFYRQ_zQ-gk
+            http://www.youtube.com/embed/DFYRQ_zQ-gk
+            //www.youtube.com/embed/DFYRQ_zQ-gk
+            www.youtube.com/embed/DFYRQ_zQ-gk
+            https://youtube.com/embed/DFYRQ_zQ-gk
+            http://youtube.com/embed/DFYRQ_zQ-gk
+            //youtube.com/embed/DFYRQ_zQ-gk
+            youtube.com/embed/DFYRQ_zQ-gk
+
+            https://youtu.be/DFYRQ_zQ-gk?t=120
+            https://youtu.be/DFYRQ_zQ-gk
+            http://youtu.be/DFYRQ_zQ-gk
+            //youtu.be/DFYRQ_zQ-gk
+            youtu.be/DFYRQ_zQ-gk
+
+            https://www.youtube.com/HamdiKickProduction?v=DFYRQ_zQ-gk
         */
-        final String youtubePatternString = "^(http(s)?:\\/\\/)?((w){3}.)?youtu(be|.be)?(\\.com)?\\/.+";
+        final String youtubePatternString = "^((?:https?:)?\\/\\/)?((?:www|m)\\.)?((?:youtube\\.com|youtu.be))(\\/(?:[\\w\\-]+\\?v=|embed\\/|v\\/)?)([\\w\\-]+)(\\S+)?$";
         Pattern repoPattern = Pattern.compile(repoPatternString);
         Pattern repoPatternNoHttps = Pattern.compile(repoPatternStringNoHttps);
         Pattern youtubePattern = Pattern.compile(youtubePatternString,Pattern.CASE_INSENSITIVE);
