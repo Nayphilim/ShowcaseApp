@@ -185,6 +185,7 @@
                     android:layout_marginTop="20dp"
                     android:background="@drawable/feedback_box"
                     android:layout_marginLeft="50dp"
+                    android:maxLength="42"
                     android:layout_marginRight="50dp"/>
 
         </RelativeLayout>
@@ -230,7 +231,7 @@
                 android:hint="Project Description"
                 android:background="@drawable/feedback_box"
                 android:lines="8"
-                android:maxLength="255"
+                android:maxLength="999"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
                  />

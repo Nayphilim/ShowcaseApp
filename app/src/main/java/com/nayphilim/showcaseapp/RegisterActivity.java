@@ -126,7 +126,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()) {
                                         Toast.makeText(RegisterActivity.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
-
+                                        finish();
                                     } else {
                                         Toast.makeText(RegisterActivity.this, "Failed to register user, please try again", Toast.LENGTH_LONG).show();
                                     }

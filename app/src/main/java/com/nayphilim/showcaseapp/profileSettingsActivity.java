@@ -60,7 +60,7 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
     private Spinner specializationSpinner;
     private EditText githubLinkText;
     private String Specialization, Location;
-    private Boolean ShowLocation;
+    private String ShowLocation;
     private Boolean SpecializationChanged = false;
     private TextView cancel, save;
 
@@ -276,10 +276,10 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if(isChecked){
-            ShowLocation = true;
+            ShowLocation = "true";
         }
         else{
-            ShowLocation = false;
+            ShowLocation = "false";
         }
     }
 

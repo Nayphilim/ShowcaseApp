@@ -183,26 +183,36 @@ public class feedFragment extends Fragment implements feedAdapter.OnProjectListe
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             ArrayList<String> allProjects = new ArrayList<String>();
-                            for (DataSnapshot d : snapshot.getChildren()) {
-                                allProjects.add(d.getKey());
+                            int projectNum;
+                            if (allProjects.size() < 10) {
+                                projectNum = allProjects.size();
                             }
-                            //currently doesnt
-                            for (int i = 0; i <= 10; i++) {
-                                int random = new Random().nextInt(allProjects.size());
-                                DataSnapshot selectedProject = snapshot.child(allProjects.get(random));
-                                allProjects.remove(random);
-                                if (selectedProject.child("visibility").getValue().toString().trim().equals("hidden")) {
-                                   //i--;
-                                } else {
-                                    String imageUrlsStr = selectedProject.child("imageUrls").getValue().toString().trim();
-                                    String[] imageUrls = imageUrlsStr.split(",");
-                                    Uri imageUri = Uri.parse(imageUrls[0]);
-                                    ProfileFeed profileFeed = new ProfileFeed(selectedProject.getKey(), selectedProject.child("title").getValue().toString().trim(), selectedProject.child("category").getValue().toString().trim(), selectedProject.child("uploadDate").getValue().toString().trim(), imageUri);
-                                    feedArrayList.add(profileFeed);
-                                    adapterFeed.notifyItemInserted(feedArrayList.size()-1);
+                            else{
+                                projectNum = 10;
+                            }
+
+
+                                for (DataSnapshot d : snapshot.getChildren()) {
+                                    allProjects.add(d.getKey());
+                                }
+                                //currently doesnt
+                                for (int i = 0; i <= projectNum; i++) {
+                                    int random = new Random().nextInt(allProjects.size());
+                                    DataSnapshot selectedProject = snapshot.child(allProjects.get(random));
+                                    allProjects.remove(random);
+                                    if (selectedProject.child("visibility").getValue().toString().trim().equals("hidden")) {
+                                        //i--;
+                                    } else {
+                                        String imageUrlsStr = selectedProject.child("imageUrls").getValue().toString().trim();
+                                        String[] imageUrls = imageUrlsStr.split(",");
+                                        Uri imageUri = Uri.parse(imageUrls[0]);
+                                        ProfileFeed profileFeed = new ProfileFeed(selectedProject.getKey(), selectedProject.child("title").getValue().toString().trim(), selectedProject.child("category").getValue().toString().trim(), selectedProject.child("uploadDate").getValue().toString().trim(), imageUri);
+                                        feedArrayList.add(profileFeed);
+                                        adapterFeed.notifyItemInserted(feedArrayList.size() - 1);
+                                    }
                                 }
                             }
-                        }
+
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {

@@ -259,7 +259,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         String credits = creditsBox.getText().toString().trim();
         String demo = demoBox.getText().toString().trim();
         String repository = repositoryBox.getText().toString().trim();
-        final String repoPatternStringNoHttps = "^((https://)?github\\.com/).+/.+";
+        final String repoPatternStringNoHttps = "^(github\\.com/).+/.+";
         final String repoPatternString = "^(https://github\\.com/).+/.+";
                /*
            Possibile Youtube urls.
@@ -310,6 +310,7 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
 
         if(imageUris.isEmpty()){
             uploadImageBox.requestFocus();
+            Toast.makeText(UploadActivity.this, "Please choose an image to upload", Toast.LENGTH_SHORT).show();
             return;
         }
 
