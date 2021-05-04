@@ -236,7 +236,7 @@ public class profileViewFragment extends Fragment implements View.OnClickListene
 
                 profileName.setText(userProfile.getFirstName() + " " + userProfile.getLastName());
 
-                if(userProfile.getShowLocation() == "true"){
+                if(userProfile.getShowLocation().equals("true")){
                     profileLocation.setText(userProfile.getLocation());
                     profileLocation.setVisibility(View.VISIBLE);
                 }

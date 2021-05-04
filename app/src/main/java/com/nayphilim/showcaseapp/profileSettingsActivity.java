@@ -329,7 +329,7 @@ public class profileSettingsActivity extends AppCompatActivity implements Adapte
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if((snapshot.child("showLocation").getValue() != null)){
-                    if(snapshot.child("showLocation").getValue().toString() == "true"){
+                    if(snapshot.child("showLocation").getValue().toString().equals("true")){
                         toggleLocation.setChecked(true);
                     }
                 }

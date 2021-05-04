@@ -197,8 +197,8 @@ public class searchFragment extends Fragment implements View.OnClickListener {
                         UserSearchResult userSearchResult = new UserSearchResult(ds.child("firstName").getValue(String.class) + " " + ds.child("lastName").getValue(String.class),
                                 ds.child("specialization").getValue(String.class),
                                 ds.child("location").getValue(String.class),
-                                ds.child("showLocation").getValue(Boolean.class));
-                        if(userSearchResult.getShowLocation()) {
+                                ds.child("showLocation").getValue(String.class));
+                        if(userSearchResult.getShowLocation().toString().equals("true")) {
                             listUsers.add(userSearchResult.getName() + "\n" + userSearchResult.getSpecialization() + " - " + userSearchResult.getLocation());
                         }
                         else{
